@@ -2,6 +2,8 @@ import React from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import MenuIcon from "@mui/icons-material/Menu";
 import InboxIcon from "@mui/icons-material/Inbox";
+import { SidebarNav } from "./SideBarNav";
+import nav from "../nav";
 
 function Sidebar({ openMenubar, handleDrawerToggle }) {
   return (
@@ -13,7 +15,9 @@ function Sidebar({ openMenubar, handleDrawerToggle }) {
       </div>
       <div className="mt-8">
         <ul className="space-y-2">
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+          <SidebarNav items={nav} openMenubar={openMenubar} />
+
+          {/* {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
             <li key={text} className="flex items-center p-2 pl-4">
               <div className="text-white">
                 {index % 2 === 0 ? <InboxIcon /> : <EmailIcon />}
@@ -22,9 +26,9 @@ function Sidebar({ openMenubar, handleDrawerToggle }) {
                 {text}
               </span>
             </li>
-          ))}
+          ))} */}
         </ul>
-        <ul className="mt-4 space-y-2">
+        {/* <ul className="mt-4 space-y-2">
           {["All mail", "Trash", "Spam"].map((text, index) => (
             <li key={text} className="flex items-center p-2 pl-4">
               <div className="text-white">
@@ -35,7 +39,7 @@ function Sidebar({ openMenubar, handleDrawerToggle }) {
               </span>
             </li>
           ))}
-        </ul>
+        </ul> */}
       </div>
     </div>
   );

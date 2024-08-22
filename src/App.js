@@ -2,8 +2,10 @@ import "./App.css";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DefaultLayout from "./layout/DefaultLayout";
-import VerifyTerm from "./views/pages/register/VerifyTerm";
 import Login from "./views/pages/login/Login";
+import ForgotPassword from "./views/pages/forgotpassword/ForgotPassword";
+import PrivateAuthRoute from "./PrivateAuthRoute";
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
   return (
@@ -22,8 +24,13 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route>
-            <Route path="/" element={<Login />} />
-            <Route path="*" name="Home" element={<DefaultLayout />} />
+            <Route element={<PrivateAuthRoute />}>
+              <Route path="/" element={<Login />} />
+              <Route path="/forgotpassword" element={<ForgotPassword />} />
+            </Route>
+            <Route element={<PrivateRoute />}>
+              <Route path="*" name="Home" element={<DefaultLayout />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

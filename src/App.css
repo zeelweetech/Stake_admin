@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.row-dark {
+  background-color: #1a2c38;
+  color: #d9e3f0; /* Add color to make text visible */
+}
+
+.row-light {
+  background-color: #999999;
+}

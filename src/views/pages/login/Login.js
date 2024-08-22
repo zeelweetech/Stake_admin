@@ -1,21 +1,19 @@
-import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import CloseIcon from "@mui/icons-material/Close";
+import { DialogContent, DialogTitle } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import ErrorIcon from "@mui/icons-material/Error";
 import { userLogin } from "../../../services/LoginServices";
+import toast from "react-hot-toast";
+import { setCookie } from "../../../resources/utility";
+import { decodedToken } from "../../../utils";
 
-function Login({
-  setLoginModel,
-  loginModel,
-  handleOnForgotPassword,
-  setRagisterModel,
-}) {
+function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [values, setValues] = useState({});
   const [error, setError] = useState({});
+  const navigate = useNavigate();
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -51,15 +49,18 @@ function Login({
       await userLogin({ body: body })
         .then((response) => {
           console.log("response", response);
+          setCookie("token", response?.token, 24);
+          localStorage.setItem("token", response?.token);
+          toast.success(response?.message);
+          if (localStorage.getItem("token")) {
+            navigate("/dashboard");
+          }
         })
         .catch((error) => {
           console.log("error", error);
+          toast.error(error?.response?.data?.error);
         });
     }
-  };
-
-  const handleClose = () => {
-    setLoginModel(false);
   };
 
   const togglePasswordVisibility = () => {
@@ -148,12 +149,16 @@ function Login({
               OR
             </p>
           </div>
-          <Link
-            onClick={(e) => handleOnForgotPassword(e)}
-            className="flex justify-center text-sm font-semibold my-3 text-white"
-          >
-            Forgot Password
-          </Link>
+          <div className="flex flex-col justify-center item-center">
+            <button
+              onClick={() => {
+                navigate("/forgotpassword");
+              }}
+              className="flex justify-center text-sm font-semibold my-3 text-white"
+            >
+              Forgot Password
+            </button>
+          </div>
         </div>
       </div>
     </div>
