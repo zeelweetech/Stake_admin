@@ -2,8 +2,8 @@ import React from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import MenuIcon from "@mui/icons-material/Menu";
 import InboxIcon from "@mui/icons-material/Inbox";
-import { SidebarNav } from "./SideBarNav";
 import nav from "../nav";
+import SidebarNav from "./SidebarNav";
 
 function Sidebar({ openMenubar, handleDrawerToggle }) {
   return (
