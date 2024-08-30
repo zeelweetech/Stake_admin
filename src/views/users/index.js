@@ -1,108 +1,381 @@
 import * as React from "react";
-// import { DataGrid } from "@mui/x-data-grid";
-import "../../App.css"; // Import your CSS file
+import "../../App.css";
 import { DataGrid } from "@mui/x-data-grid";
+import { BsIncognito, BsFire } from "react-icons/bs";
+import { RiMoneyRupeeCircleFill, RiMoneyPoundCircleFill } from "react-icons/ri";
 
 const columns = [
-  { field: "id", headerName: "ID", width: 70 },
-  { field: "firstName", headerName: "First name", width: 130 },
-  { field: "lastName", headerName: "Last name", width: 130 },
   {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
+    field: "Game",
+    headerName: "Game",
+    width: 250,
+    headerClassName: "column-header",
+    cellClassName: "column-cell",
+    renderCell: (params) => (
+      <div className="flex items-center">
+        <p className="mr-1.5">{params.value.icon}</p> {params.value.text}
+      </div>
+    ),
   },
   {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
-    // valueGetter: (params) =>
-    //   `${params.row.firstName || ""} ${params.row.lastName || ""}`,
+    field: "User",
+    headerName: "User",
+    width: 150,
+    headerClassName: "column-header",
+    cellClassName: "column-cell",
+    renderCell: (params) => (
+      <div className="flex items-center">
+        <p className="mr-1.5">{params.value.icon}</p> {params.value.text}
+      </div>
+    ),
   },
   {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
+    field: "Time",
+    headerName: "Time",
+    width: 220,
+    headerClassName: "column-header",
+    cellClassName: "column-cell",
   },
   {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
+    field: "BetAmount",
+    headerName: "Bet Amount",
+    width: 220,
+    headerClassName: "column-header",
+    cellClassName: "column-cell",
+    renderCell: (params) => (
+      <div className="flex items-center">
+        <p className="mr-1.5">{params.value.text}</p> {params.value.icon}
+      </div>
+    ),
   },
   {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
+    field: "Multiplier",
+    headerName: "Multiplier",
+    width: 120,
+    headerClassName: "column-header",
+    cellClassName: "column-cell",
   },
   {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
+    field: "Payout",
+    headerName: "Payout",
+    width: 130,
+    headerClassName: "column-header",
+    cellClassName: "column-cell",
+    renderCell: (params) => (
+      <div className="flex items-center">
+        <p className="mr-1.5">{params.value.text}</p> {params.value.icon}
+      </div>
+    ),
   },
-  {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
-  },
-  {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
-  },
-  {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
-  },
-  { field: "lastName", headerName: "Last name", width: 130 },
-  { field: "lastName", headerName: "Last name", width: 130 },
-  { field: "lastName", headerName: "Last name", width: 130 },
-  { field: "lastName", headerName: "Last name", width: 130 },
 ];
 
 const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
+  {
+    id: 1,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Crash" },
+    Time: "12:32 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 2,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Mines" },
+    Time: "12:33 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 3,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Plinko" },
+    Time: "12:32 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 4,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Crash" },
+    Time: "12:32 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 5,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Wheel" },
+    Time: "12:32 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 6,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Dragon Tower" },
+    Time: "12:32 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 7,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Limbo" },
+    Time: "12:33 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 8,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Plinko" },
+    Time: "12:32 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 9,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Mines" },
+    Time: "12:32 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 10,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Wheel" },
+    Time: "12:32 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 11,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Dragon Tower" },
+    Time: "12:32 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 12,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Plinko" },
+    Time: "12:33 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 13,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Dragon Tower" },
+    Time: "12:32 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 14,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Plinko" },
+    Time: "12:32 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 15,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Plinko" },
+    Time: "12:32 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 16,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Plinko" },
+    Time: "12:33 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 17,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Plinko" },
+    Time: "12:32 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
+  {
+    id: 18,
+    User: { icon: <BsIncognito />, text: "Hidden" },
+    Game: { icon: <BsFire />, text: "Plinko" },
+    Time: "12:33 AM",
+    BetAmount: {
+      text: "₹12,57,947.92",
+      icon: <RiMoneyRupeeCircleFill color="yellow" />,
+    },
+    Multiplier: "1.49×",
+    Payout: {
+      text: "₹99,469.89",
+      icon: <RiMoneyPoundCircleFill color="green" />,
+    },
+  },
 ];
 
 export default function Users() {
   return (
-    <div className="bg-[#0f212e] h-screen flex justify-center item-center">
-      <div className="h-screen flex justify-center">
-        <div style={{ height: 400, width: "100%" }} className="mt-10 ">
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-            getRowClassName={(params) =>
-              params.indexRelativeToCurrentPage % 2 === 0
-                ? "row-dark"
-                : "row-light"
-            }
-          />
-        </div>
+    <div className="bg-[#1a2c38] flex justify-center item-center py-[1.8rem]">
+      <div style={{ height: 640, width: "70%" }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 10 },
+            },
+          }}
+          pageSizeOptions={[10, 20]}
+          getRowClassName={(params) =>
+            params.indexRelativeToCurrentPage % 2 === 0
+              ? "row-dark"
+              : "row-light"
+          }
+          sx={{
+            border: "none",
+            color: "#b1bad3",
+            "& .MuiDataGrid-cell": {
+              border: "none",
+            },
+            "& .MuiDataGrid-columnHeader": {
+              borderBottom: "none",
+              borderTop: "none",
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              borderBottom: "none",
+            },
+          }}
+        />
       </div>
     </div>
   );

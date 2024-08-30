@@ -3,7 +3,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import MenuIcon from "@mui/icons-material/Menu";
 import InboxIcon from "@mui/icons-material/Inbox";
 import nav from "../nav";
-import SidebarNav from "./SidebarNav";
+import SidebarNav from "./SideBarNav";
 
 function Sidebar({ openMenubar, handleDrawerToggle }) {
   return (
