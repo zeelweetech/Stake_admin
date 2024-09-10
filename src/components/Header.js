@@ -5,7 +5,8 @@ import Login from "../views/pages/login/Login";
 import Register from "../views/pages/register/Register";
 import ForgotPassword from "../views/pages/forgotpassword/ForgotPassword";
 import VerifyTerm from "../views/pages/register/VerifyTerm";
-import { Menu, MenuItem } from "@mui/material";
+import { IoPerson } from "react-icons/io5";
+import { IconButton, Menu, MenuItem } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { removeCookie } from "../resources/utility";
@@ -28,14 +29,17 @@ function Header() {
     <div>
       <div className="bg-[#1a2c38] shadow-2xl border-b border-b-black">
         <div className="flex justify-around items-center space-x-[70rem]">
-          <img src={stakeLogo} className="w-16 h-16" alt="Not Found" />
+          <img src={stakeLogo} className="w-16 h-16" alt="Not Found" onClick={() => navigate('/dashboard')}/>
           <div className="flex items-center space-x-3">
-            <button
+            {/* <button
               className="bg-[#1475e1] hover:bg-[#396ca8] text-white rounded-lg px-5 py-2.5"
               onClick={(e) => setAnchorEl(e.currentTarget)}
             >
               Profile
-            </button>
+            </button> */}
+            <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} data-menu-type="profile">
+              <IoPerson color="white" size={16} />
+            </IconButton>
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
