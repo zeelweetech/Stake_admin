@@ -4,12 +4,12 @@ import AddIcon from "@mui/icons-material/Add";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { BiDetail } from "react-icons/bi";
 import { IoSettingsOutline } from "react-icons/io5";
-import Information from "./Information";
-import Details from "./Details";
-import Setting from "./Setting";
 import Loader from "../../component/Loader";
+import GameDetails from "./GameDetails";
+import GameInformation from "./GameInformation";
+import GameCommissionSetting from "./GameCommissionSetting";
 
-export default function CrashGame() {
+export default function Games() {
   const [commissionData, setCommissionData] = useState([]);
   const [gameMenu, setGameMenu] = useState("Information");
   const [loading, setLoading] = useState(false);
@@ -66,17 +66,17 @@ export default function CrashGame() {
               </div>
 
               {gameMenu === "Information" ? (
-                <Information
+                <GameInformation
                   setLoading={setLoading}
                   commissionData={commissionData}
                   setCommissionData={setCommissionData}
                 />
               ) : gameMenu === "Details" ? (
-                <Details
+                <GameDetails
                   commissionData={commissionData}
                 />
               ) : (
-                <Setting />
+                <GameCommissionSetting />
               )}
             </div>
           </div>

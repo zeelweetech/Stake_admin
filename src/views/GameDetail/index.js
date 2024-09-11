@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../App.css";
 import Loader from "../component/Loader";
 import { getAllGame } from "../../services/GameServices";
-import CrashGame from "./CrashGame";
+// import CrashGame from "./CrashGame";
 import { useNavigate } from "react-router-dom";
 
 export default function GameDetail() {
@@ -30,7 +30,6 @@ export default function GameDetail() {
   const handleGameData = (name, id) => {
     console.log("&&&&&", name, id);
     navigate(`/games/${name}/${id}`);
-    // if(name === )
   };
 
   return (

@@ -80,10 +80,10 @@ export async function AddCommission({ body: body }) {
 /**
  * Edit commission
  */
-export async function EditCoommission({ body: body }) {
+export async function EditCoommission({ body: body, id: id }) {
   try {
     const response = await axios.put(
-      `${process.env.REACT_APP_LOCAL_URL}/admin/commissions/edit/`,
+      `${process.env.REACT_APP_LOCAL_URL}/admin/commissions/edit/${id}`,
       body,
       {
         headers: {
@@ -102,7 +102,7 @@ export async function EditCoommission({ body: body }) {
  */
 export async function getGameHistory(gameId, page, pageSize) {
   // console.log("gameId 4564585645845641", gameId);
-  
+
   try {
     const response = await axios.get(
       `${process.env.REACT_APP_LOCAL_URL}/game/history/${gameId}?page=${page}&limit=${pageSize}`,
@@ -112,7 +112,7 @@ export async function getGameHistory(gameId, page, pageSize) {
         },
       }
     );
-    console.log("response data ***** (((( ++++" , response.data);
+    // console.log("response data ***** (((( ++++" , response.data);
     return response.data;
   } catch (error) {
     throw error;

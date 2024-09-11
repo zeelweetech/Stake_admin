@@ -50,7 +50,7 @@ export const handleFacebookLogin = async () => {
   }
 };
 
-const sendDataToApi = async (firebaseUid) => {
+export async function sendDataToApi(firebaseUid) {
   try {
     const response = await axios.post(
       `${process.env.REACT_APP_LOCAL_URL}/user/firebaseLogin`,
@@ -60,4 +60,4 @@ const sendDataToApi = async (firebaseUid) => {
   } catch (error) {
     console.error("Failed to send data to API:", error);
   }
-};
+}

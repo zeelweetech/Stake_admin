@@ -4,7 +4,7 @@ import React from "react";
 const LandingBanner = React.lazy(() => import("./views/lendingpage/index"));
 const Users = React.lazy(() => import("./views/users"));
 const Games = React.lazy(() => import("./views/GameDetail"));
-const Crash = React.lazy(() => import("./views/GameDetail/CrashGame"));
+const Crash = React.lazy(() => import("./views/GameDetail/Games"));
 
 // const { gameName, gameId } = useParams();
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { FaArrowLeft } from "react-icons/fa6";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
 import { useParams } from "react-router-dom";
 import {
@@ -17,33 +18,42 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import toast from "react-hot-toast";
+import { Flag } from "@mui/icons-material";
+import Loader from "../../component/Loader";
 
-function Setting() {
+export default function GameCommissionSetting() {
   const { gameId } = useParams();
   const [commissionData, setCommissionData] = useState(false);
   const [gameCommission, setGameCommission] = useState([]);
   const [open, setOpen] = useState(false);
   const [commissionForm, setCommissionForm] = useState();
   const [errors, setErrors] = useState({});
+  const [selectedCommissionId, setSelectedCommissionId] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [pageState, setPageState] = useState({
     total: 0,
     page: 1,
     pageSize: 10,
   });
+  // console.log("commissionData", commissionData);
+  console.log("selectedCommissionId", selectedCommissionId);
 
   useEffect(() => {
     // Fetch commission data when the component mounts
-    if (commissionData) {
-      CommissionById();
-    }
-  }, [commissionData, pageState.page, pageState.pageSize]);
+    // if (commissionData) {
+    CommissionById();
+    // }
+  }, [pageState.page, pageState.pageSize]);
 
-  const handleCommission = async () => {
-    setCommissionData(true);
+  const handleCommission = async (e) => {
+    e.preventDefault();
     await CommissionById();
+    setCommissionData(true);
   };
 
-  console.log("gameCommission **/-*-*-*-*-", gameCommission);
+  // console.log("gameCommission **/-*-*-*-*-", gameCommission);
 
   const CommissionById = async () => {
     try {
@@ -87,6 +97,7 @@ function Setting() {
       };
       const response = await AddCommission({ body: body });
       console.log("response : ", response);
+      toast.error(response?.response?.data?.message);
 
       setGameCommission((prev) => [
         ...prev,
@@ -95,7 +106,7 @@ function Setting() {
           commissionPercentage: commissionForm.commissionPercentage,
           startTime: commissionForm.startTime,
           endTime: commissionForm.endTime,
-        }
+        },
       ]);
       // await CommissionById();
 
@@ -104,7 +115,10 @@ function Setting() {
       setCommissionForm({});
     } catch (error) {
       console.error("Add Commission error ", error);
+    }finally {
+      setLoading(false); // Reset loading state regardless of success or failure
     }
+     console.log("loading", loading);
   };
 
   const handleChange = (e) => {
@@ -116,21 +130,50 @@ function Setting() {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleEditCommission = async() => {
+  const handleEditCommission = async () => {
     try {
       const body = {
         commissionPercentage: commissionForm?.commissionPercentage,
         startTime: commissionForm.startTime,
         endTime: commissionForm.endTime,
       };
-      const response = await EditCoommission({ body: body });
-      console.log("EditCoommission response : ", response);
-      // setGameCommission(response?.data);
-      // setPageState((old) => ({ ...old, total: response.totalPulls }));
+      const response = await EditCoommission({
+        body: body,
+        id: selectedCommissionId, // Use selected row's ID
+      });
+      console.log("Edit Commission response : ", response);
+
+      // Update the row in gameCommission array
+      setGameCommission((prev) =>
+        prev.map((commission) =>
+          commission.id === selectedCommissionId
+            ? { ...commission, ...commissionForm }
+            : commission
+        )
+      );
+
+      setOpen(false);
+      setErrors({});
+      setCommissionForm({});
+      setIsEditing(false); // Reset edit mode
     } catch (error) {
-      console.error("Failed to fetch commission: ", error);
+      console.error("Edit Commission error ", error);
+    } finally {
+      setLoading(false); // Reset loading state regardless of success or failure
     }
-  }
+    console.log("loading", loading);
+  };
+
+  const openEditDialog = (commission) => {
+    setCommissionForm({
+      commissionPercentage: commission.commissionPercentage,
+      startTime: commission.startTime,
+      endTime: commission.endTime,
+    });
+    setSelectedCommissionId(commission?.id); // Track the row's ID
+    setIsEditing(true);
+    setOpen(true);
+  };
 
   const columns = [
     {
@@ -160,16 +203,37 @@ function Setting() {
       width: 190,
       headerClassName: "column-header",
       cellClassName: "column-cell",
-      renderCell: () => (
-        <button onClick={handleEditCommission} className="px-2 py-1">
-          <EditIcon />
-        </button>
+      renderCell: (params) => (
+        <>
+          {console.log("row", params)}
+          <button
+            onClick={() => openEditDialog(params.row)}
+            className="px-2 py-1"
+          >
+            <EditIcon />
+          </button>
+        </>
+      ),
+    },
+    {
+      field: "Delete",
+      headerName: "Delete",
+      width: 190,
+      headerClassName: "column-header",
+      cellClassName: "column-cell",
+      renderCell: (params) => (
+        <>
+         {console.log("", params)}
+          <button  className="px-2 py-1">
+            <DeleteIcon />
+          </button>
+        </>
       ),
     },
   ];
 
   const rows = gameCommission?.map((item, index) => ({
-    id: index,
+    id: item?.id,
     commissionPercentage: item.commissionPercentage,
     startTime: item.startTime,
     endTime: item.endTime,
@@ -196,7 +260,7 @@ function Setting() {
             <p>Game Commission : </p>
             <button
               className="w-36 py-2 font-medium text-white bg-[#213743]"
-              onClick={() => handleCommission()}
+              onClick={(e) => handleCommission(e)}
             >
               Commission
             </button>
@@ -214,7 +278,11 @@ function Setting() {
             <div>
               <button
                 className="text-white bg-[#213743] font-medium px-4 py-2 rounded-sm flex items-center space-x-1"
-                onClick={() => setOpen(true)}
+                onClick={() => {
+                  setIsEditing(false);
+                  setOpen(true);
+                  setCommissionForm({});
+                }}
               >
                 <AddIcon />
                 <p>Add Commission</p>
@@ -290,11 +358,13 @@ function Setting() {
           "& .MuiPaper-root": {
             borderRadius: "6px",
             backgroundColor: "#1a2c38",
-            color: 'white'
+            color: "white",
           },
         }}
       >
-        <DialogTitle>Add Commission</DialogTitle>
+        <DialogTitle>
+          {isEditing ? "Edit Commission" : "Add Commission"}
+        </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -302,10 +372,24 @@ function Setting() {
             name="commissionPercentage"
             type="number"
             fullWidth
-            value={commissionForm?.commissionPercentage}
+            value={commissionForm?.commissionPercentage || ""}
             onChange={handleChange}
             error={!!errors.commissionPercentage}
             helperText={errors.commissionPercentage}
+            sx={{
+              my: 1,
+              input: {
+                color: "white",
+              },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "white",
+                },
+                "&:hover fieldset": {
+                  borderColor: "white",
+                },
+              },
+            }}
           />
           <TextField
             margin="dense"
@@ -314,11 +398,28 @@ function Setting() {
             type="time"
             fullWidth
             variant="outlined"
-            value={commissionForm?.startTime}
+            value={commissionForm?.startTime || ""}
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             error={!!errors.startTime}
             helperText={errors.startTime}
+            sx={{
+              my: 1,
+              input: {
+                color: "white",
+              },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "white",
+                },
+                "&:hover fieldset": {
+                  borderColor: "white",
+                },
+              },
+              "& .MuiInputLabel-root": {
+                color: "white",
+              },
+            }}
           />
           <TextField
             margin="dense"
@@ -327,24 +428,47 @@ function Setting() {
             type="time"
             fullWidth
             variant="outlined"
-            value={commissionForm?.endTime}
+            value={commissionForm?.endTime || ""}
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             error={!!errors.endTime}
             helperText={errors.endTime}
+            sx={{
+              my: 1,
+              input: {
+                color: "white",
+              },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "white",
+                },
+                "&:hover fieldset": {
+                  borderColor: "white",
+                },
+              },
+              "& .MuiInputLabel-root": {
+                color: "white",
+              },
+              // "& input[type='time']": {
+              //   color: "white",
+              // },
+            }}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)} color="primary">
             Close
           </Button>
-          <Button onClick={handleAddCommission} color="primary">
-            Save
+          <Button
+            onClick={isEditing ? handleEditCommission : handleAddCommission}
+            color="primary"
+            // disabled={loading}
+          >
+            {/* {isEditing ? "Save" : "Add"} */}
+            {loading ? <Loader /> : isEditing ? "Save" : "Add"}
           </Button>
         </DialogActions>
       </Dialog>
     </div>
   );
 }
-
-export default Setting;

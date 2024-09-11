@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { getCommissionList } from "../../../services/GameServices";
 
-export default function Information({ setLoading, commissionData, setCommissionData }) {
+export default function GameInformation({ setLoading, commissionData, setCommissionData }) {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState();
 

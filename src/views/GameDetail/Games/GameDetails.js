@@ -147,10 +147,10 @@
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
-import { getGameHistory } from "../../../services/GameServices";
 import { useParams } from "react-router-dom";
+import { getGameHistory } from "../../../services/GameServices";
 
-export default function Details() {
+export default function GameDetails() {
   const { gameId } = useParams();
   const [pullsData, setPullsData] = useState([]);
   const [pageState, setPageState] = useState({
