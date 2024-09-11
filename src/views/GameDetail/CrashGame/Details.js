@@ -165,7 +165,8 @@ export default function Details() {
   useEffect(() => {
     getAllUserdata();
   }, [pageState.page, pageState.pageSize, gameId]);
-  // console.log("gameId ((((((((((((((", gameId);
+  
+  console.log("gameId ((((((((((((((", gameId);
 
   const getAllUserdata = async () => {
     try {

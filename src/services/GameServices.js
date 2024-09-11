@@ -41,10 +41,10 @@ export async function getCommissionList(page, pageSize) {
 /**
  * getCommission by id
  */
-export async function getCommissionById(page, pageSize) {
+export async function getCommissionById(gameId, page, pageSize) {
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_LOCAL_URL}/admin/commissions/get?page=${page}&limit=${pageSize}`,
+      `${process.env.REACT_APP_LOCAL_URL}/admin/commissions/get/${gameId}?page=${page}&limit=${pageSize}`,
       {
         headers: {
           Authorization: localStorage.getItem("token"),
@@ -100,7 +100,9 @@ export async function EditCoommission({ body: body }) {
 /**
  * Game History
  */
-export async function getGameHistory(page, pageSize, gameId) {
+export async function getGameHistory(gameId, page, pageSize) {
+  // console.log("gameId 4564585645845641", gameId);
+  
   try {
     const response = await axios.get(
       `${process.env.REACT_APP_LOCAL_URL}/game/history/${gameId}?page=${page}&limit=${pageSize}`,
