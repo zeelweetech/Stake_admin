@@ -3,7 +3,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import MenuIcon from "@mui/icons-material/Menu";
 import InboxIcon from "@mui/icons-material/Inbox";
 import nav from "../nav";
-import SidebarNav from "./SidebarNav";
+import SideBarNav from "./SideBarNav";
 
 function Sidebar({ openMenubar, handleDrawerToggle }) {
   return (
@@ -15,7 +15,7 @@ function Sidebar({ openMenubar, handleDrawerToggle }) {
       </div>
       <div className="mt-8">
         <ul className="space-y-2">
-          <SidebarNav items={nav} openMenubar={openMenubar} />
+          <SideBarNav items={nav} openMenubar={openMenubar} />
 
           {/* {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
             <li key={text} className="flex items-center p-2 pl-4">

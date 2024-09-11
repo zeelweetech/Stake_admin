@@ -2,7 +2,7 @@ import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const SidebarNav = ({ items, openMenubar }) => {
+const SideBarNav = ({ items, openMenubar }) => {
   const navLink = (name, icon, badge, indent = false, index) => {
     return (
       <>
@@ -73,8 +73,8 @@ const SidebarNav = ({ items, openMenubar }) => {
   );
 };
 
-SidebarNav.propTypes = {
+SideBarNav.propTypes = {
   items: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
 
-export default SidebarNav;
+export default SideBarNav;
