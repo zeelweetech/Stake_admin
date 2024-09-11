@@ -6,7 +6,7 @@ import axios from "axios";
 export async function userLogin({ body: body }) {
   try {
     const response = await axios.post(
-      `${process.env.REACT_APP_LOCAL_URL}/user/login`,
+      `${process.env.REACT_APP_LOCAL_URL}/admin/signIn`,
       body
     );
     return response.data;
@@ -21,7 +21,7 @@ export async function userLogin({ body: body }) {
 export async function userRegister({ body: body }) {
   try {
     const response = await axios.post(
-      `${process.env.REACT_APP_LOCAL_URL}/user/add`,
+      `${process.env.REACT_APP_LOCAL_URL}/admin/signIn`,
       body
     );
     return response.data;
