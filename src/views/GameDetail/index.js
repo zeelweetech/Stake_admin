@@ -14,8 +14,6 @@ export default function GameDetail() {
     GameAllData();
   }, []);
 
-  console.log("gameData", gameData);
-
   const GameAllData = async () => {
     await getAllGame()
       .then((response) => {

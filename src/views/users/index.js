@@ -4,6 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { getAllUser, getUserStatus } from "../../services/userServices";
 import Loader from "../component/Loader";
 import { Switch } from "@mui/material";
+import Columns from "./columns";
 
 export default function Users() {
   const [userData, setUserData] = useState([]);
@@ -25,48 +26,17 @@ export default function Users() {
       setLoading(false);
     }
   };
-  console.log("userData /-*/*-/-/*-/-*/-*/-*/ ", userData);
-
-  // const handleToggleStatus = async (userId, currentStatus) => {
-  //   console.log("userId : currentStatus : ", userId, currentStatus);
-  //   try {
-  //     setUserData((prevData) =>
-  //       prevData.map((user) =>
-  //         user.id === userId ? { ...user, isActive: !currentStatus } : user
-  //       )
-  //     );
-  //     console.log("userData *****************", userData);
-  //     const body = {
-  //       isActive: currentStatus,
-  //     };
-  //     await getUserStatus({ body: body, userId: userId });
-  //     // .then((response) => {
-  //     //   console.log(" getUserStatus response *+-/", response);
-  //     // })
-  //     // .catch((error) => {
-  //     //   console.log("getUserStatus */--/*-/*-/*-/*- error", error);
-  //     // });
-  //     // }
-  //   } catch (error) {
-  //     console.error("Failed to toggle user status: ", error);
-  //   }
-  // };
 
   const handleToggleStatus = async (userId, currentStatus) => {
-    // console.log("User ID:", userId, "Current Status:", currentStatus);
-  
     try {
       const updatedUserData = userData.map((user) =>
         user.id === userId ? { ...user, isActive: !currentStatus } : user
       );
       setUserData(updatedUserData);
-  
       const body = {
         isActive: !currentStatus,
       };
       await getUserStatus({ body: body, userId: userId });
-  
-      console.log("Updated user status successfully", body.isActive);
     } catch (error) {
       console.error("Failed to toggle user status: ", error);
       setUserData((prevData) =>
@@ -76,126 +46,6 @@ export default function Users() {
       );
     }
   };
-  
-  
-  const columns = [
-    {
-      field: "userName",
-      headerName: "User Name",
-      width: 170,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      width: 150,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
-    {
-      field: "firstName",
-      headerName: "First Name",
-      width: 150,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
-    {
-      field: "lastName",
-      headerName: "Last Name",
-      width: 150,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
-    {
-      field: "occupation",
-      headerName: "Occupation",
-      width: 120,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
-    {
-      field: "mobileNumber",
-      headerName: "Mobile Number",
-      width: 150,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
-    {
-      field: "country",
-      headerName: "Country",
-      width: 100,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
-    {
-      field: "city",
-      headerName: "City",
-      width: 130,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
-    {
-      field: "address",
-      headerName: "Address",
-      width: 130,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
-    {
-      field: "DOB",
-      headerName: "DOB",
-      width: 120,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
-    {
-      field: "EnableDisable",
-      headerName: "Enable / Disable",
-      width: 120,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-      renderCell: (params) => (
-        // <button
-        //   onClick={() => handleToggleStatus(params.row.id, params.row.isActive)}
-        //   onMouseEnter={(e) => {
-        //     e.target.style.backgroundColor = "#4d718768";
-        //   }}
-        //   onMouseLeave={(e) => {
-        //     e.target.style.backgroundColor = "transparent";
-        //   }}
-        //   style={{
-        //     color: params.row.isActive ? "#ff0000" : "#00ff00",
-        //     border: "none",
-        //     fontWeight: 'bold',
-        //     // height: '1rem',
-        //     borderRadius: "4px",
-        //     cursor: "pointer",
-        //   }}
-        // >
-        //   {params.row.isActive ? "Inactive" : "Active"}
-        // </button>
-        <div>
-          <Switch
-            checked={params.row.isActive}
-            onChange={() =>
-              handleToggleStatus(params.row.id, params.row.isActive)
-            }
-            color="primary"
-          />
-          <span
-            style={{
-              color: params.row.isActive ? "green" : "red",
-              fontWeight: "bold",
-            }}
-          >
-            {params.row.isActive ? "Active" : "Inactive"}
-          </span>
-        </div>
-      ),
-    },
-  ];
-
   const label = { inputProps: { "aria-label": "Switch demo" } };
 
   const rows = userData.map((user, index) => ({
@@ -226,7 +76,7 @@ export default function Users() {
             <div style={{ width: "75%" }}>
               <DataGrid
                 rows={rows}
-                columns={columns}
+                columns={Columns({ handleToggleStatus })}
                 initialState={{
                   pagination: {
                     paginationModel: { page: 1, pageSize: 10 },

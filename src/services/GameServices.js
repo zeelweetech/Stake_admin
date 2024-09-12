@@ -22,19 +22,20 @@ export async function getAllGame() {
 /**
  * Game History
  */
-export async function getGameHistory(gameId, page, pageSize) {
-  // console.log("gameId 4564585645845641", gameId);
-
+export async function getGameHistory({
+  id: id,
+  page: page,
+  pageSize: pageSize,
+}) {
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_LOCAL_URL}/game/history/${gameId}?page=${page}&limit=${pageSize}`,
+      `${process.env.REACT_APP_LOCAL_URL}/game/history/${id}?page=${page}&limit=${pageSize}`,
       {
         headers: {
           Authorization: localStorage.getItem("token"),
         },
       }
     );
-    // console.log("response data ***** (((( ++++" , response.data);
     return response.data;
   } catch (error) {
     throw error;
