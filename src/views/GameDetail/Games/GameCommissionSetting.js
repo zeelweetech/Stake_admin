@@ -19,7 +19,6 @@ import {
   TextField,
 } from "@mui/material";
 import toast from "react-hot-toast";
-import { Flag } from "@mui/icons-material";
 import Loader from "../../component/Loader";
 
 export default function GameCommissionSetting() {
@@ -115,10 +114,10 @@ export default function GameCommissionSetting() {
       setCommissionForm({});
     } catch (error) {
       console.error("Add Commission error ", error);
-    }finally {
+    } finally {
       setLoading(false); // Reset loading state regardless of success or failure
     }
-     console.log("loading", loading);
+    console.log("loading", loading);
   };
 
   const handleChange = (e) => {
@@ -223,8 +222,8 @@ export default function GameCommissionSetting() {
       cellClassName: "column-cell",
       renderCell: (params) => (
         <>
-         {console.log("", params)}
-          <button  className="px-2 py-1">
+          {console.log("", params)}
+          <button className="px-2 py-1">
             <DeleteIcon />
           </button>
         </>

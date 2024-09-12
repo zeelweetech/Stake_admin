@@ -5,9 +5,9 @@ import { IoInformationCircleOutline } from "react-icons/io5";
 import { BiDetail } from "react-icons/bi";
 import { IoSettingsOutline } from "react-icons/io5";
 import Loader from "../../component/Loader";
-import GameDetails from "./GameDetails";
 import GameInformation from "./GameInformation";
 import GameCommissionSetting from "./GameCommissionSetting";
+import GameDetails from "./GameDetails";
 
 export default function Games() {
   const [commissionData, setCommissionData] = useState([]);
@@ -72,9 +72,7 @@ export default function Games() {
                   setCommissionData={setCommissionData}
                 />
               ) : gameMenu === "Details" ? (
-                <GameDetails
-                  commissionData={commissionData}
-                />
+                <GameDetails commissionData={commissionData} />
               ) : (
                 <GameCommissionSetting />
               )}
