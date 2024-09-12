@@ -1,7 +1,7 @@
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
-import { getCommissionList } from "../../../services/GameServices";
+import { getCommissionList } from "../../../services/CommissionServices";
 
 export default function GameInformation({ setLoading, commissionData, setCommissionData }) {
     const [page, setPage] = useState(1);

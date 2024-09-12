@@ -9,7 +9,8 @@ import {
   AddCommission,
   EditCoommission,
   getCommissionById,
-} from "../../../services/GameServices";
+  DeleteCommission,
+} from "../../../services/CommissionServices";
 import {
   Dialog,
   DialogActions,
@@ -19,8 +20,8 @@ import {
   TextField,
 } from "@mui/material";
 import toast from "react-hot-toast";
-import { Flag } from "@mui/icons-material";
 import Loader from "../../component/Loader";
+import { ChangeGameStatus } from "../../../services/GameServices";
 
 export default function GameCommissionSetting() {
   const { gameId } = useParams();
@@ -32,28 +33,25 @@ export default function GameCommissionSetting() {
   const [selectedCommissionId, setSelectedCommissionId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [gameMenu, setGameMenu] = useState();
   const [pageState, setPageState] = useState({
     total: 0,
     page: 1,
     pageSize: 10,
   });
-  // console.log("commissionData", commissionData);
-  console.log("selectedCommissionId", selectedCommissionId);
 
   useEffect(() => {
     // Fetch commission data when the component mounts
-    // if (commissionData) {
     CommissionById();
-    // }
   }, [pageState.page, pageState.pageSize]);
-
   const handleCommission = async (e) => {
     e.preventDefault();
     await CommissionById();
     setCommissionData(true);
   };
 
-  // console.log("gameCommission **/-*-*-*-*-", gameCommission);
+  console.log("selectedCommissionId", selectedCommissionId);
+  console.log("gameCommission", gameCommission);
 
   const CommissionById = async () => {
     try {
@@ -108,17 +106,16 @@ export default function GameCommissionSetting() {
           endTime: commissionForm.endTime,
         },
       ]);
-      // await CommissionById();
 
       setOpen(false);
       setErrors({});
       setCommissionForm({});
     } catch (error) {
       console.error("Add Commission error ", error);
-    }finally {
+    } finally {
       setLoading(false); // Reset loading state regardless of success or failure
     }
-     console.log("loading", loading);
+    console.log("loading", loading);
   };
 
   const handleChange = (e) => {
@@ -139,7 +136,7 @@ export default function GameCommissionSetting() {
       };
       const response = await EditCoommission({
         body: body,
-        id: selectedCommissionId, // Use selected row's ID
+        id: selectedCommissionId,
       });
       console.log("Edit Commission response : ", response);
 
@@ -173,6 +170,19 @@ export default function GameCommissionSetting() {
     setSelectedCommissionId(commission?.id); // Track the row's ID
     setIsEditing(true);
     setOpen(true);
+  };
+
+  const handleDeleteCommission = async (row) => {
+    try {
+      console.log("Selected row data:", row);
+      await DeleteCommission({ id: row.id });
+
+      setGameCommission((prev) =>
+        prev.filter((commission) => commission.id !== row.id)
+      );
+    } catch (error) {
+      console.error("Error deleting commission:", error);
+    }
   };
 
   const columns = [
@@ -223,8 +233,11 @@ export default function GameCommissionSetting() {
       cellClassName: "column-cell",
       renderCell: (params) => (
         <>
-         {console.log("", params)}
-          <button  className="px-2 py-1">
+          {console.log("", params)}
+          <button
+            onClick={() => handleDeleteCommission(params.row)}
+            className="px-2 py-1"
+          >
             <DeleteIcon />
           </button>
         </>
@@ -249,12 +262,49 @@ export default function GameCommissionSetting() {
         <div>
           <div className="flex space-x-2 items-center text-white">
             <p>Game status : </p>
-            <button className="w-28 py-2 font-medium bg-[#213743] text-[#00ff00]">
-              Active
-            </button>
-            <button className="w-28 py-2 font-medium bg-[#213743] text-[#ff0000]">
-              Inactive
-            </button>
+            <div className="flex flex-col flex-1 justify-center items-center pt-12">
+              <div
+                style={{ width: "98%", marginTop: "-43px" }}
+                className="flex-1 flex flex-col"
+              >
+                <div className="flex justify-between">
+                  <div className="flex overflow-x-auto overflow-y-hidden touch-scroll transform translate-z-0">
+                    <div className="bg-[#0f212e] flex rounded-full p-[5px] flex-shrink-0 space-x-2 text-xs">
+                      <button
+                        className={`py-2 px-5 rounded-full flex justify-center text-base space-x-1.5 items-center ${
+                          gameMenu === "Active"
+                            ? "bg-[#4d718768] text-[#00ff00]"
+                            : "hover:bg-[#4d718768]"
+                        }`}
+                        onClick={async () => {
+                          setGameMenu("Active");
+                          console.log("gameStatus",true);
+                          
+                          await ChangeGameStatus(gameId, true);
+                        }}
+                      >
+                        <p>Active</p>
+                      </button>
+                      <button
+                        className={`py-2 px-5 rounded-full flex justify-center text-base space-x-1.5 items-center ${
+                          gameMenu === "Inactive"
+                            ? "bg-[#4d718768] text-[#ff0000]"
+                            : "hover:bg-[#4d718768]"
+                        }`}
+                        onClick={async () => {
+                          setGameMenu("Inactive");
+                          console.log("gameStatus", false);
+                          
+                          await ChangeGameStatus(gameId, false);
+                        }}
+                      >
+                        <p>Inactive</p>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="flex items-center mt-5 space-x-2 text-white">
             <p>Game Commission : </p>
@@ -449,9 +499,9 @@ export default function GameCommissionSetting() {
               "& .MuiInputLabel-root": {
                 color: "white",
               },
-              // "& input[type='time']": {
-              //   color: "white",
-              // },
+              "& input[type='time']": {
+                color: "white",
+              },
             }}
           />
         </DialogContent>
