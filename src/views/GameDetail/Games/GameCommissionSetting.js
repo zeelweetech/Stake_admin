@@ -5,6 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
 import { useParams } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   AddCommission,
   EditCoommission,
@@ -18,6 +19,7 @@ import {
   DialogTitle,
   Button,
   TextField,
+  IconButton,
 } from "@mui/material";
 import toast from "react-hot-toast";
 import Loader from "../../component/Loader";
@@ -101,7 +103,7 @@ export default function GameCommissionSetting() {
       setGameCommission((prev) => [
         ...prev,
         {
-          id: prev.length + 1, // Use a unique ID, consider using UUID or server-generated IDs
+          id: prev.length + 1,
           commissionPercentage: commissionForm.commissionPercentage,
           startTime: commissionForm.startTime,
           endTime: commissionForm.endTime,
@@ -410,7 +412,15 @@ export default function GameCommissionSetting() {
         }}
       >
         <DialogTitle>
-          {isEditing ? "Edit Commission" : "Add Commission"}
+          <div className="flex justify-between items-center">
+            <p>{isEditing ? "Edit Commission" : "Add Commission"}</p>
+            <IconButton>
+              <CloseIcon
+                onClick={() => setOpen(false)}
+                className="text-white"
+              />
+            </IconButton>
+          </div>
         </DialogTitle>
         <DialogContent>
           <TextField

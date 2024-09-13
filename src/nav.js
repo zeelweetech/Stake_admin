@@ -28,7 +28,15 @@ const nav = [
     badge: {
       color: "info",
     },
-  }
+  },
+  {
+    name: "Logs",
+    to: "/Logs",
+    icon: <img src={cards} alt="Not Found" />,
+    badge: {
+      color: "info",
+    },
+  },
 ];
 
 export default nav;
