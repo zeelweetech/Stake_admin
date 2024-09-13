@@ -45,11 +45,11 @@ export async function getGameHistory({
 /**
  * Game Status
  */
-export async function ChangeGameStatus(gameId, status) {
+export async function ChangeGameStatus({ gameId: gameId, body: body }) {
   try {
     const response = await axios.post(
-      `${process.env.REACT_APP_LOCAL_URL}game/${gameId}/status`,
-      { status },
+      `${process.env.REACT_APP_LOCAL_URL}/game/${gameId}/status`,
+      body,
       {
         headers: {
           Authorization: localStorage.getItem("token"),
