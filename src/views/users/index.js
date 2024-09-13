@@ -1,25 +1,51 @@
 import React, { useEffect, useState } from "react";
 import "../../App.css";
 import { DataGrid } from "@mui/x-data-grid";
-import { getAllUser, getUserStatus } from "../../services/userServices";
+import {
+  getAllUser,
+  getUserNote,
+  getUserStatus,
+} from "../../services/userServices";
+import GroupIcon from "@mui/icons-material/Group";
 import Loader from "../component/Loader";
-import { Switch } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
 import Columns from "./columns";
+import CloseIcon from "@mui/icons-material/Close";
+import { ErrorIcon } from "react-hot-toast";
 
 export default function Users() {
-  const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [userData, setUserData] = useState([]);
+  const [userNote, setUserNote] = useState({});
+  const [errors, setErrors] = useState({});
+  const [open, setOpen] = useState(false);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   useEffect(() => {
     getAllUserdata();
-  }, [page, pageSize]);
+  }, [paginationModel?.page, paginationModel?.pageSize]);
 
   const getAllUserdata = async () => {
     try {
-      const response = await getAllUser(page, pageSize);
+      const response = await getAllUser({
+        page: paginationModel?.page + 1,
+        pageSize: paginationModel?.pageSize,
+      });
+      console.log("getAllUser response", response);
       setUserData(response?.UserList || []);
+      setTotalCount(response?.totalPulls);
       setLoading(false);
     } catch (error) {
       console.error("Failed to fetch users: ", error);
@@ -28,39 +54,77 @@ export default function Users() {
   };
 
   const handleToggleStatus = async (userId, currentStatus) => {
-    try {
-      const updatedUserData = userData.map((user) =>
-        user.id === userId ? { ...user, isActive: !currentStatus } : user
-      );
-      setUserData(updatedUserData);
-      const body = {
-        isActive: !currentStatus,
-      };
-      await getUserStatus({ body: body, userId: userId });
-    } catch (error) {
-      console.error("Failed to toggle user status: ", error);
-      setUserData((prevData) =>
-        prevData.map((user) =>
-          user.id === userId ? { ...user, isActive: currentStatus } : user
-        )
-      );
+    if (!currentStatus) {
+      try {
+        const updatedUserData = userData.map((user) =>
+          user.id === userId ? { ...user, isActive: !currentStatus } : user
+        );
+        setUserData(updatedUserData);
+
+        const body = { isActive: !currentStatus };
+        await getUserStatus({ body: body, userId: userId });
+      } catch (error) {
+        console.error("Failed to toggle user status: ", error);
+      }
+    } else {
+      setOpen(true);
+      setCurrentUserId(userId);
     }
   };
-  const label = { inputProps: { "aria-label": "Switch demo" } };
 
-  const rows = userData.map((user, index) => ({
+  console.log("userData userData userData :", userData);
+
+  const handleNote = async () => {
+    const { Note } = userNote;
+    let NoteErrors = {};
+
+    if (!Note) {
+      NoteErrors.Note = "Note is required";
+      setErrors(NoteErrors);
+      return;
+    }
+
+    try {
+      const body = {
+        notes: userNote.Note,
+      };
+      await getUserNote({ body: body, userId: currentUserId });
+      const updatedUserData = userData.map((user) =>
+        user.id === currentUserId
+          ? { ...user, isActive: false, notes: userNote.Note }
+          : user
+      );
+      setUserData(updatedUserData);
+
+      const statusBody = { isActive: false };
+      await getUserStatus({ body: statusBody, userId: currentUserId });
+
+      setOpen(false);
+    } catch (error) {
+      console.error("Failed to update user note/status: ", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserNote((prevNote) => ({ ...prevNote, [name]: value }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+  };
+
+  const rows = userData.map((user) => ({
     id: user.id,
     userName: user.userName,
-    email: user.email,
     firstName: user.firstName,
     lastName: user.lastName,
+    email: user.email,
     occupation: user.occupation,
     mobileNumber: user.mobileNumber,
     country: user.country,
     city: user.city,
     address: user.address,
     DOB: user.DOB,
-    isActive: user.isActive, // Ensure `user.isActive` exists
+    isActive: user.isActive,
+    Note: user.notes,
   }));
 
   return (
@@ -69,23 +133,20 @@ export default function Users() {
         <Loader />
       ) : (
         <div>
-          <p className="text-white bg-[#213743] text-2xl pl-16 py-3">
-            User Details
-          </p>
-          <div className="flex justify-center item-center py-8 h-[38rem]">
-            <div style={{ width: "75%" }}>
+          <div className="text-white bg-[#0f212e] border-y-4 border-r-4 border-[#2f4553] flex items-center justify-center space-x-4 w-80 rounded-e-full mt-5">
+            <GroupIcon />
+            <p className=" text-2xl py-3">Users</p>
+          </div>
+          <div className="flex justify-center item-center py-8">
+            <div style={{ width: "75.25%" }}>
               <DataGrid
                 rows={rows}
                 columns={Columns({ handleToggleStatus })}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 1, pageSize: 10 },
-                  },
-                }}
-                page={page}
-                pageSize={pageSize}
-                onPageChange={(newPage) => setPage(newPage)}
-                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                loading={loading}
+                rowCount={totalCount}
+                paginationModel={paginationModel}
+                paginationMode="server"
+                onPaginationModelChange={setPaginationModel}
                 pageSizeOptions={[10, 20]}
                 getRowClassName={(params) =>
                   params.indexRelativeToCurrentPage % 2 === 0
@@ -117,6 +178,57 @@ export default function Users() {
               />
             </div>
           </div>
+
+          <Dialog
+            open={open}
+            onClose={() => setOpen(false)}
+            maxWidth="sm"
+            fullWidth
+            sx={{
+              "& .MuiPaper-root": {
+                borderRadius: "6px",
+                backgroundColor: "#1a2c38",
+                color: "white",
+              },
+            }}
+          >
+            <DialogTitle>
+              <div className="flex justify-between items-center">
+                <p>Reson</p>
+                <IconButton>
+                  <CloseIcon
+                    onClick={() => setOpen(false)}
+                    className="text-white"
+                  />
+                </IconButton>
+              </div>
+            </DialogTitle>
+            <DialogContent>
+              {/* <p>What is the reason behind your decision?</p> */}
+              <textarea
+                rows="4"
+                cols="70"
+                name="Note"
+                onChange={(e) => handleChange(e)}
+                value={userNote?.Note}
+                className="bg-[#1a2c38] my-2 border-2 border-[#4d718768]"
+              ></textarea>
+              {errors?.Note && (
+                <div className="flex items-center space-x-1 text-[#f2708a]">
+                  <ErrorIcon fontSize="10" />
+                  <p className="text-xs">{errors.Note}</p>
+                </div>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpen(false)} color="primary">
+                Close
+              </Button>
+              <Button color="primary" onClick={handleNote}>
+                {loading ? <Loader /> : "save"}
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       )}
     </div>

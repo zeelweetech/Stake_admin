@@ -11,13 +11,6 @@ function Columns({ handleToggleStatus }) {
       cellClassName: "column-cell",
     },
     {
-      field: "email",
-      headerName: "Email",
-      width: 150,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
-    {
       field: "firstName",
       headerName: "First Name",
       width: 150,
@@ -32,12 +25,19 @@ function Columns({ handleToggleStatus }) {
       cellClassName: "column-cell",
     },
     {
-      field: "occupation",
-      headerName: "Occupation",
-      width: 120,
+      field: "email",
+      headerName: "Email",
+      width: 150,
       headerClassName: "column-header",
       cellClassName: "column-cell",
     },
+    // {
+    //   field: "occupation",
+    //   headerName: "Occupation",
+    //   width: 120,
+    //   headerClassName: "column-header",
+    //   cellClassName: "column-cell",
+    // },
     {
       field: "mobileNumber",
       headerName: "Mobile Number",
@@ -52,31 +52,31 @@ function Columns({ handleToggleStatus }) {
       headerClassName: "column-header",
       cellClassName: "column-cell",
     },
-    {
-      field: "city",
-      headerName: "City",
-      width: 130,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
-    {
-      field: "address",
-      headerName: "Address",
-      width: 130,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
-    {
-      field: "DOB",
-      headerName: "DOB",
-      width: 120,
-      headerClassName: "column-header",
-      cellClassName: "column-cell",
-    },
+    // {
+    //   field: "city",
+    //   headerName: "City",
+    //   width: 130,
+    //   headerClassName: "column-header",
+    //   cellClassName: "column-cell",
+    // },
+    // {
+    //   field: "address",
+    //   headerName: "Address",
+    //   width: 130,
+    //   headerClassName: "column-header",
+    //   cellClassName: "column-cell",
+    // },
+    // {
+    //   field: "DOB",
+    //   headerName: "DOB",
+    //   width: 120,
+    //   headerClassName: "column-header",
+    //   cellClassName: "column-cell",
+    // },
     {
       field: "EnableDisable",
       headerName: "Enable / Disable",
-      width: 120,
+      width: 160,
       headerClassName: "column-header",
       cellClassName: "column-cell",
       renderCell: (params) => (
@@ -99,6 +99,20 @@ function Columns({ handleToggleStatus }) {
         </div>
       ),
     },
+    {
+      field: "Note",
+      headerName: "Note",
+      width: 140,
+      headerClassName: "column-header",
+      cellClassName: "column-cell",
+      renderCell: (params) => (
+        <div
+          style={{ whiteSpace: 'nowrap', width: '7rem', overflow: 'hidden', textOverflow: 'ellipsis' }}
+        >
+          {params.value}
+        </div>
+      ),
+    }
   ];
 
   return columns;
