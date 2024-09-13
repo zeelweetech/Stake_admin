@@ -34,9 +34,9 @@ export default function GameCommissionSetting() {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [gameMenu, setGameMenu] = useState();
+  const [totalCount, setTotalCount] = useState(0);
   const [pageState, setPageState] = useState({
-    total: 0,
-    page: 1,
+    page: 0,
     pageSize: 10,
   });
 
@@ -61,7 +61,8 @@ export default function GameCommissionSetting() {
         pageState.pageSize
       );
       setGameCommission(response?.data);
-      setPageState((old) => ({ ...old, total: response.totalPulls }));
+      setTotalCount(response?.totalPulls);
+      // setPageState((old) => ({ ...old, total: response.totalPulls }));
     } catch (error) {
       console.error("Failed to fetch commission: ", error);
     }
@@ -278,9 +279,15 @@ export default function GameCommissionSetting() {
                         }`}
                         onClick={async () => {
                           setGameMenu("Active");
-                          console.log("gameStatus",true);
-                          
-                          await ChangeGameStatus(gameId, true);
+                          console.log("gameStatus", true);
+                          const body = {
+                            isActive: true,
+                          };
+
+                          await ChangeGameStatus({
+                            gameId: gameId,
+                            body: body,
+                          });
                         }}
                       >
                         <p>Active</p>
@@ -294,8 +301,14 @@ export default function GameCommissionSetting() {
                         onClick={async () => {
                           setGameMenu("Inactive");
                           console.log("gameStatus", false);
-                          
-                          await ChangeGameStatus(gameId, false);
+                          const body = {
+                            isActive: false,
+                          };
+
+                          await ChangeGameStatus({
+                            gameId: gameId,
+                            body: body,
+                          });
                         }}
                       >
                         <p>Inactive</p>
@@ -341,31 +354,15 @@ export default function GameCommissionSetting() {
           </div>
           <div className="mt-8 w-[47.47rem]">
             <DataGrid
-              autoHeight
               rows={rows}
               columns={columns}
               getRowId={(row) => row.id}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 1, pageSize: 10 },
-                },
-              }}
-              pagination
-              page={pageState.page - 1}
-              pageSize={pageState.pageSize}
-              onPageChange={(newPage) =>
-                setPageState((old) => ({ ...old, page: newPage + 1 }))
-              }
-              onPageSizeChange={(newPageSize) =>
-                setPageState((old) => ({
-                  ...old,
-                  pageSize: newPageSize,
-                  page: 1,
-                }))
-              }
-              rowCount={pageState.total}
+              loading={loading}
+              rowCount={totalCount}
+              paginationModel={pageState}
               paginationMode="server"
-              pageSizeOptions={[10, 20, 30, 40]}
+              onPaginationModelChange={setPageState}
+              pageSizeOptions={[10, 20]}
               getRowClassName={(params) =>
                 params.indexRelativeToCurrentPage % 2 === 0
                   ? "row-dark"
