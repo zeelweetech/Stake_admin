@@ -58,3 +58,23 @@ export async function getUserNote({ body: body, userId }) {
     throw error;
   }
 }
+
+/**
+ * user History
+ */
+
+export async function getUserHistory({userId }) {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_LOCAL_URL}/user/history/${userId}`,
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
