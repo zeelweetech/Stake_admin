@@ -5,7 +5,7 @@ import { getAllGame } from "../../services/GameServices";
 // import CrashGame from "./CrashGame";
 import { useNavigate } from "react-router-dom";
 
-export default function GameDetail() {
+export default function GamesDashboard() {
   const [loading, setLoading] = useState(false);
   const [gameData, setGameData] = useState([]);
   const navigate = useNavigate();

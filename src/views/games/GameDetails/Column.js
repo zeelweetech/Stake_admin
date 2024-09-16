@@ -1,38 +1,38 @@
 import React from "react";
 
-function Columns() {
+function Column() {
   const columns = [
     {
       field: "pullId",
-      headerName: "pullId",
+      headerName: "Pool Id",
       width: 250,
       headerClassName: "column-header",
       cellClassName: "column-cell",
     },
     {
-      field: "crashPoint",
-      headerName: "crashPoint",
+      field: "CrashPoint",
+      headerName: "Crash Point",
       width: 250,
       headerClassName: "column-header",
       cellClassName: "column-cell",
     },
     {
-      field: "playerCount",
-      headerName: "playerCount",
+      field: "PlayerCount",
+      headerName: "Player Count",
       width: 220,
       headerClassName: "column-header",
       cellClassName: "column-cell",
     },
     {
-      field: "totalPullAmount",
-      headerName: "totalPullAmount",
+      field: "TotalPullAmount",
+      headerName: "Total Pull Amount",
       width: 220,
       headerClassName: "column-header",
       cellClassName: "column-cell",
     },
     {
-      field: "pullTime",
-      headerName: "pullTime",
+      field: "PullTime",
+      headerName: "Pull Time",
       width: 210,
       headerClassName: "column-header",
       cellClassName: "column-cell",
@@ -41,4 +41,4 @@ function Columns() {
   return columns;
 }
 
-export default Columns;
+export default Column;
