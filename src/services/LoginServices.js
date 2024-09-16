@@ -11,7 +11,9 @@ export async function userLogin({ body: body }) {
     );
     return response.data;
   } catch (error) {
-    throw error;
+    // throw error;
+    throw error.response ? error.response.data : new Error("Network Error");
+
   }
 }
 
