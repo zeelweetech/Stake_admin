@@ -1,24 +1,37 @@
-import React from "react";
 
 function Columns() {
   const columns = [
     {
       field: "userName",
       headerName: "User Name",
-      width: 250,
+      width: 200,
       headerClassName: "column-header",
       cellClassName: "column-cell",
     },
     {
       field: "userId",
       headerName: "User Id",
+      width: 200,
+      headerClassName: "column-header",
+      cellClassName: "column-cell",
+    },
+    {
+      field: "performOn",
+      headerName: "Perform",
+      width: 200,
+      headerClassName: "column-header",
+      cellClassName: "column-cell",
+    },
+    {
+      field: "actionType",
+      headerName: "Action",
       width: 250,
       headerClassName: "column-header",
       cellClassName: "column-cell",
     },
     {
-      field: "action",
-      headerName: "Action",
+      field: "actionDescription",
+      headerName: "Message",
       width: 250,
       headerClassName: "column-header",
       cellClassName: "column-cell",
