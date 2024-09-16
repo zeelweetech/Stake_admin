@@ -3,6 +3,7 @@ import InboxIcon from "@mui/icons-material/Inbox";
 import EmailIcon from "@mui/icons-material/Email";
 import GroupIcon from "@mui/icons-material/Group";
 import cards from "./assets/img/card.png"
+import { PiUserSquareDuotone } from "react-icons/pi";
 
 const nav = [
   {
@@ -31,8 +32,8 @@ const nav = [
   },
   {
     name: "Logs",
-    to: "/Logs",
-    icon: <img src={cards} alt="Not Found" />,
+    to: "/logs",
+    icon: <PiUserSquareDuotone size={25}/>,
     badge: {
       color: "info",
     },

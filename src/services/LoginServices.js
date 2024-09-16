@@ -44,3 +44,22 @@ export async function userForgotPassword({ body: body }) {
     throw error;
   }
 }
+
+/**
+ * GETALLLOGS
+ */
+export async function getAllLogs({page: page}) {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_LOCAL_URL}/admin/logs?searchQuery=${page}`,
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}

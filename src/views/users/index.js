@@ -19,6 +19,7 @@ import {
 import Columns from "./columns";
 import CloseIcon from "@mui/icons-material/Close";
 import { ErrorIcon } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function Users() {
   const [loading, setLoading] = useState(false);
@@ -26,6 +27,7 @@ export default function Users() {
   const [userNote, setUserNote] = useState({});
   const [errors, setErrors] = useState({});
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate()
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
@@ -111,6 +113,10 @@ export default function Users() {
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
+  const handleUserData = (params) => {
+    const { userName, id } = params.row; 
+    navigate(`/users/${userName}/${id}`); 
+  };
   const rows = userData.map((user) => ({
     id: user.id,
     userName: user.userName,
@@ -148,6 +154,7 @@ export default function Users() {
                 paginationMode="server"
                 onPaginationModelChange={setPaginationModel}
                 pageSizeOptions={[10, 20]}
+                onRowClick={handleUserData}
                 getRowClassName={(params) =>
                   params.indexRelativeToCurrentPage % 2 === 0
                     ? "row-dark"
