@@ -6,14 +6,19 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import ErrorIcon from "@mui/icons-material/Error";
 import { userLogin } from "../../../services/LoginServices";
 import toast from "react-hot-toast";
+// import { setCookie } from "../../../resources/utility";
+// import { decodedToken } from "../../../utils";
+import { useDispatch } from "react-redux";
+import { loginFailure, loginSuccess } from "../../../features/auth/authSlice";
 import { setCookie } from "../../../resources/utility";
-import { decodedToken } from "../../../utils";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [values, setValues] = useState({});
   const [error, setError] = useState({});
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // const auth = useSelector((state) => state.auth);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -62,7 +67,6 @@ function Login() {
         });
     }
   };
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
