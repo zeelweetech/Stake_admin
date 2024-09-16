@@ -26,6 +26,7 @@ export default function AddCommissions({
   setGameCommission,
   setIsEditing,
   selectedCommissionId,
+  formatDateTime
 }) {
   const { gameId } = useParams();
   const [loading, setLoading] = useState(false);
@@ -41,7 +42,7 @@ export default function AddCommissions({
   };
 
   const handleAddCommission = async () => {
-    const { commissionPercentage, startTime, endTime } = commissionForm;
+    const { commissionPercentage, startTime, endTime, startCommissionDate, endCommissionDate } = commissionForm;
     let formErrors = {};
 
     if (!commissionPercentage) {
@@ -52,6 +53,12 @@ export default function AddCommissions({
     }
     if (!endTime) {
       formErrors.endTime = "End Time is required";
+    }
+    if (!startCommissionDate){
+      formErrors.startCommissionDate = "Start Commission Date is required"
+    }
+    if (!endCommissionDate){
+      formErrors.endCommissionDate = "End Commission Date required required"
     }
 
     if (Object.keys(formErrors).length > 0) {
@@ -65,6 +72,8 @@ export default function AddCommissions({
         commissionPercentage: commissionForm?.commissionPercentage,
         startTime: commissionForm.startTime,
         endTime: commissionForm.endTime,
+        startCommissionDate: commissionForm?.startCommissionDate,
+        endCommissionDate: commissionForm?.endCommissionDate
       };
       const response = await AddCommission({ body: body });
       toast.success(response.message);
@@ -76,6 +85,8 @@ export default function AddCommissions({
           commissionPercentage: commissionForm.commissionPercentage,
           startTime: commissionForm.startTime,
           endTime: commissionForm.endTime,
+          startCommissionDate: commissionForm?.startCommissionDate,
+          endCommissionDate: commissionForm?.endCommissionDate
         },
       ]);
 
@@ -97,6 +108,8 @@ export default function AddCommissions({
         commissionPercentage: commissionForm?.commissionPercentage,
         startTime: commissionForm.startTime,
         endTime: commissionForm.endTime,
+        startCommissionDate: commissionForm?.startCommissionDate,
+        endCommissionDate: commissionForm?.endCommissionDate
       };
       const response = await EditCoommission({
         body: body,
@@ -236,6 +249,54 @@ export default function AddCommissions({
               },
               "& input[type='time']": {
                 color: "white",
+              },
+            }}
+          />
+          <TextField
+            autoFocus
+            name="startCommissionDate"
+            type="date"
+            fullWidth
+            value={commissionForm?.startCommissionDate || ""}
+            onChange={handleChange}
+            error={!!errors.startCommissionDate}
+            helperText={errors.startCommissionDate}
+            sx={{
+              my: 1,
+              input: {
+                color: "white",
+              },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "white",
+                },
+                "&:hover fieldset": {
+                  borderColor: "white",
+                },
+              },
+            }}
+          />
+          <TextField
+            autoFocus
+            name="endCommissionDate"
+            type="date"
+            fullWidth
+            value={commissionForm?.endCommissionDate || ""}
+            onChange={handleChange}
+            error={!!errors.endCommissionDate}
+            helperText={errors.endCommissionDate}
+            sx={{
+              my: 1,
+              input: {
+                color: "white",
+              },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "white",
+                },
+                "&:hover fieldset": {
+                  borderColor: "white",
+                },
               },
             }}
           />

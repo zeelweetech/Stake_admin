@@ -29,6 +29,7 @@ export default function Commission({
       commissionPercentage: commission.commissionPercentage,
       startTime: commission.startTime,
       endTime: commission.endTime,
+      commissionDate: commission?.commissionDate,
     });
     setSelectedCommissionId(commission?.id);
     setIsEditing(true);
@@ -51,14 +52,14 @@ export default function Commission({
     {
       field: "commissionPercentage",
       headerName: "Commission Percentage",
-      width: 250,
+      width: 200,
       headerClassName: "column-header",
       cellClassName: "column-cell",
     },
     {
       field: "startTime",
       headerName: "Start Time",
-      width: 160,
+      width: 163,
       headerClassName: "column-header",
       cellClassName: "column-cell",
     },
@@ -70,9 +71,30 @@ export default function Commission({
       cellClassName: "column-cell",
     },
     {
+      field: "startCommissionDate",
+      headerName: "start Commission Date",
+      width: 180,
+      headerClassName: "column-header",
+      cellClassName: "column-cell",
+    },
+    {
+      field: "endCommissionDate",
+      headerName: "end Commission Date",
+      width: 180,
+      headerClassName: "column-header",
+      cellClassName: "column-cell",
+    },
+    // {
+    //   field: "commissionDate",
+    //   headerName: "Commission Date",
+    //   width: 280,
+    //   headerClassName: "column-header",
+    //   cellClassName: "column-cell",
+    // },
+    {
       field: "Edit",
       headerName: "Edit",
-      width: 190,
+      width: 150,
       headerClassName: "column-header",
       cellClassName: "column-cell",
       renderCell: (params) => (
@@ -89,7 +111,7 @@ export default function Commission({
     {
       field: "Delete",
       headerName: "Delete",
-      width: 190,
+      width: 120,
       headerClassName: "column-header",
       cellClassName: "column-cell",
       renderCell: (params) => (
@@ -105,17 +127,38 @@ export default function Commission({
     },
   ];
 
-  const rows = gameCommission?.map((item, index) => ({
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString("en-US");
+
+    const options = {
+      hour: "numeric",
+
+      minute: "numeric",
+      hour12: true,
+    };
+    const formattedTime = date.toLocaleTimeString("en-US", options);
+    return `${formattedDate} ${formattedTime}`;
+  };
+
+  // const logDateTimeFormatted = formatDateTime("2024-08-23T10:13:04.000Z");
+
+  const rows = gameCommission?.map((item) => ({
     id: item?.id,
-    commissionPercentage: item.commissionPercentage,
-    startTime: item.startTime,
-    endTime: item.endTime,
+    commissionPercentage: item?.commissionPercentage
+      ? item?.commissionPercentage
+      : "-",
+    startTime: item?.startTime ? item?.startTime : "-",
+    endTime: item?.endTime ? item?.endTime : "-",
+    startCommissionDate: formatDateTime(item?.startCommissionDate) ? formatDateTime(item?.startCommissionDate) : '-',
+    endCommissionDate: formatDateTime(item?.endCommissionDate) ? formatDateTime(item?.endCommissionDate) : '-',
+    // commissionDate: formatDateTime(item?.createdAt) ? formatDateTime(item?.createdAt) : "-",
   }));
 
   return (
     <div>
       <div>
-        <div className="flex items-center space-x-80">
+        <div className="flex items-center justify-between">
           <div className="flex items-center space-x-5">
             <button className="py-3 px-3 bg-[#213743]">
               <FaArrowLeft color="white" onClick={handleBack} />
@@ -136,7 +179,7 @@ export default function Commission({
             </button>
           </div>
         </div>
-        <div className="mt-8 w-[47.47rem]">
+        <div className="mt-8">
           <DataGrid
             rows={rows}
             columns={columns}
@@ -188,6 +231,7 @@ export default function Commission({
         setCommissionForm={setCommissionForm}
         setIsEditing={setIsEditing}
         selectedCommissionId={selectedCommissionId}
+        formatDateTime={formatDateTime}
       />
     </div>
   );

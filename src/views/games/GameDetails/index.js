@@ -57,49 +57,24 @@ function GameDetails() {
     };
   });
 
-  const rowsWithDetails = rows
-    .flatMap((row) => [
-      row,
-      expandedRow === row.pullId
-        ? {
-            id: `details-${row.pullId}`,
-            isDetailsRow: true,
-            pullId: row.pullId,
-            // pullsData.map((row) => (
-            //   <div key={row?.pullId}>
-            //     {expandedRow === row?.pullId && (
-            //       <Accordion expanded={true} sx={{ background: "#1a2c38" }}>
-            //         <AccordionSummary>
-            //           Game Details for {row?.pullId}
-            //         </AccordionSummary>
-            //         <AccordionDetails>
-            //           {/* <GamePlayersColumn pullId={row.pullId} /> */}
-            //           <GameDetailPlayers
-            //             pullId={row?.pullId}
-            //             userData={userData.filter(
-            //               (player) => player.pullId === row.pullId
-            //             )}
-            //           />
-            //         </AccordionDetails>
-            //       </Accordion>
-            //     )}
-            //   </div>
-            // )),
-          }
-        : null,
-    ])
-    .filter(Boolean);
+  // const rowsWithDetails = rows.flatMap((row) => [
+  //   row, // Parent row
+  //   expandedRow === row.pullId // Add child row if expanded
+  //     ? {
+  //         id: `details-${row.pullId}`,
+  //         isDetailsRow: true,
+  //         pullId: row.pullId,
+  //       }
+  //     : null,
+  // ]).filter(Boolean);
 
   const columnsWithDetails = [
     ...Column(),
     {
-      field: "details",
-      headerName: "Details",
-      width: 200,
       renderCell: (params) =>
-        params.row.isDetailsRow && (
-          <Box sx={{ padding: 2 }}>
-            <GameDetailPlayers pullId={params.row.pullId} userData={userData} />
+        params.row.expanded && (
+          <Box sx={{ padding: 2, width: '100%' }}>
+            <GameDetailPlayers pullId={params.row.pullId} userData={userData.filter((player) => player.pullId === params.row.pullId)} />
           </Box>
         ),
     },
@@ -108,15 +83,17 @@ function GameDetails() {
   const handleRowClick = (params) => {
     const clickedRowId = params.row.pullId;
     setExpandedRow((prev) => (prev === clickedRowId ? null : clickedRowId));
+
+    
   };
 
   return (
     <div className="flex-1 mt-10">
       <DataGrid
         autoHeight
-        // rows={rows}
+        rows={rows}
         // columns={Column()}
-        rows={rowsWithDetails}
+        // rows={rowsWithDetails}
         columns={columnsWithDetails}
         getRowId={(row) => row.pullId}
         loading={loading}
@@ -154,46 +131,27 @@ function GameDetails() {
         }}
       />
       {pullsData.map((row) => (
-      <div key={row?.pullId}>
-        {expandedRow === row?.pullId && (
-          <Accordion expanded={true} sx={{ background: "#1a2c38" }}>
-            <AccordionSummary>Game Details for {row?.pullId}</AccordionSummary>
-            <AccordionDetails>
-              {/* <GamePlayersColumn pullId={row.pullId} /> */}
-              <GameDetailPlayers
-                pullId={row?.pullId}
-                userData={userData.filter(
-                  (player) => player.pullId === row.pullId
-                )}
-              />
-            </AccordionDetails>
-          </Accordion>
-        )}
-      </div>
+        <div key={row?.pullId}>
+          {expandedRow === row?.pullId && (
+            <Accordion expanded={true} sx={{ background: "#1a2c38" }}>
+              <AccordionSummary>
+                Game Details for {row?.pullId}
+              </AccordionSummary>
+              <AccordionDetails>
+                {/* <GamePlayersColumn pullId={row.pullId} /> */}
+                <GameDetailPlayers
+                  pullId={row?.pullId}
+                  userData={userData.filter(
+                    (player) => player.pullId === row.pullId
+                  )}
+                />
+              </AccordionDetails>
+            </Accordion>
+          )}
+        </div>
       ))}
     </div>
   );
 }
 
 export default GameDetails;
-
-// pullsData.map((row) => (
-//     <div key={row?.pullId}>
-//       {expandedRow === row?.pullId && (
-//         <Accordion expanded={true} sx={{ background: "#1a2c38" }}>
-//           <AccordionSummary>
-//             Game Details for {row?.pullId}
-//           </AccordionSummary>
-//           <AccordionDetails>
-//             {/* <GamePlayersColumn pullId={row.pullId} /> */}
-//             <GameDetailPlayers
-//               pullId={row?.pullId}
-//               userData={userData.filter(
-//                 (player) => player.pullId === row.pullId
-//               )}
-//             />
-//           </AccordionDetails>
-//         </Accordion>
-//       )}
-//     </div>
-//   )),

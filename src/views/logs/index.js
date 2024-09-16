@@ -50,8 +50,8 @@ function Logs() {
     return `${formattedDate} ${formattedTime}`;
   };
 
-  const logDateTimeFormatted = formatDateTime("2024-08-23T10:13:04.000Z");
-  console.log(logDateTimeFormatted);
+  // const logDateTimeFormatted = formatDateTime("2024-08-23T10:13:04.000Z");
+  // console.log(logDateTimeFormatted);
 
   const rows = logsData?.map((logs) => {
     return {
