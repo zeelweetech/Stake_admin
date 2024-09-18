@@ -26,7 +26,7 @@ export default function AddCommissions({
   setGameCommission,
   setIsEditing,
   selectedCommissionId,
-  formatDateTime
+  formatDateTime,
 }) {
   const { gameId } = useParams();
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,13 @@ export default function AddCommissions({
   };
 
   const handleAddCommission = async () => {
-    const { commissionPercentage, startTime, endTime, startCommissionDate, endCommissionDate } = commissionForm;
+    const {
+      commissionPercentage,
+      startTime,
+      endTime,
+      startCommissionDate,
+      endCommissionDate,
+    } = commissionForm;
     let formErrors = {};
 
     if (!commissionPercentage) {
@@ -54,11 +60,11 @@ export default function AddCommissions({
     if (!endTime) {
       formErrors.endTime = "End Time is required";
     }
-    if (!startCommissionDate){
-      formErrors.startCommissionDate = "Start Commission Date is required"
+    if (!startCommissionDate) {
+      formErrors.startCommissionDate = "Start Commission Date is required";
     }
-    if (!endCommissionDate){
-      formErrors.endCommissionDate = "End Commission Date required required"
+    if (!endCommissionDate) {
+      formErrors.endCommissionDate = "End Commission Date is required";
     }
 
     if (Object.keys(formErrors).length > 0) {
@@ -73,7 +79,7 @@ export default function AddCommissions({
         startTime: commissionForm.startTime,
         endTime: commissionForm.endTime,
         startCommissionDate: commissionForm?.startCommissionDate,
-        endCommissionDate: commissionForm?.endCommissionDate
+        endCommissionDate: commissionForm?.endCommissionDate,
       };
       const response = await AddCommission({ body: body });
       toast.success(response.message);
@@ -86,7 +92,7 @@ export default function AddCommissions({
           startTime: commissionForm.startTime,
           endTime: commissionForm.endTime,
           startCommissionDate: commissionForm?.startCommissionDate,
-          endCommissionDate: commissionForm?.endCommissionDate
+          endCommissionDate: commissionForm?.endCommissionDate,
         },
       ]);
 
@@ -109,7 +115,7 @@ export default function AddCommissions({
         startTime: commissionForm.startTime,
         endTime: commissionForm.endTime,
         startCommissionDate: commissionForm?.startCommissionDate,
-        endCommissionDate: commissionForm?.endCommissionDate
+        endCommissionDate: commissionForm?.endCommissionDate,
       };
       const response = await EditCoommission({
         body: body,
@@ -217,6 +223,9 @@ export default function AddCommissions({
               "& .MuiInputLabel-root": {
                 color: "white",
               },
+              "& input[type='time']": {
+                color: "white",
+              },
             }}
           />
           <TextField
@@ -253,12 +262,15 @@ export default function AddCommissions({
             }}
           />
           <TextField
-            autoFocus
+            margin="dense"
             name="startCommissionDate"
-            type="date"
+            label="Start Commission Date"
             fullWidth
+            variant="outlined"
+            type="date"
             value={commissionForm?.startCommissionDate || ""}
             onChange={handleChange}
+            InputLabelProps={{ shrink: true }}
             error={!!errors.startCommissionDate}
             helperText={errors.startCommissionDate}
             sx={{
@@ -274,15 +286,25 @@ export default function AddCommissions({
                   borderColor: "white",
                 },
               },
+              "& .MuiInputLabel-root": {
+                color: "white",
+              },
+              "& input[type='time']": {
+                color: "white",
+              },
             }}
           />
           <TextField
             autoFocus
+            variant="outlined"
             name="endCommissionDate"
+            label="End Commission Date"
+            margin="dense"
             type="date"
             fullWidth
             value={commissionForm?.endCommissionDate || ""}
             onChange={handleChange}
+            InputLabelProps={{ shrink: true }}
             error={!!errors.endCommissionDate}
             helperText={errors.endCommissionDate}
             sx={{
@@ -298,6 +320,12 @@ export default function AddCommissions({
                   borderColor: "white",
                 },
               },
+              "& .MuiInputLabel-root": {
+                color: "white",
+              },
+              "& input[type='time']": {
+                color: "white",
+              },
             }}
           />
         </DialogContent>
@@ -310,7 +338,6 @@ export default function AddCommissions({
             color="primary"
             // disabled={loading}
           >
-            {/* {isEditing ? "Save" : "Add"} */}
             {loading ? <Loader /> : isEditing ? "Save" : "Add"}
           </Button>
         </DialogActions>

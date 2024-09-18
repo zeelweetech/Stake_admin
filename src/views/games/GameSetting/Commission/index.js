@@ -131,17 +131,8 @@ export default function Commission({
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString("en-US");
 
-    const options = {
-      hour: "numeric",
-
-      minute: "numeric",
-      hour12: true,
-    };
-    const formattedTime = date.toLocaleTimeString("en-US", options);
-    return `${formattedDate} ${formattedTime}`;
+    return `${formattedDate}`;
   };
-
-  // const logDateTimeFormatted = formatDateTime("2024-08-23T10:13:04.000Z");
 
   const rows = gameCommission?.map((item) => ({
     id: item?.id,
