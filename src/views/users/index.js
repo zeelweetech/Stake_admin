@@ -118,19 +118,19 @@ export default function Users() {
     navigate(`/users/${userName}/${id}`); 
   };
   const rows = userData.map((user) => ({
-    id: user.id,
-    userName: user.userName,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
-    occupation: user.occupation,
-    mobileNumber: user.mobileNumber,
-    country: user.country,
-    city: user.city,
-    address: user.address,
-    DOB: user.DOB,
-    isActive: user.isActive,
-    Note: user.notes,
+    id: user?.id,
+    userName: user?.userName ? user?.userName : '-',
+    firstName: user?.firstName ? user?.firstName : '-',
+    lastName: user?.lastName ? user?.lastName : '-',
+    email: user?.email ? user?.email : '-',
+    mobileNumber: user?.mobileNumber ? user?.mobileNumber : '-',
+    country: user?.country ? user?.country : '-',
+    isActive: user?.isActive ? user?.isActive : '-',
+    Note: user?.notes ? user?.notes : '-',
+    // occupation: user?.occupation ? user?.occupation : '-',
+    // city: user?.city ? user?.city : '-',
+    // address: user?.address ? user?.address : '-',
+    // DOB: user?.DOB ? user?.DOB : '-',
   }));
 
   return (
@@ -181,6 +181,7 @@ export default function Users() {
                   "& .MuiTablePagination-selectIcon": {
                     color: "white",
                   },
+                  overflowY: 'hidden',
                 }}
               />
             </div>

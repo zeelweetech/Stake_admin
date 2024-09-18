@@ -22,7 +22,11 @@ export async function getCommissionList(page, pageSize) {
 /**
  * getCommission by id
  */
-export async function getCommissionById(gameId, page, pageSize) {
+export async function getCommissionById({
+  gameId,
+  page: page,
+  pageSize: pageSize,
+}) {
   try {
     const response = await axios.get(
       `${process.env.REACT_APP_LOCAL_URL}/admin/commissions/get/${gameId}?page=${page}&limit=${pageSize}`,

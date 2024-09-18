@@ -26,10 +26,7 @@ function GameRatio() {
 
   return (
     <div>
-      <div
-        className="flex justify-center m-auto"
-        style={{ width: "500px", height: "300px" }}
-      >
+      <div className="flex justify-center m-auto w-[500px] h-[300px]">
         <Pie data={data} />
       </div>
       <p className="text-m font-semibold text-[#b1bad3] flex justify-center py-5">

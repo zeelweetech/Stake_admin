@@ -4,7 +4,7 @@ import "../../App.css";
 import { DataGrid } from "@mui/x-data-grid";
 import { getAllLogs } from "../../services/LoginServices";
 import Columns from "./columns";
-import { PiUserSquareDuotone } from "react-icons/pi";
+import { TbLogs } from "react-icons/tb";
 
 function Logs() {
   const [loading, setLoading] = useState(false);
@@ -71,7 +71,7 @@ function Logs() {
       ) : (
         <div>
           <div className="text-white bg-[#0f212e] border-y-4 border-r-4 border-[#2f4553] flex items-center justify-center space-x-4 w-80 rounded-e-full mt-5">
-            <PiUserSquareDuotone size={25} />
+            <TbLogs size={25} />
             <p className=" text-2xl py-3">Logs</p>
           </div>
           <div className="flex justify-center item-center py-8">

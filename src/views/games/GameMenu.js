@@ -41,14 +41,14 @@ export default function Games() {
             <p className=" text-2xl py-3">Games</p>
           </div>
           <div className="flex flex-col flex-1 justify-center items-center pt-12">
-            <div style={{ width: "74.24%" }} className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col xl:w-[74.24%] lg:w-[75.5%]">
               <div className="flex justify-center">
                 <div className="flex overflow-x-auto overflow-y-hidden touch-scroll transform translate-z-0">
                   <div className="bg-[#0f212e] flex rounded-full p-[5px] flex-shrink-0  space-x-2 text-xs">
                     {menuItems.map((item) => (
                       <button
                         key={item.label}
-                        className={`py-2 px-16 rounded-full flex justify-center space-x-1.5 items-center ${
+                        className={`py-2 xl:px-16 lg:px-10 rounded-full flex justify-center space-x-1.5 items-center ${
                           gameMenu === item.label
                             ? "bg-[#4d718768]"
                             : "hover:bg-[#4d718768]"

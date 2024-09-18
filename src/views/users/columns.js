@@ -102,7 +102,7 @@ function Columns({ handleToggleStatus }) {
     {
       field: "Note",
       headerName: "Note",
-      width: 140,
+      width: 139,
       headerClassName: "column-header",
       cellClassName: "column-cell",
       renderCell: (params) => (

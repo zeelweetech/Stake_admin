@@ -53,11 +53,11 @@ function TopPlayers() {
   }));
 
   return (
-    <div>
+    <div className="pb-3">
       <p className="text-xl font-bold text-center py-4 text-[#b1bad3]">
         Top Three Players
       </p>
-      <div className="w-[40rem] flex justify-center m-auto">
+      <div className="flex justify-center m-auto">
         {gameInformation?.topPlayers?.length > 0 ? (
           <DataGrid
             rows={rows}
@@ -89,6 +89,7 @@ function TopPlayers() {
               "& .MuiTablePagination-selectIcon": {
                 color: "white",
               },
+              overflowY: 'hidden',
             }}
           />
         ) : (

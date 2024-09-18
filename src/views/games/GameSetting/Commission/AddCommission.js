@@ -26,7 +26,6 @@ export default function AddCommissions({
   setGameCommission,
   setIsEditing,
   selectedCommissionId,
-  formatDateTime,
 }) {
   const { gameId } = useParams();
   const [loading, setLoading] = useState(false);
@@ -141,6 +140,14 @@ export default function AddCommissions({
       setLoading(false);
     }
     console.log("loading", loading);
+  };
+
+  const formatToDateInput = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Add leading zero
+    const day = String(date.getDate()).padStart(2, "0"); // Add leading zero
+    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -268,7 +275,11 @@ export default function AddCommissions({
             fullWidth
             variant="outlined"
             type="date"
-            value={commissionForm?.startCommissionDate || ""}
+            value={
+              commissionForm?.startCommissionDate
+                ? formatToDateInput(commissionForm?.startCommissionDate)
+                : ""
+            }
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             error={!!errors.startCommissionDate}
@@ -302,7 +313,11 @@ export default function AddCommissions({
             margin="dense"
             type="date"
             fullWidth
-            value={commissionForm?.endCommissionDate || ""}
+            value={
+              commissionForm?.endCommissionDate
+                ? formatToDateInput(commissionForm?.endCommissionDate)
+                : ""
+            }
             onChange={handleChange}
             InputLabelProps={{ shrink: true }}
             error={!!errors.endCommissionDate}

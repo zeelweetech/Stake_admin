@@ -131,7 +131,7 @@ function WeeklyBetsAmount() {
     <div>
       <div className="flex justify-end">
         <select
-          className="bg-[#4d718768] text-white p-2"
+          className="bg-[#4d718768] text-white p-2 rounded-md"  
           name="week"
           value={weeklyBetsAmount}
           onChange={(e) => dispatch(setWeeklyBetsAmount(e.target.value))}
@@ -140,7 +140,7 @@ function WeeklyBetsAmount() {
           <option value="Last Week">Last Week</option>
         </select>
       </div>
-      <div className="space-y-10" style={{ width: "600px", margin: "0 auto" }}>
+      <div className="space-y-10 xl:w-[600px] lg:w-[430px]" style={{ margin: "0 auto" }}>
         <Bar data={BetsData} options={options} />
         <Bar data={AmountData} options={options} />
       </div>

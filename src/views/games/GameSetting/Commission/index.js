@@ -12,8 +12,8 @@ export default function Commission({
   totalCount,
   setGameCommission,
   gameCommission,
-  pageState,
-  setPageState,
+  paginationModel,
+  setPaginationModel,
 }) {
   const [commissionForm, setCommissionForm] = useState();
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,8 @@ export default function Commission({
       commissionPercentage: commission.commissionPercentage,
       startTime: commission.startTime,
       endTime: commission.endTime,
-      commissionDate: commission?.commissionDate,
+      startCommissionDate: commission.startCommissionDate,
+      endCommissionDate: commission.endCommissionDate,
     });
     setSelectedCommissionId(commission?.id);
     setIsEditing(true);
@@ -84,6 +85,28 @@ export default function Commission({
       headerClassName: "column-header",
       cellClassName: "column-cell",
     },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 130,
+      headerClassName: "column-header",
+      cellClassName: "column-cell",
+      renderCell: (params) => {
+        const style = {
+          color:
+            params.value === "active"
+              ? "#4ade80"
+              : params.value === "inactive"
+              ? "#f87171"
+              : params.value === "preactive"
+              ? "#60a5fa"
+              : "#b1bad3",
+          fontWeight: "bold",
+        };
+  
+        return <span style={style}>{params.value}</span>;
+      },
+    },
     // {
     //   field: "commissionDate",
     //   headerName: "Commission Date",
@@ -94,7 +117,7 @@ export default function Commission({
     {
       field: "Edit",
       headerName: "Edit",
-      width: 150,
+      width: 100,
       headerClassName: "column-header",
       cellClassName: "column-cell",
       renderCell: (params) => (
@@ -111,7 +134,7 @@ export default function Commission({
     {
       field: "Delete",
       headerName: "Delete",
-      width: 120,
+      width: 100,
       headerClassName: "column-header",
       cellClassName: "column-cell",
       renderCell: (params) => (
@@ -141,8 +164,13 @@ export default function Commission({
       : "-",
     startTime: item?.startTime ? item?.startTime : "-",
     endTime: item?.endTime ? item?.endTime : "-",
-    startCommissionDate: formatDateTime(item?.startCommissionDate) ? formatDateTime(item?.startCommissionDate) : '-',
-    endCommissionDate: formatDateTime(item?.endCommissionDate) ? formatDateTime(item?.endCommissionDate) : '-',
+    startCommissionDate: formatDateTime(item?.startCommissionDate)
+      ? formatDateTime(item?.startCommissionDate)
+      : "-",
+    endCommissionDate: formatDateTime(item?.endCommissionDate)
+      ? formatDateTime(item?.endCommissionDate)
+      : "-",
+      status: item?.status ? item?.status : '-',
     // commissionDate: formatDateTime(item?.createdAt) ? formatDateTime(item?.createdAt) : "-",
   }));
 
@@ -177,9 +205,9 @@ export default function Commission({
             getRowId={(row) => row.id}
             loading={loading}
             rowCount={totalCount}
-            paginationModel={pageState}
+            paginationModel={paginationModel}
             paginationMode="server"
-            onPaginationModelChange={setPageState}
+            onPaginationModelChange={setPaginationModel}
             pageSizeOptions={[10, 20]}
             getRowClassName={(params) =>
               params.indexRelativeToCurrentPage % 2 === 0
@@ -222,7 +250,6 @@ export default function Commission({
         setCommissionForm={setCommissionForm}
         setIsEditing={setIsEditing}
         selectedCommissionId={selectedCommissionId}
-        formatDateTime={formatDateTime}
       />
     </div>
   );

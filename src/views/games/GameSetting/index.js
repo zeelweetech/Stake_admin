@@ -9,11 +9,11 @@ export default function GameCommissions() {
   const [gameMenu, setGameMenu] = useState();
   const [commissionData, setCommissionData] = useState(false);
   const [gameCommission, setGameCommission] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [pageState, setPageState] = useState({
+  const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
     pageSize: 10,
   });
+  const [totalCount, setTotalCount] = useState(0);
 
   const handleCommission = async (e) => {
     e.preventDefault();
@@ -23,11 +23,11 @@ export default function GameCommissions() {
 
   const CommissionById = async () => {
     try {
-      const response = await getCommissionById(
+      const response = await getCommissionById({
         gameId,
-        pageState.page,
-        pageState.pageSize
-      );
+        page: paginationModel?.page + 1,
+        pageSize: paginationModel?.pageSize,
+      });
       setGameCommission(response?.data);
       setTotalCount(response?.totalPulls);
     } catch (error) {
@@ -102,8 +102,8 @@ export default function GameCommissions() {
           setGameCommission={setGameCommission}
           totalCount={totalCount}
           gameCommission={gameCommission}
-          setPageState={setPageState}
-          pageState={pageState}
+          paginationModel={paginationModel}
+          setPaginationModel={setPaginationModel}
         />
       )}
     </div>
