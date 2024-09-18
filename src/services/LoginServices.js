@@ -13,7 +13,6 @@ export async function userLogin({ body: body }) {
   } catch (error) {
     // throw error;
     throw error.response ? error.response.data : new Error("Network Error");
-
   }
 }
 
@@ -50,10 +49,10 @@ export async function userForgotPassword({ body: body }) {
 /**
  * GETALLLOGS
  */
-export async function getAllLogs({page: page}) {
+export async function getAllLogs({ page: page }) {
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_LOCAL_URL}/admin/logs?searchQuery=${page}`,
+      `${process.env.REACT_APP_LOCAL_URL}/admin/logs`,
       {
         headers: {
           Authorization: localStorage.getItem("token"),

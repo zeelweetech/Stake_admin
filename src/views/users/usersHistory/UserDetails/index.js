@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
-import Columns from "./columns";
-import { DataGrid } from "@mui/x-data-grid";
-import { getUserHistory } from "../../../../services/userServices";
 import { useParams } from "react-router-dom";
+import { getUserHistory } from "../../../../services/userServices";
+import Loader from "../../../component/Loader";
+import { DataGrid } from "@mui/x-data-grid";
+import Columns from "./columns";
 
 const UserDetails = () => {
   const { userId } = useParams();
   const [loading, setLoading] = useState(false);
-  const [totalCount, setTotalCount] = useState(0);
-  const [userData, setUserData] = useState([]);
-  const [paginationModel, setPaginationModel] = useState({
+  const [userData, setUserData] = useState(null);
+  const [betsData, setBetsData] = useState([]);
+  const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
     pageSize: 10,
   });
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
-    if (userId) {
-      getAllUserdata();
-    }
-  }, [paginationModel?.page, paginationModel?.pageSize, userId]);
+    getAllUserdata();
+  }, [paginationModel?.page, paginationModel?.pageSize]);
 
   const getAllUserdata = async () => {
     setLoading(true);
@@ -28,80 +28,189 @@ const UserDetails = () => {
         page: paginationModel?.page + 1,
         pageSize: paginationModel?.pageSize,
       });
-      console.log("response : ", response);
-      const userHistory = Array.isArray(response?.user) ? response.user : [];
-
-      setUserData(userHistory);
-      //   setUserData(response?.user);
-      setTotalCount(response?.totalPulls);
+      console.log("getuser history", response);
+      setUserData(response?.user);
+      setBetsData(response?.user?.bets);
+      setTotalCount(response?.totalbets);
       setLoading(false);
-      console.log("userData", userData);
     } catch (error) {
-      console.error("Failed to fetch users: ", error);
+      console.error("Failed to fetch user data: ", error);
       setLoading(false);
     }
   };
 
-  const rows = userData?.map((user) => {
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString("en-US");
+
+    const options = {
+      hour: "numeric",
+
+      minute: "numeric",
+      hour12: true,
+    };
+    const formattedTime = date.toLocaleTimeString("en-US", options);
+    return `${formattedDate} ${formattedTime}`;
+  };
+
+  const rows = betsData?.map((bets) => {
     return {
-      firstName: user.firstName ? user.firstName : "-",
-      lastName: user.lastName ? user.lastName : "-",
-      userName: user.userName ? user.userName : "-",
-      email: user.email ? user.email : "-",
-      mobileNumber: user.mobileNumber ? user.mobileNumber : "-",
-      DOB: user.DOB ? user.DOB : "-",
-      country: user.country ? user.country : "-",
-      address: user.address ? user.address : "-",
-      city: user.city ? user.city : "-",
-      isActive: user.isActive ? user.isActive : "-",
-      notes: user.notes ? user.notes : "-",
+      id: bets?.id,
+      betAmount: bets?.betAmount ? bets?.betAmount : "-",
+      winAmount: bets?.winAmount ? bets?.winAmount : "-",
+      cashOutAt: bets?.cashOutAt ? bets?.cashOutAt : "-",
+      betTime: formatDateTime(bets?.betTime)
+        ? formatDateTime(bets?.betTime)
+        : "-",
     };
   });
+
   return (
-    <>
-      <div className="flex-1 mt-10">
-        {/* <p></p> */}
-        <DataGrid
-          rows={rows}
-          columns={Columns()}
-          getRowId={(row) => row.id}
-          loading={loading}
-          rowCount={totalCount}
-          paginationModel={paginationModel}
-          paginationMode="server"
-          onPaginationModelChange={setPaginationModel}
-          pageSizeOptions={[10, 20]}
-          getRowClassName={(params) =>
-            params.indexRelativeToCurrentPage % 2 === 0
-              ? "row-dark"
-              : "row-light"
-          }
-          className="select-none"
-          sx={{
-            border: "none",
-            color: "#b1bad3",
-            "& .MuiDataGrid-cell": {
-              border: "none",
-            },
-            "& .MuiDataGrid-columnHeader": {
-              borderBottom: "none",
-              borderTop: "none",
-            },
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
-              borderBottom: "none",
-              color: "white",
-            },
-            "& .MuiTablePagination-root": {
-              color: "white",
-            },
-            "& .MuiTablePagination-selectIcon": {
-              color: "white",
-            },
-          }}
-        />
-      </div>
-    </>
+    <div className="flex-1 mt-10">
+      {loading ? (
+        <Loader />
+      ) : (
+        <div>
+          {userData && (
+            <div>
+              <p className="text-white bg-[#213743] text-2xl text-center mb-7 py-3 w-60">
+                User Details
+              </p>
+              <div className="mb-4 p-4 bg-[#213743] rounded shadow text-white">
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 m-2 border-b border-gray-500 pb-4 bg-dark">
+                  <div>
+                    First Name: {userData.firstName ? userData.firstName : "-"}
+                  </div>
+                  <div>
+                    Last Name: {userData.lastName ? userData.lastName : "-"}
+                  </div>
+                  <div>
+                    User Name: {userData.userName ? userData.userName : "-"}
+                  </div>
+                </div>
+
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2 border-b border-gray-500 pb-4">
+                  <div>Email: {userData.email ? userData.email : "-"}</div>
+                  <div>
+                    Mobile Number:{" "}
+                    {userData.mobileNumber ? userData.mobileNumber : "-"}
+                  </div>
+                </div>
+
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 m-2 border-b border-gray-500 pb-4">
+                  <div>
+                    Country: {userData.country ? userData.country : "-"}
+                  </div>
+                  <div>
+                    Address: {userData.address ? userData.address : "-"}
+                  </div>
+                  <div>City: {userData.city ? userData.city : "-"}</div>
+                </div>
+
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2 border-b border-gray-500 pb-4">
+                  <div>Date of Birth: {userData.DOB ? userData.DOB : "-"}</div>
+                  <div
+                    className={`${
+                      userData.isActive ? "text-green-500" : "text-red-500"
+                    }`}
+                  >
+                    Status: {userData.isActive ? "Active" : "Inactive"}
+                  </div>
+                </div>
+
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2 border-b border-gray-500 pb-4">
+                  <div>
+                    Created At: {new Date(userData.createdAt).toLocaleString()}
+                  </div>
+                  <div>
+                    Updated At: {new Date(userData.updatedAt).toLocaleString()}
+                  </div>
+                </div>
+
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2 border-b border-gray-500 pb-4">
+                  <div>
+                    Occupation:{" "}
+                    {userData.occupation ? userData.occupation : "-"}
+                  </div>
+                  <div>Notes: {userData.notes ? userData.notes : "-"}</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div>
+            <p className="text-white bg-[#213743] text-2xl text-center mt-9 py-3 w-60">
+              User Bets Details
+            </p>
+            <div className="flex justify-center item-center py-8">
+              <DataGrid
+                rows={rows}
+                columns={Columns()}
+                getRowId={(row) => row.id}
+                loading={loading}
+                rowCount={totalCount}
+                paginationModel={paginationModel}
+                paginationMode="server"
+                onPaginationModelChange={setPaginationModel}
+                pageSizeOptions={[10, 20]}
+                getRowClassName={(params) =>
+                  params.indexRelativeToCurrentPage % 2 === 0
+                    ? "row-dark"
+                    : "row-light"
+                }
+                className="select-none"
+                sx={{
+                  border: "none",
+                  color: "#b1bad3",
+                  "& .MuiDataGrid-cell": {
+                    border: "none",
+                  },
+                  "& .MuiDataGrid-columnHeader": {
+                    borderBottom: "none",
+                    borderTop: "none",
+                  },
+                  "& .MuiDataGrid-footerContainer": {
+                    borderTop: "none",
+                    borderBottom: "none",
+                    color: "white",
+                  },
+                  "& .MuiTablePagination-root": {
+                    color: "white",
+                  },
+                  "& .MuiTablePagination-selectIcon": {
+                    color: "white",
+                  },
+                }}
+              />
+            </div>
+          </div>
+
+          {userData && userData.wallet && (
+            <div>
+              <p className="text-white bg-[#213743] text-2xl text-center mb-7 py-3 w-60">
+                User Wallet Details
+              </p>
+              <div className="mb-4 p-4 bg-[#213743] rounded shadow text-white">
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2 border-b border-gray-500 pb-4">
+                  <div>
+                    Current Amount:{" "}
+                    {userData.wallet.currentAmount
+                      ? userData.wallet.currentAmount
+                      : "-"}
+                  </div>
+                  <div>
+                    Total Amount:{" "}
+                    {userData.wallet.totalAmount
+                      ? userData.wallet.totalAmount
+                      : "-"}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 

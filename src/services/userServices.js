@@ -63,7 +63,7 @@ export async function getUserNote({ body: body, userId }) {
  * user History
  */
 
-export async function getUserHistory({userId }) {
+export async function getUserHistory({ userId }) {
   try {
     const response = await axios.get(
       `${process.env.REACT_APP_LOCAL_URL}/user/history/${userId}`,

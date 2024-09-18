@@ -55,10 +55,12 @@ function Logs() {
 
   const rows = logsData?.map((logs) => {
     return {
-      userName: logs.User?.username ? logs.User?.username : "-",
+      userName: logs.userName ? logs.userName : "-",
       userId: logs.userId ? logs.userId : "-",
-      action: logs.action ? logs.action : "-",
-      logTime: formatDateTime(logs.logTime) ? formatDateTime(logs.logTime) : "-",
+      performOn: logs.performOn ? logs.performOn : "-",
+      actionType: logs.actionType ? logs.actionType : " -",
+      actionDescription: logs.actionDescription? logs.actionDescription : "-",
+      logTime: formatDateTime(logs.logTime) ? formatDateTime(logs.logTime) : "-"
     };
   });
 
@@ -77,7 +79,7 @@ function Logs() {
               <DataGrid
                 rows={rows}
                 columns={Columns()}
-                getRowId={(row) => row.userId || row.id || Math.random()}
+                getRowId={(row) => row.userId}
                 loading={loading}
                 rowCount={totalCount}
                 paginationModel={paginationModel}

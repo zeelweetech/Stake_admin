@@ -61,3 +61,22 @@ export async function ChangeGameStatus({ gameId: gameId, body: body }) {
     throw error;
   }
 }
+
+/**
+ * Game Information
+ */
+export async function getGameInformation({ id: id }) {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_LOCAL_URL}/game/GameInformation/${id}`,
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
