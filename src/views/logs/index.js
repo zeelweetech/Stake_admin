@@ -7,28 +7,29 @@ import Columns from "./columns";
 import { PiUserSquareDuotone } from "react-icons/pi";
 
 function Logs() {
-  const [loading, setLoading] = useState(false);
-  const [totalCount, setTotalCount] = useState(0);
   const [logsData, setLogsData] = useState([]);
-  const [paginationModel, setPaginationModel] = useState({
+  const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
     pageSize: 10,
   });
+  const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getAllUserdata();
+    getAllUserLogs();
   }, [paginationModel?.page, paginationModel?.pageSize]);
 
-  const getAllUserdata = async () => {
+  const getAllUserLogs = async () => {
+    setLoading(true);
     try {
       const response = await getAllLogs({
         page: paginationModel?.page + 1,
         pageSize: paginationModel?.pageSize,
       });
-      console.log("getAllUser response", response);
-      setLogsData(response?.logs);
-      setTotalCount(response?.totalPulls);
+      console.log("response", response);
 
+      setLogsData(response?.logs);
+      setTotalCount(response?.totalItems);
       setLoading(false);
     } catch (error) {
       console.error("Failed to fetch users: ", error);
@@ -50,26 +51,29 @@ function Logs() {
     return `${formattedDate} ${formattedTime}`;
   };
 
-  // const logDateTimeFormatted = formatDateTime("2024-08-23T10:13:04.000Z");
-  // console.log(logDateTimeFormatted);
-
-  const rows = logsData?.map((logs) => {
+  const rows = logsData?.map((logsData) => {
     return {
-      userName: logs.userName ? logs.userName : "-",
-      userId: logs.userId ? logs.userId : "-",
-      performOn: logs.performOn ? logs.performOn : "-",
-      actionType: logs.actionType ? logs.actionType : " -",
-      actionDescription: logs.actionDescription? logs.actionDescription : "-",
-      logTime: formatDateTime(logs.logTime) ? formatDateTime(logs.logTime) : "-"
+      userName: logsData.userName ? logsData.userName : "-",
+      userId: logsData.userId ? logsData.userId : "-",
+      performOn: logsData.performOn ? logsData.performOn : "-",
+      actionType: logsData.actionType ? logsData.actionType : " -",
+      actionDescription: logsData.actionDescription
+        ? logsData.actionDescription
+        : "-",
+      logTime: formatDateTime(logsData.logTime)
+        ? formatDateTime(logsData.logTime)
+        : "-",
     };
   });
 
   return (
-    <div className="bg-[#1a2c38] py-2 h-screen">
+    <div className="bg-[#1a2c38] py-2 h-full ">
       {loading ? (
-        <Loader />
+        <div className="m-auto justify-center item-center">
+          <Loader />
+        </div>
       ) : (
-        <div>
+        <div className=" h-full">
           <div className="text-white bg-[#0f212e] border-y-4 border-r-4 border-[#2f4553] flex items-center justify-center space-x-4 w-80 rounded-e-full mt-5">
             <PiUserSquareDuotone size={25} />
             <p className=" text-2xl py-3">Logs</p>
@@ -77,6 +81,7 @@ function Logs() {
           <div className="flex justify-center item-center py-8">
             <div style={{ width: "75.25%" }}>
               <DataGrid
+                autoHeight
                 rows={rows}
                 columns={Columns()}
                 getRowId={(row) => row.userId}
@@ -91,6 +96,7 @@ function Logs() {
                     ? "row-dark"
                     : "row-light"
                 }
+                className="select-none"
                 sx={{
                   border: "none",
                   color: "#b1bad3",

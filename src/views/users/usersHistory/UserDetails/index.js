@@ -7,7 +7,6 @@ import Columns from "./columns";
 
 const UserDetails = () => {
   const { userId } = useParams();
-  const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
   const [betsData, setBetsData] = useState([]);
   const [paginationModel, setPaginationModel] = React.useState({
@@ -15,6 +14,8 @@ const UserDetails = () => {
     pageSize: 10,
   });
   const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  console.log("paginationModel", paginationModel);
 
   useEffect(() => {
     getAllUserdata();
@@ -31,7 +32,9 @@ const UserDetails = () => {
       console.log("getuser history", response);
       setUserData(response?.user);
       setBetsData(response?.user?.bets);
-      setTotalCount(response?.totalbets);
+      setTotalCount(response?.user?.totalBets);
+      console.log("totalCount", totalCount);
+
       setLoading(false);
     } catch (error) {
       console.error("Failed to fetch user data: ", error);
@@ -53,14 +56,14 @@ const UserDetails = () => {
     return `${formattedDate} ${formattedTime}`;
   };
 
-  const rows = betsData?.map((bets) => {
+  const rows = betsData?.map((betsData) => {
     return {
-      id: bets?.id,
-      betAmount: bets?.betAmount ? bets?.betAmount : "-",
-      winAmount: bets?.winAmount ? bets?.winAmount : "-",
-      cashOutAt: bets?.cashOutAt ? bets?.cashOutAt : "-",
-      betTime: formatDateTime(bets?.betTime)
-        ? formatDateTime(bets?.betTime)
+      id: betsData?.id,
+      betAmount: betsData?.betAmount ? betsData?.betAmount : "-",
+      winAmount: betsData?.winAmount ? betsData?.winAmount : "-",
+      cashOutAt: betsData?.cashOutAt ? betsData?.cashOutAt : "-",
+      betTime: formatDateTime(betsData?.betTime)
+        ? formatDateTime(betsData?.betTime)
         : "-",
     };
   });
@@ -158,7 +161,6 @@ const UserDetails = () => {
                     ? "row-dark"
                     : "row-light"
                 }
-                className="select-none"
                 sx={{
                   border: "none",
                   color: "#b1bad3",

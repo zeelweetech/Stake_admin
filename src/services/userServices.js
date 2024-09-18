@@ -62,9 +62,14 @@ export async function getUserNote({ body: body, userId }) {
 /**
  * user History
  */
-
-export async function getUserHistory({userId, page: page, pageSize: pageSize }) {
+export async function getUserHistory({
+  userId: userId,
+  page: page,
+  pageSize: pageSize,
+}) {
   try {
+    console.log("page", page, pageSize);
+
     const response = await axios.get(
       `${process.env.REACT_APP_LOCAL_URL}/user/history/${userId}?page=${page}&limit=${pageSize}`,
       {
