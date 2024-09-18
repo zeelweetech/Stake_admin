@@ -16,19 +16,6 @@ export default function GameDetailPlayers({ userData }) {
   }));
   return (
     <div>
-      {/* {rows.map((row) => (
-        <div key={row.pullId}>
-          {expandedRow === row.pullId && (
-            <Accordion expanded={true} sx={{ background: "#1a2c38" }}>
-              <AccordionSummary>Game Details for {row.pullId}</AccordionSummary>
-              <AccordionDetails>
-                <GamePlayersColumn pullId={row.pullId} />
-              </AccordionDetails>
-            </Accordion>
-          )}
-        </div>
-      ))} */}
-
       <DataGrid
         autoHeight
         rows={playerRows}
@@ -71,3 +58,25 @@ export default function GameDetailPlayers({ userData }) {
     </div>
   );
 }
+
+
+// {pullsData.map((row) => (
+//   <div key={row?.pullId}>
+//     {expandedRow === row?.pullId && (
+//       <Accordion expanded={true} sx={{ background: "#1a2c38" }}>
+//         <AccordionSummary>
+//           Game Details for {row?.pullId}
+//         </AccordionSummary>
+//         <AccordionDetails>
+//           {/* <GamePlayersColumn pullId={row.pullId} /> */}
+//           <GameDetailPlayers
+//             pullId={row?.pullId}
+//             userData={userData.filter(
+//               (player) => player.pullId === row.pullId
+//             )}
+//           />
+//         </AccordionDetails>
+//       </Accordion>
+//     )}
+//   </div>
+// ))}

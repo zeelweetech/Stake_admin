@@ -26,6 +26,28 @@ code {
   background: #b1bad3; 
 }
 
+.custom-list {
+  list-style-type: none; /* Removes the default bullet points */
+}
+
+.custom-list li::before {
+  content: "•"; /* Unicode for bullet point */
+  font-size: 1.5rem; /* Adjust bullet size */
+  margin-right: 8px; /* Add space between bullet and text */
+}
+
+.highest-bet::before {
+  color: rgba(255, 99, 132, 0.6); /* Bullet color for Highest Bet */
+}
+
+.lowest-bet::before {
+  color: rgba(75, 192, 192, 0.6); /* Bullet color for Lowest Bet */
+}
+
+.average-bet::before {
+  color: rgba(54, 162, 235, 0.7); /* Bullet color for Average Bet */
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
