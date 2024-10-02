@@ -71,7 +71,9 @@ const UserDetails = () => {
   return (
     <div className="flex-1 mt-10">
       {loading ? (
-        <Loader />
+        <div className="flex justify-center">
+          <Loader />
+        </div>
       ) : (
         <div>
           {userData && (
