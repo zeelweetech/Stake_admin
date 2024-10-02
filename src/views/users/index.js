@@ -45,7 +45,7 @@ export default function Users() {
         page: paginationModel?.page + 1,
         pageSize: paginationModel?.pageSize,
       });
-      console.log("getAllUser response", response);
+      // console.log("getAllUser response", response);
       setUserData(response?.UserList || []);
       setTotalCount(response?.totalPulls);
       setLoading(false);
@@ -73,8 +73,6 @@ export default function Users() {
       setCurrentUserId(userId);
     }
   };
-
-  console.log("userData userData userData :", userData);
 
   const handleNote = async () => {
     const { Note } = userNote;
@@ -117,6 +115,7 @@ export default function Users() {
     const { userName, id } = params.row; 
     navigate(`/users/${userName}/${id}`); 
   };
+  
   const rows = userData.map((user) => ({
     id: user?.id,
     userName: user?.userName ? user?.userName : '-',

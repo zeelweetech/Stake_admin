@@ -68,10 +68,86 @@ export async function getUserHistory({
   pageSize: pageSize,
 }) {
   try {
-    console.log("page", page, pageSize);
-
     const response = await axios.get(
       `${process.env.REACT_APP_LOCAL_URL}/user/history/${userId}?page=${page}&limit=${pageSize}`,
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * get user Distribution
+ */
+export async function getUserDistribution({ page: page, pageSize: pageSize }) {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_LOCAL_URL}/admin/amountdistributions/?page=${page}&limit=${pageSize}`,
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * add user Distribution
+ */
+export async function AddDistribution({ body: body }) {
+  try {
+    const response = await axios.post(
+      `${process.env.REACT_APP_LOCAL_URL}/admin/amountdistributions`,
+      body,
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * edit user Distribution
+ */
+export async function EditDistribution({ body: body, id: id }) {
+  try {
+    const response = await axios.put(
+      `${process.env.REACT_APP_LOCAL_URL}/admin/amountdistributions/${id}`,
+      body,
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * Delete user Distribution
+ */
+export async function DeleteDistribution({ id: id }) {
+  try {
+    const response = await axios.delete(
+      `${process.env.REACT_APP_LOCAL_URL}/admin/amountdistributions/${id}`,
       {
         headers: {
           Authorization: localStorage.getItem("token"),

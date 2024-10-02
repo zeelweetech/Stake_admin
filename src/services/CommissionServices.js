@@ -95,10 +95,10 @@ export async function DeleteCommission({ id }) {
         },
       }
     );
-    console.log("Delete response:", response.data);
+    // console.log("Delete response:", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error deleting commission:", error);
+    // console.error("Error deleting commission:", error);
     throw error;
   }
 }

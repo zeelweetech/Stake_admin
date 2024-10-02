@@ -83,6 +83,7 @@ function Columns({ handleToggleStatus }) {
         <div>
           <Switch
             checked={params.row.isActive}
+            onClick={(e) => e.stopPropagation()}
             onChange={() =>
               handleToggleStatus(params.row.id, params.row.isActive)
             }

@@ -9,6 +9,7 @@ const GameMenu = React.lazy(() => import("./views/games/GameMenu"));
 // const Crash = React.lazy(() => import("./views/GameDetail/Games"));
 const Logs = React.lazy(() => import("./views/logs"));
 const User = React.lazy(() => import("./views/users/usersHistory"));
+const userDistribution = React.lazy(() => import("./views/users/userDistribution"))
 
 // const { gameName, gameId } = useParams();
 
@@ -19,6 +20,11 @@ const routes = [
   { path: "/games", name: "Games", element: Games },
   { path: "/games/:gameName/:gameId", name: "GameMenu", element: GameMenu },
   { path: "/logs", name: "Logs", element: Logs },
+  {
+    path: "/userDistribution",
+    name: "User Distribution",
+    element: userDistribution,
+  },
 ];
 
 export default routes;

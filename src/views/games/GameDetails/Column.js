@@ -25,15 +25,15 @@ function Column() {
     },
     {
       field: "TotalPullAmount",
-      headerName: "Total Pull Amount",
+      headerName: "Total Pool Amount",
       width: 220,
       headerClassName: "column-header",
       cellClassName: "column-cell",
     },
     {
       field: "PullTime",
-      headerName: "Pull Time",
-      width: 210,
+      headerName: "Pool Time",
+      width: 214,
       headerClassName: "column-header",
       cellClassName: "column-cell",
     },
