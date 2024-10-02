@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
-import Loader from "../component/Loader";
+import React from "react";
 import "../../App.css";
-import { DataGrid } from "@mui/x-data-grid";
+import { useEffect } from "react";
+import { useState } from "react";
 import { getAllLogs } from "../../services/LoginServices";
 import Columns from "./columns";
+import { DataGrid } from "@mui/x-data-grid";
 import { TbLogs } from "react-icons/tb";
+import SearchIcon from "@mui/icons-material/Search";
 
-function Logs() {
+const Logs = () => {
   const [logsData, setLogsData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
     pageSize: 10,
@@ -17,17 +20,17 @@ function Logs() {
 
   useEffect(() => {
     getAllUserLogs();
-  }, [paginationModel?.page, paginationModel?.pageSize]);
+  }, [paginationModel?.page, paginationModel?.pageSize, searchQuery]);
 
   const getAllUserLogs = async () => {
     setLoading(true);
     try {
       const response = await getAllLogs({
+        search: searchQuery,
         page: paginationModel?.page + 1,
         pageSize: paginationModel?.pageSize,
       });
-      console.log("response", response);
-
+      console.log("getlogs", response);
       setLogsData(response?.logs);
       setTotalCount(response?.totalItems);
       setLoading(false);
@@ -51,32 +54,37 @@ function Logs() {
     return `${formattedDate} ${formattedTime}`;
   };
 
-  const rows = logsData?.map((logsData) => {
+  const rows = logsData?.map((log) => {
     return {
-      userName: logsData.userName ? logsData.userName : "-",
-      userId: logsData.userId ? logsData.userId : "-",
-      performOn: logsData.performOn ? logsData.performOn : "-",
-      actionType: logsData.actionType ? logsData.actionType : " -",
-      actionDescription: logsData.actionDescription
-        ? logsData.actionDescription
-        : "-",
-      logTime: formatDateTime(logsData.logTime)
-        ? formatDateTime(logsData.logTime)
-        : "-",
+      userName: log.userName ? log.userName : "-",
+      userId: log.userId ? log.userId : "-",
+      performOn: log.performOn ? log.performOn : "-",
+      actionType: log.actionType ? log.actionType : " -",
+      actionDescription: log.actionDescription ? log.actionDescription : "-",
+      logTime: formatDateTime(log.logTime) ? formatDateTime(log.logTime) : "-",
     };
   });
 
   return (
-    <div className="bg-[#1a2c38] py-2 h-full ">
-      {loading ? (
-        <div className="m-auto justify-center item-center">
-          <Loader />
-        </div>
-      ) : (
+    <>
+      <div className="bg-[#1a2c38] py-2 h-full ">
         <div className=" h-full">
           <div className="text-white bg-[#0f212e] border-y-4 border-r-4 border-[#2f4553] flex items-center justify-center space-x-4 w-80 rounded-e-full mt-5">
             <TbLogs size={25} />
             <p className=" text-2xl py-3">Logs</p>
+          </div>
+          <div className="bg-[#0f212e] border-[#2f4553] flex items-center justify-center w-72 mt-5 ml-auto mr-40 p-2 space-x-2">
+            <SearchIcon size={25} className="text-white" />
+            <input
+              className="text-lg text-white bg-[#0f212e] w-full outline-none"
+              type="text"
+              name="search"
+              value={searchQuery}
+              placeholder="Search..."
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }}
+            />
           </div>
           <div className="flex justify-center item-center py-8">
             <div style={{ width: "75.25%" }}>
@@ -123,9 +131,9 @@ function Logs() {
             </div>
           </div>
         </div>
-      )}
-    </div>
+      </div>
+    </>
   );
-}
+};
 
 export default Logs;
