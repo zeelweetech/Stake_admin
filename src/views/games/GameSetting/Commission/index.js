@@ -103,7 +103,7 @@ export default function Commission({
               : "#b1bad3",
           fontWeight: "bold",
         };
-  
+
         return <span style={style}>{params.value}</span>;
       },
     },
@@ -157,8 +157,9 @@ export default function Commission({
     return `${formattedDate}`;
   };
 
-  const rows = gameCommission?.map((item) => ({
-    id: item?.id,
+  const rows = gameCommission?.map((item, index) => ({
+    // id: item?.id || index,
+    id: item?.id ? item?.id : index,
     commissionPercentage: item?.commissionPercentage
       ? item?.commissionPercentage
       : "-",
@@ -170,7 +171,7 @@ export default function Commission({
     endCommissionDate: formatDateTime(item?.endCommissionDate)
       ? formatDateTime(item?.endCommissionDate)
       : "-",
-      status: item?.status ? item?.status : '-',
+    status: item?.status ? item?.status : "-",
     // commissionDate: formatDateTime(item?.createdAt) ? formatDateTime(item?.createdAt) : "-",
   }));
 
@@ -246,6 +247,7 @@ export default function Commission({
         open={open}
         setOpen={setOpen}
         isEditing={isEditing}
+        gameCommission={gameCommission}
         setGameCommission={setGameCommission}
         setCommissionForm={setCommissionForm}
         setIsEditing={setIsEditing}

@@ -10,9 +10,12 @@ import {
 import { getGameHistory } from "../../../services/GameServices";
 import Column from "./Column";
 import GameDetailPlayers from "./GameDetailPlayer";
+import { useDispatch, useSelector } from "react-redux";
+import GameDetailFilter from "./GameDetailFilter";
 
 function GameDetails() {
   const { gameId } = useParams();
+  // const dispatch = useDispatch()
   const [pullsData, setPullsData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [paginationModel, setPaginationModel] = React.useState({
@@ -22,10 +25,14 @@ function GameDetails() {
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [expandedRow, setExpandedRow] = useState(null);
+  const { searchTerm } = useSelector((state) => state?.gameDataFilter);
+  // const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     getAllUserdata();
   }, [paginationModel?.page, paginationModel?.pageSize]);
+
+  console.log("searchTerm -*-*-*-*-*", searchTerm);
 
   const getAllUserdata = async () => {
     setLoading(true);
@@ -33,9 +40,30 @@ function GameDetails() {
       const response = await getGameHistory({
         id: gameId,
         page: paginationModel?.page + 1,
-        pageSize: paginationModel?.pageSize,
+        limit: paginationModel?.pageSize,
+        pullId: searchTerm?.pullId,
+        crashPoint: searchTerm?.crashPoint,
+        playerCount: searchTerm?.playerCount,
+        totalAmount: searchTerm?.totalAmount,
+        pullIdOperator: searchTerm?.pullId && "=",
+        crashPointOperator: searchTerm?.crashPoint && "=",
+        playerCountOperator: searchTerm?.playerCount && "=",
+        totalAmountOperator: searchTerm?.totalAmount && "=",
+        pullIdMin: searchTerm?.pullIdRangeMin,
+        pullIdMax: searchTerm?.pullIdRangeMax,
+        crashPointMin: searchTerm?.crashPointRangeMin,
+        crashPointMax: searchTerm?.crashPointRangeMax,
+        playerCountMin: searchTerm?.playerCountRangeMin,
+        playerCountMax: searchTerm?.playerCountRangeMax,
+        totalAmountMin: searchTerm?.totalAmountRangeMin,
+        totalAmountMax: searchTerm?.totalAmountRangeMax,
+        startDate: searchTerm?.startDate,
+        endDate: searchTerm?.endDate,
+        sortBy: searchTerm?.sortBy,
+        sortOrder: searchTerm?.sortOrder,
       });
-      setPullsData(response?.pulls);
+      setPullsData(response?.pulls)
+      // dispatch(setPullsData(response?.pulls))
       const allPlayers = response?.pulls?.flatMap((pull) => pull.players || []);
       setUserData(allPlayers);
       setTotalCount(response?.totalPulls);
@@ -46,35 +74,60 @@ function GameDetails() {
     }
   };
 
-  const rows = pullsData?.map((pullsData) => {
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const formattedDate = `${day}/${month}/${year}`;
+
+    const options = {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+    const formattedTime = date.toLocaleTimeString("en-US", options);
+    return `${formattedDate} ${formattedTime}`;
+  };
+
+  const rows = pullsData?.map((pulls) => {
     return {
-      pullId: pullsData.pullId,
-      CrashPoint: pullsData.crashPoint,
-      PlayerCount: pullsData.playerCount,
-      TotalPullAmount: pullsData.totalPullAmount,
-      PullTime: pullsData.pullTime,
-      expanded: expandedRow === pullsData.pullId,
+      pullId: pulls?.pullId ? pulls?.pullId : "-",
+      CrashPoint: pulls?.crashPoint ? pulls?.crashPoint : "-",
+      PlayerCount: pulls?.playerCount ? pulls?.playerCount : "-",
+      TotalPullAmount: pulls?.totalPullAmount ? pulls?.totalPullAmount : "-",
+      PullTime: formatDateTime(pulls?.pullTime)
+        ? formatDateTime(pulls?.pullTime)
+        : "-",
+      expanded: expandedRow === pulls?.pullId,
     };
   });
 
-  // const rowsWithDetails = rows.flatMap((row) => [
-  //   row, // Parent row
-  //   expandedRow === row.pullId // Add child row if expanded
-  //     ? {
-  //         id: `details-${row.pullId}`,
-  //         isDetailsRow: true,
-  //         pullId: row.pullId,
-  //       }
-  //     : null,
-  // ]).filter(Boolean);
+  const rowsWithDetails = rows
+    .flatMap((row) => [
+      row, // Parent row
+      expandedRow === row.pullId // Add child row if expanded
+        ? {
+            id: `details-${row.pullId}`,
+            isDetailsRow: true,
+            pullId: row.pullId,
+          }
+        : null,
+    ])
+    .filter(Boolean);
 
   const columnsWithDetails = [
     ...Column(),
     {
       renderCell: (params) =>
         params.row.expanded && (
-          <Box sx={{ padding: 2, width: '100%' }}>
-            <GameDetailPlayers pullId={params.row.pullId} userData={userData.filter((player) => player.pullId === params.row.pullId)} />
+          <Box sx={{ padding: 2, width: "100%" }}>
+            <GameDetailPlayers
+              pullId={params.row.pullId}
+              userData={userData.filter(
+                (player) => player.pullId === params.row.pullId
+              )}
+            />
           </Box>
         ),
     },
@@ -83,18 +136,19 @@ function GameDetails() {
   const handleRowClick = (params) => {
     const clickedRowId = params.row.pullId;
     setExpandedRow((prev) => (prev === clickedRowId ? null : clickedRowId));
-
-    
   };
 
   return (
     <div className="flex-1 mt-10">
+      <div>
+        <GameDetailFilter getAllUserdata={getAllUserdata} />
+      </div>
       <DataGrid
         autoHeight
         rows={rows}
-        // columns={Column()}
+        columns={Column()}
         // rows={rowsWithDetails}
-        columns={columnsWithDetails}
+        // columns={columnsWithDetails}
         getRowId={(row) => row.pullId}
         loading={loading}
         rowCount={totalCount}
@@ -106,7 +160,7 @@ function GameDetails() {
         getRowClassName={(params) =>
           params.indexRelativeToCurrentPage % 2 === 0 ? "row-dark" : "row-light"
         }
-        className="select-none"
+        className="select-none mt-6"
         sx={{
           border: "none",
           color: "#b1bad3",

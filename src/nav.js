@@ -38,6 +38,14 @@ const nav = [
       color: "info",
     },
   },
+  {
+    name: "User Distribution",
+    to: "/userDistribution",
+    icon: <TbLogs size={25}/>,
+    badge: {
+      color: "info",
+    },
+  },
 ];
 
 export default nav;

@@ -28,7 +28,7 @@ function Header() {
   return (
     <div>
       <div className="bg-[#1a2c38] shadow-2xl border-b border-b-black">
-        <div className="flex justify-around items-center space-x-[70rem]">
+        <div className="flex justify-around items-center space-x-[36rem]">
           <img src={stakeLogo} className="w-16 h-16" alt="Not Found" onClick={() => navigate('/dashboard')}/>
           <div className="flex items-center space-x-3">
             {/* <button

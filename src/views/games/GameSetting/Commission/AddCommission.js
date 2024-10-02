@@ -23,6 +23,7 @@ export default function AddCommissions({
   setOpen,
   isEditing,
   setCommissionForm,
+  gameCommission,
   setGameCommission,
   setIsEditing,
   selectedCommissionId,
@@ -104,7 +105,6 @@ export default function AddCommissions({
     } finally {
       setLoading(false);
     }
-    console.log("loading", loading);
   };
 
   const handleEditCommission = async () => {
@@ -145,8 +145,8 @@ export default function AddCommissions({
   const formatToDateInput = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Add leading zero
-    const day = String(date.getDate()).padStart(2, "0"); // Add leading zero
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
@@ -161,7 +161,7 @@ export default function AddCommissions({
           "& .MuiPaper-root": {
             borderRadius: "6px",
             backgroundColor: "#1a2c38",
-            color: "white",
+            color: "#b1bad3",
           },
         }}
       >
@@ -171,7 +171,7 @@ export default function AddCommissions({
             <IconButton>
               <CloseIcon
                 onClick={() => setOpen(false)}
-                className="text-white"
+                className="text-[#b1bad3]"
               />
             </IconButton>
           </div>
@@ -190,14 +190,14 @@ export default function AddCommissions({
             sx={{
               my: 1,
               input: {
-                color: "white",
+                color: "#b1bad3",
               },
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "white",
+                  borderColor: "#2f4553",
                 },
                 "&:hover fieldset": {
-                  borderColor: "white",
+                  borderColor: "#2f4553",
                 },
               },
             }}
@@ -217,21 +217,21 @@ export default function AddCommissions({
             sx={{
               my: 1,
               input: {
-                color: "white",
+                color: "#b1bad3",
               },
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "white",
+                  borderColor: "#2f4553",
                 },
                 "&:hover fieldset": {
-                  borderColor: "white",
+                  borderColor: "#2f4553",
                 },
               },
               "& .MuiInputLabel-root": {
-                color: "white",
+                color: "#b1bad3",
               },
               "& input[type='time']": {
-                color: "white",
+                color: "#b1bad3",
               },
             }}
           />
@@ -250,21 +250,21 @@ export default function AddCommissions({
             sx={{
               my: 1,
               input: {
-                color: "white",
+                color: "#b1bad3",
               },
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "white",
+                  borderColor: "#2f4553",
                 },
                 "&:hover fieldset": {
-                  borderColor: "white",
+                  borderColor: "#2f4553",
                 },
               },
               "& .MuiInputLabel-root": {
-                color: "white",
+                color: "#b1bad3",
               },
               "& input[type='time']": {
-                color: "white",
+                color: "#b1bad3",
               },
             }}
           />
@@ -287,21 +287,21 @@ export default function AddCommissions({
             sx={{
               my: 1,
               input: {
-                color: "white",
+                color: "#b1bad3",
               },
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "white",
+                  borderColor: "#2f4553",
                 },
                 "&:hover fieldset": {
-                  borderColor: "white",
+                  borderColor: "#2f4553",
                 },
               },
               "& .MuiInputLabel-root": {
-                color: "white",
+                color: "#b1bad3",
               },
               "& input[type='time']": {
-                color: "white",
+                color: "#b1bad3",
               },
             }}
           />
@@ -325,33 +325,47 @@ export default function AddCommissions({
             sx={{
               my: 1,
               input: {
-                color: "white",
+                color: "#b1bad3",
               },
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "white",
+                  borderColor: "#2f4553",
                 },
                 "&:hover fieldset": {
-                  borderColor: "white",
+                  borderColor: "#2f4553",
                 },
               },
               "& .MuiInputLabel-root": {
-                color: "white",
+                color: "#b1bad3",
               },
               "& input[type='time']": {
-                color: "white",
+                color: "#b1bad3",
               },
             }}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)} color="primary">
+          <Button
+            onClick={() => setOpen(false)}
+            sx={{
+              backgroundColor: "#ff638433",
+              px: "1rem",
+              py: "0.5rem",
+              color: "#b1bad3",
+              border: "1px solid #ff6384",
+            }}
+          >
             Close
           </Button>
           <Button
             onClick={isEditing ? handleEditCommission : handleAddCommission}
-            color="primary"
-            // disabled={loading}
+            sx={{
+              backgroundColor: "#4bc0c033",
+              px: "1rem",
+              py: "0.5rem",
+              color: "#b1bad3",
+              border: "1px solid #4bc0c0",
+            }}
           >
             {loading ? <Loader /> : isEditing ? "Save" : "Add"}
           </Button>

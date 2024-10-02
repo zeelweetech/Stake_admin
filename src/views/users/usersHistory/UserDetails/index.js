@@ -15,7 +15,6 @@ const UserDetails = () => {
   });
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  console.log("paginationModel", paginationModel);
 
   useEffect(() => {
     getAllUserdata();
@@ -33,8 +32,6 @@ const UserDetails = () => {
       setUserData(response?.user);
       setBetsData(response?.user?.bets);
       setTotalCount(response?.user?.totalBets);
-      console.log("totalCount", totalCount);
-
       setLoading(false);
     } catch (error) {
       console.error("Failed to fetch user data: ", error);
@@ -78,73 +75,124 @@ const UserDetails = () => {
         <div>
           {userData && (
             <div>
-              <p className="text-white bg-[#213743] text-2xl text-center mb-7 py-3 w-60">
+              <p className="text-white bg-[#213743] border border-[#2f4553] text-2xl text-center mb-7 py-3 w-60">
                 User Details
               </p>
-              <div className="mb-4 p-4 bg-[#213743] rounded shadow text-white">
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 m-2 border-b border-gray-500 pb-4 bg-dark">
-                  <div>
-                    First Name: {userData.firstName ? userData.firstName : "-"}
+              <div className="mb-4 p-4 bg-[#213743] rounded shadow-md text-white border border-[#2f4553]">
+                <div className="flex justify-between m-2 pb-4 bg-dark">
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">User Name : </p>{" "}
+                    {userData.userName ? userData.userName : "-"}
                   </div>
-                  <div>
-                    Last Name: {userData.lastName ? userData.lastName : "-"}
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">First Name :</p>{" "}
+                    {userData.firstName ? userData.firstName : "-"}
                   </div>
-                  <div>
-                    User Name: {userData.userName ? userData.userName : "-"}
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">Last Name :</p>{" "}
+                    {userData.lastName ? userData.lastName : "-"}
                   </div>
                 </div>
 
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2 border-b border-gray-500 pb-4">
-                  <div>Email: {userData.email ? userData.email : "-"}</div>
-                  <div>
-                    Mobile Number:{" "}
+                <div className="flex justify-between m-2">
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">Email :</p>{" "}
+                    {userData.email ? userData.email : "-"}
+                  </div>
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">Mobile Number : </p>
                     {userData.mobileNumber ? userData.mobileNumber : "-"}
                   </div>
                 </div>
 
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 m-2 border-b border-gray-500 pb-4">
-                  <div>
-                    Country: {userData.country ? userData.country : "-"}
+                <div className="flex justify-between m-2 py-4">
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">Country :</p>{" "}
+                    {userData.country ? userData.country : "-"}
                   </div>
-                  <div>
-                    Address: {userData.address ? userData.address : "-"}
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">City :</p>{" "}
+                    {userData.city ? userData.city : "-"}
                   </div>
-                  <div>City: {userData.city ? userData.city : "-"}</div>
-                </div>
-
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2 border-b border-gray-500 pb-4">
-                  <div>Date of Birth: {userData.DOB ? userData.DOB : "-"}</div>
-                  <div
-                    className={`${
-                      userData.isActive ? "text-green-500" : "text-red-500"
-                    }`}
-                  >
-                    Status: {userData.isActive ? "Active" : "Inactive"}
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">Address :</p>{" "}
+                    {userData.address ? userData.address : "-"}
                   </div>
                 </div>
 
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2 border-b border-gray-500 pb-4">
-                  <div>
-                    Created At: {new Date(userData.createdAt).toLocaleString()}
+                <div className="flex justify-between m-2">
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">Date of Birth :</p>{" "}
+                    {userData.DOB ? userData.DOB : "-"}
                   </div>
-                  <div>
-                    Updated At: {new Date(userData.updatedAt).toLocaleString()}
-                  </div>
-                </div>
-
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2 border-b border-gray-500 pb-4">
-                  <div>
-                    Occupation:{" "}
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">Occupation : </p>
                     {userData.occupation ? userData.occupation : "-"}
                   </div>
-                  <div>Notes: {userData.notes ? userData.notes : "-"}</div>
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">Status : </p>
+                    <span
+                      className={`${
+                        userData.isActive ? "text-green-500" : "text-red-500"
+                      } font-bold`}
+                    >
+                      {userData.isActive ? "Active" : "Inactive"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex justify-between m-2 py-4">
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">
+                      Total Amount Spent :
+                    </p>{" "}
+                    {userData.totalAmountSpent
+                      ? userData.totalAmountSpent
+                      : "-"}
+                  </div>
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">
+                      Total Wins Amount :
+                    </p>{" "}
+                    {userData.totalWinsAmount ? userData.totalWinsAmount : "-"}
+                  </div>
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">
+                      Total Losses Amount :
+                    </p>{" "}
+                    {userData.totalLossesAmount
+                      ? userData.totalLossesAmount
+                      : "-"}
+                  </div>
+                </div>
+
+                <div className="flex justify-between m-2">
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">
+                      Created Date & Time :{" "}
+                    </p>
+                    {new Date(userData.createdAt).toLocaleString()}
+                  </div>
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">
+                      Updated Date & Time :{" "}
+                    </p>
+                    {new Date(userData.updatedAt).toLocaleString()}
+                  </div>
+                </div>
+
+                <div className="m-2 py-4">
+                  <div className="flex items-center">
+                    <p className="font-bold text-lg pr-2">Notes : </p>
+                    {userData.notes ? userData.notes : "-"}
+                  </div>
                 </div>
               </div>
             </div>
           )}
 
           <div>
-            <p className="text-white bg-[#213743] text-2xl text-center mt-9 py-3 w-60">
+            <p className="text-white bg-[#213743] border border-[#2f4553] text-2xl text-center mt-9 py-3 w-60">
               User Bets Details
             </p>
             <div className="flex justify-center item-center py-8">
@@ -191,11 +239,11 @@ const UserDetails = () => {
 
           {userData && userData.wallet && (
             <div>
-              <p className="text-white bg-[#213743] text-2xl text-center mb-7 py-3 w-60">
+              <p className="text-white bg-[#213743] border border-[#2f4553] text-2xl text-center mb-7 py-3 w-60">
                 User Wallet Details
               </p>
-              <div className="mb-4 p-4 bg-[#213743] rounded shadow text-white">
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2 border-b border-gray-500 pb-4">
+              <div className="mb-4 p-4 bg-[#213743] border border-[#2f4553] rounded shadow text-white">
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2">
                   <div>
                     Current Amount:{" "}
                     {userData.wallet.currentAmount
