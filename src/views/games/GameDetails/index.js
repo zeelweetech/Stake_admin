@@ -12,11 +12,12 @@ import Column from "./Column";
 import GameDetailPlayers from "./GameDetailPlayer";
 import { useDispatch, useSelector } from "react-redux";
 import GameDetailFilter from "./GameDetailFilter";
+import { setPullsData } from "../../../features/games/gameDetails";
 
 function GameDetails() {
   const { gameId } = useParams();
-  // const dispatch = useDispatch()
-  const [pullsData, setPullsData] = useState([]);
+  const dispatch = useDispatch()
+  // const [pullsData, setPullsData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
@@ -26,6 +27,7 @@ function GameDetails() {
   const [loading, setLoading] = useState(false);
   const [expandedRow, setExpandedRow] = useState(null);
   const { searchTerm } = useSelector((state) => state?.gameDataFilter);
+  const {pullsData} = useSelector((state) => state?.gameDetail)
   // const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -62,8 +64,8 @@ function GameDetails() {
         sortBy: searchTerm?.sortBy,
         sortOrder: searchTerm?.sortOrder,
       });
-      setPullsData(response?.pulls)
-      // dispatch(setPullsData(response?.pulls))
+      // setPullsData(response?.pulls)
+      dispatch(setPullsData(response?.pulls))
       const allPlayers = response?.pulls?.flatMap((pull) => pull.players || []);
       setUserData(allPlayers);
       setTotalCount(response?.totalPulls);

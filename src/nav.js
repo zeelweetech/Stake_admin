@@ -1,6 +1,6 @@
 import React from "react";
 import InboxIcon from "@mui/icons-material/Inbox";
-import EmailIcon from "@mui/icons-material/Email";
+import { GiTriangleTarget } from "react-icons/gi";
 import GroupIcon from "@mui/icons-material/Group";
 import cards from "./assets/img/card.png"
 import { TbLogs } from "react-icons/tb";
@@ -41,7 +41,7 @@ const nav = [
   {
     name: "User Distribution",
     to: "/userDistribution",
-    icon: <TbLogs size={25}/>,
+    icon: <GiTriangleTarget size={25} />,
     badge: {
       color: "info",
     },

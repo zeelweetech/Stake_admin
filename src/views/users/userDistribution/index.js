@@ -2,6 +2,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import {
   DeleteDistribution,
+  getAllUser,
   getUserDistribution,
 } from "../../../services/userServices";
 import AddDistributions from "./AddDistribution";
@@ -9,6 +10,7 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { GiTriangleTarget } from "react-icons/gi";
+import { getAllGame } from "../../../services/GameServices";
 
 function UserDistribution() {
   const [loading, setLoading] = useState(false);
@@ -17,6 +19,8 @@ function UserDistribution() {
   const [isEditing, setIsEditing] = useState(false);
   const [distributionValue, setDistributionValue] = useState();
   const [selectedDistributionId, setSelectedDistributionId] = useState();
+  const [usersData, setUsersData] = useState([])
+  const [allGameData, setAllGameData] = useState([])
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
@@ -25,7 +29,34 @@ function UserDistribution() {
 
   useEffect(() => {
     getDistributionData();
+    userData()
+    allgame()
   }, [paginationModel?.page, paginationModel?.pageSize]);
+
+  const userData = async () => {
+    try {
+      const response = await getAllUser({
+        page: paginationModel?.page + 1,
+        pageSize: paginationModel?.pageSize,
+      });
+      setUsersData(response?.UserList)
+    } catch (error) {
+      console.error("Failed to fetch users: ", error);
+      setLoading(false);
+    }
+  }
+
+  // console.log('userDistributionData +-**/*-++-***/*-*-+', userDistributionData);
+  
+  const allgame = async () => {
+    try {
+      const response = await getAllGame()
+      setAllGameData(response?.games)
+    } catch (error) {
+      console.error("Failed to fetch users: ", error);
+      setLoading(false);
+    }
+  }
 
   const getDistributionData = async () => {
     setLoading(true);
@@ -34,7 +65,6 @@ function UserDistribution() {
         page: paginationModel?.page + 1,
         pageSize: paginationModel?.pageSize,
       });
-      // console.log("getUserDistribution response", response.data);
       setUserDistributionData(response?.data || []);
       setTotalCount(response?.totalPulls);
       setLoading(false);
@@ -45,23 +75,17 @@ function UserDistribution() {
   };
 
   const openEditDialog = (distribution) => {
-    // console.log('distribution =========,', distribution);
 
     setDistributionValue({
       userId: distribution?.userId,
       gameId: distribution?.gameId,
       amount: distribution?.amount,
-      // status: distribution?.status,
+      status: distribution?.status,
     });
     setSelectedDistributionId(distribution?.id);
     setIsEditing(true);
     setOpen(true);
   };
-
-  console.log(
-    "selectedDistributionId 098i8890890,098iu9",
-    selectedDistributionId
-  );
 
   const handleDeletedistribution = async (row) => {
     try {
@@ -215,18 +239,20 @@ function UserDistribution() {
               />
             </div>
           </div>
-          </div>
-          <AddDistributions
-            distributionValue={distributionValue}
-            open={open}
-            setOpen={setOpen}
-            isEditing={isEditing}
-            userDistributionData={userDistributionData}
-            setUserDistributionData={setUserDistributionData}
-            setDistributionValue={setDistributionValue}
-            setIsEditing={setIsEditing}
-            selectedDistributionId={selectedDistributionId}
-          />
+        </div>
+        <AddDistributions
+          distributionValue={distributionValue}
+          open={open}
+          setOpen={setOpen}
+          isEditing={isEditing}
+          // userDistributionData={userDistributionData}
+          setUserDistributionData={setUserDistributionData}
+          setDistributionValue={setDistributionValue}
+          setIsEditing={setIsEditing}
+          selectedDistributionId={selectedDistributionId}
+          usersData={usersData}
+          allGameData={allGameData}
+        />
       </div>
     </div>
   );

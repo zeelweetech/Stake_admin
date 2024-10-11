@@ -1,19 +1,5 @@
-import React, { useState } from "react";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  FormControlLabel,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  Switch,
-  TextField,
-} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, IconButton, InputLabel, MenuItem, Select, Switch, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -54,14 +40,21 @@ export default function AddDistributions({
   setOpen,
   isEditing,
   setIsEditing,
-  userDistributionData,
   setUserDistributionData,
   selectedDistributionId,
+  usersData,
+  allGameData
 }) {
   const { gameId } = useParams();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState(false);
+
+  useEffect(() => {
+    if (isEditing) {
+      setStatus(distributionValue?.status === "active");
+    }
+  }, [distributionValue, isEditing]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -101,6 +94,7 @@ export default function AddDistributions({
         userId: distributionValue?.userId,
         gameId: distributionValue?.gameId,
         amount: distributionValue?.amount,
+        status: status ? "active" : "inactive",
       };
       const response = await AddDistribution({ body: body });
       toast.success(response.message);
@@ -110,6 +104,7 @@ export default function AddDistributions({
         {
           id: prev.length + 1,
           ...distributionValue,
+          status: status ? "active" : "inactive",
           // userId: distributionValue?.userId,
           // gameId: distributionValue?.gameId,
           // amount: distributionValue.amount,
@@ -127,7 +122,7 @@ export default function AddDistributions({
     }
   };
 
-  console.log("selectedDistributionId **********", selectedDistributionId);
+  // console.log("selectedDistributionId **********", selectedDistributionId);
 
   const handleEditDistribution = async () => {
     try {
@@ -211,9 +206,9 @@ export default function AddDistributions({
                 },
               }}
             >
-              {userDistributionData.map((Data) => (
-                <MenuItem key={Data?.user?.id} value={Data?.user?.id}>
-                  {`UserId: ${Data?.user?.id} - ${Data?.user?.userName}`}
+              {usersData.map((Data) => (
+                <MenuItem key={Data?.id} value={Data?.id}>
+                  {`UserId: ${Data?.id} - ${Data?.userName}`}
                 </MenuItem>
               ))}
             </Select>
@@ -240,9 +235,9 @@ export default function AddDistributions({
                 },
               }}
             >
-              {userDistributionData.map((gameData) => (
-                <MenuItem key={gameData?.game?.id} value={gameData?.game?.id}>
-                  {`GameId: ${gameData?.game?.id} - ${gameData?.game?.gameName}`}
+              {allGameData.map((gameData) => (
+                <MenuItem key={gameData?.id} value={gameData?.id}>
+                  {`GameId: ${gameData?.id} - ${gameData?.gameName}`}
                 </MenuItem>
               ))}
             </Select>
