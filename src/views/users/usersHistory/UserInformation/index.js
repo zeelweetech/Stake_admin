@@ -3,7 +3,7 @@ import React from "react";
 const UserInformation = () => {
   return(
     <>
-    <p>Information</p>
+    <p className="ml-28 mt-10 text-white">Information</p>
     </>
 
   )
