@@ -29,11 +29,11 @@ const UsersHistory = () => {
             <div className="text-white bg-[#0f212e] border-y-4 border-r-4 border-[#2f4553] flex items-center justify-center space-x-4 w-80 rounded-e-full mt-5">
               <p className=" text-2xl py-3">User Details</p>
             </div>
-            <div className="flex flex-col flex-1 justify-center pt-12">
+            <div className="flex flex-col flex-1 justify-center items-center pt-12">
               <div style={{ width: "74.24%" }} className="flex-1 flex flex-col">
                 <div className="flex justify-between items-center">
                   <div className="flex overflow-x-auto overflow-y-hidden touch-scroll transform translate-z-0">
-                    <div className="bg-[#0f212e] flex rounded-full p-[5px] flex-shrink-0 space-x-2 text-xs ml-24">
+                    <div className="bg-[#0f212e] flex rounded-full p-[5px] flex-shrink-0 space-x-2 text-xs">
                       {menuItems.map((item) => (
                         <button
                           key={item.label}
