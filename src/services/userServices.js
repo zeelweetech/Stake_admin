@@ -81,6 +81,24 @@ export async function getUserHistory({
     throw error;
   }
 }
+/**
+ * Game Information
+ */
+export async function getUserInformation({ id: id }) {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_LOCAL_URL}/user/information/${id}`,
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 /**
  * get user Distribution

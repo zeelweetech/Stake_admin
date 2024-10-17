@@ -75,9 +75,6 @@ const UserDetails = () => {
         <div>
           {userData && (
             <div>
-              <p className="text-white bg-[#213743] border border-[#2f4553] text-2xl text-center mb-7 py-3 w-60">
-                User Details
-              </p>
               <div className="mb-4 p-4 bg-[#213743] rounded shadow-md text-white border border-[#2f4553]">
                 <div className="flex justify-between m-2 pb-4 bg-dark">
                   <div className="flex items-center">
@@ -192,9 +189,9 @@ const UserDetails = () => {
           )}
 
           <div>
-            <p className="text-white bg-[#213743] border border-[#2f4553] text-2xl text-center mt-9 py-3 w-60">
-              User Bets Details
-            </p>
+            <div className="text-white bg-[#0f212e] border-y-4 border-r-4 border-[#2f4553] flex items-center justify-center space-x-4 w-80 rounded-e-full mt-10">
+              <p className=" text-2xl py-3">User Bets Details</p>
+            </div>
             <div className="flex justify-center item-center py-8">
               <DataGrid
                 rows={rows}
@@ -239,10 +236,10 @@ const UserDetails = () => {
 
           {userData && userData.wallet && (
             <div>
-              <p className="text-white bg-[#213743] border border-[#2f4553] text-2xl text-center mb-7 py-3 w-60">
-                User Wallet Details
-              </p>
-              <div className="mb-4 p-4 bg-[#213743] border border-[#2f4553] rounded shadow text-white">
+              <div className="text-white bg-[#0f212e] border-y-4 border-r-4 border-[#2f4553] flex items-center justify-center space-x-4 w-80 rounded-e-full mt-5 mb-7">
+                <p className=" text-2xl py-3">User Wallet Details</p>
+              </div>
+              <div className="mb-4 p-4 bg-[#213743] border border-[#2f4553] rounded shadow  text-white">
                 <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 m-2">
                   <div>
                     Current Amount:{" "}
