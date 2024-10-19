@@ -235,11 +235,13 @@ export default function AddDistributions({
                 },
               }}
             >
-              {allGameData.map((gameData) => (
-                <MenuItem key={gameData?.id} value={gameData?.id}>
-                  {`GameId: ${gameData?.id} - ${gameData?.gameName}`}
-                </MenuItem>
-              ))}
+              {allGameData
+                .filter((gameData) => !gameData.isPull) 
+                .map((gameData) => (
+                  <MenuItem key={gameData?.id} value={gameData?.id}>
+                    {`GameId: ${gameData?.id} - ${gameData?.gameName}`}
+                  </MenuItem>
+                ))}
             </Select>
             {errors.gameId && <p className="text-red-500">{errors.gameId}</p>}
           </FormControl>
@@ -299,3 +301,4 @@ export default function AddDistributions({
     </div>
   );
 }
+

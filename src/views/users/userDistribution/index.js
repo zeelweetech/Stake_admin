@@ -46,7 +46,7 @@ function UserDistribution() {
     }
   }
 
-  // console.log('userDistributionData +-**/*-++-***/*-*-+', userDistributionData);
+  console.log('userDistributionData +-**/*-++-***/*-*-+', userDistributionData);
   
   const allgame = async () => {
     try {

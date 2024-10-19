@@ -63,9 +63,6 @@ function UserInformation() {
             </div>
           </div>
           <div className="h-full xl:w-[37rem] lg:w-96">
-            {/* <div className="bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2">
-              <BetDistribution />
-            </div> */}
             <div className="xl:mt-8 lg:mt-3.5 bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2">
               <TopGames />
             </div>

@@ -14,7 +14,7 @@ const Columns = [
   },
   {
     field: "totalWinAmount",
-    headerName: "Total Woi Amount",
+    headerName: "Total Win Amount",
     width: 150,
     headerClassName: "column-header",
     cellClassName: "column-cell",
