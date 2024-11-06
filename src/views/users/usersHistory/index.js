@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Loader from "../../component/Loader";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { BiDetail } from "react-icons/bi";
-import UserDetails from"./userDetails"
-import UserInformation from "./userInformation"
+import UserDetails from "./UserDetails/index";
+import UserInformation from "./UserInformation/index";
 
 const UsersHistory = () => {
   const [loading, setLoading] = useState(false);
