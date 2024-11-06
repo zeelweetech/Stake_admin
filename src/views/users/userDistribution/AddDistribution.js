@@ -81,7 +81,9 @@ export default function AddDistributions({
     }
     if (!amount) {
       Errors.amount = "amount is required";
-    }
+    } else if (amount <= 0) {
+    Errors.amount = "Amount must be greater than zero";
+  }
 
     if (Object.keys(Errors).length > 0) {
       setErrors(Errors);
@@ -190,8 +192,8 @@ export default function AddDistributions({
               User
             </InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
+              labelId= "user-select-label"
+              id= "user-select-label" 
               label="User"
               name="userId"
               value={distributionValue?.userId || ""}
@@ -208,7 +210,7 @@ export default function AddDistributions({
             >
               {usersData.map((Data) => (
                 <MenuItem key={Data?.id} value={Data?.id}>
-                  {`UserId: ${Data?.id} - ${Data?.userName}`}
+                   {Data?.userName}
                 </MenuItem>
               ))}
             </Select>
@@ -219,8 +221,8 @@ export default function AddDistributions({
               Game
             </InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
+              labelId="user-select-label"
+              id="user-select-label"
               label="Game"
               name="gameId"
               value={distributionValue?.gameId || ""}
@@ -239,7 +241,7 @@ export default function AddDistributions({
                 .filter((gameData) => !gameData.isPull) 
                 .map((gameData) => (
                   <MenuItem key={gameData?.id} value={gameData?.id}>
-                    {`GameId: ${gameData?.id} - ${gameData?.gameName}`}
+                    {gameData?.gameName}
                   </MenuItem>
                 ))}
             </Select>
@@ -250,6 +252,7 @@ export default function AddDistributions({
             placeholder="amount"
             name="amount"
             type="number"
+            inputProps={{ min: 0 }}
             fullWidth
             value={distributionValue?.amount || ""}
             onChange={handleChange}

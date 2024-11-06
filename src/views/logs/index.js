@@ -22,6 +22,26 @@ const Logs = () => {
     getAllUserLogs();
   }, [paginationModel?.page, paginationModel?.pageSize, searchQuery]);
 
+  // const getAllUserLogs = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await getAllLogs({
+  //       search: searchQuery,
+  //       page: paginationModel?.page + 1,
+  //       pageSize: paginationModel?.pageSize,
+  //     });
+  //     console.log("getlogs", response);
+  //     console.log("searchQuery:::::::::::", searchQuery);
+      
+  //     setLogsData(response?.logs);
+  //     setTotalCount(response?.totalItems);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error("Failed to fetch users: ", error);
+  //     setLoading(false);
+  //   }
+  // };
+
   const getAllUserLogs = async () => {
     setLoading(true);
     try {
@@ -30,16 +50,18 @@ const Logs = () => {
         page: paginationModel?.page + 1,
         pageSize: paginationModel?.pageSize,
       });
-      console.log("getlogs", response);
-      setLogsData(response?.logs);
-      setTotalCount(response?.totalItems);
+      const filteredLogs = response?.logs?.filter((log) =>
+        log.userName.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setLogsData(filteredLogs || response?.logs);
+      setTotalCount(filteredLogs ? filteredLogs.length : response?.totalItems);
       setLoading(false);
     } catch (error) {
-      console.error("Failed to fetch users: ", error);
+      console.error("Failed to fetch logs: ", error);
       setLoading(false);
     }
   };
-
+  
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString("en-US");
