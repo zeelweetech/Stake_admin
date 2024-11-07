@@ -22,26 +22,6 @@ const Logs = () => {
     getAllUserLogs();
   }, [paginationModel?.page, paginationModel?.pageSize, searchQuery]);
 
-  // const getAllUserLogs = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await getAllLogs({
-  //       search: searchQuery,
-  //       page: paginationModel?.page + 1,
-  //       pageSize: paginationModel?.pageSize,
-  //     });
-  //     console.log("getlogs", response);
-  //     console.log("searchQuery:::::::::::", searchQuery);
-      
-  //     setLogsData(response?.logs);
-  //     setTotalCount(response?.totalItems);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error("Failed to fetch users: ", error);
-  //     setLoading(false);
-  //   }
-  // };
-
   const getAllUserLogs = async () => {
     setLoading(true);
     try {
@@ -50,18 +30,17 @@ const Logs = () => {
         page: paginationModel?.page + 1,
         pageSize: paginationModel?.pageSize,
       });
-      const filteredLogs = response?.logs?.filter((log) =>
-        log.userName.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setLogsData(filteredLogs || response?.logs);
-      setTotalCount(filteredLogs ? filteredLogs.length : response?.totalItems);
+      
+      setLogsData(response?.logs);
+      setTotalCount(response?.totalItems);
       setLoading(false);
     } catch (error) {
-      console.error("Failed to fetch logs: ", error);
+      console.error("Failed to fetch users: ", error);
       setLoading(false);
     }
   };
-  
+
+
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString("en-US");
@@ -75,14 +54,16 @@ const Logs = () => {
     const formattedTime = date.toLocaleTimeString("en-US", options);
     return `${formattedDate} ${formattedTime}`;
   };
+  
 
-  const rows = logsData?.map((log) => {
+  const rows = logsData?.map((log, index) => {
     return {
+      id: log.id || `log- ${index}`,
       userName: log.userName ? log.userName : "-",
       userId: log.userId ? log.userId : "-",
       performOn: log.performOn ? log.performOn : "-",
       actionType: log.actionType ? log.actionType : " -",
-      actionDescription: log.actionDescription ? log.actionDescription : "-",
+      actionDescription: log?.actionDescription,
       logTime: formatDateTime(log.logTime) ? formatDateTime(log.logTime) : "-",
     };
   });
@@ -114,7 +95,6 @@ const Logs = () => {
                 autoHeight
                 rows={rows}
                 columns={Columns()}
-                getRowId={(row) => row.userId}
                 loading={loading}
                 rowCount={totalCount}
                 paginationModel={paginationModel}

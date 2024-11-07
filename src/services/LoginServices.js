@@ -55,7 +55,7 @@ export async function userForgotPassword({ body: body }) {
 export async function getAllLogs({ page: page, pageSize: pageSize, search: search }) {
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_LOCAL_URL}/admin/logs?searchQuery=${search}&page=${page}&limit=${pageSize}`,
+      search ? `${process.env.REACT_APP_LOCAL_URL}/admin/logs?searchQuery=${search}&page=${page}&limit=${pageSize}` : `${process.env.REACT_APP_LOCAL_URL}/admin/logs?page=${page}&limit=${pageSize}`,
       {
         headers: {
           Authorization: localStorage.getItem("token"),

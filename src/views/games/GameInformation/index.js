@@ -12,6 +12,7 @@ function GameInformation() {
   const { gameId } = useParams();
   const dispatch = useDispatch();
   const { gameInformation } = useSelector((state) => state?.crashGame);
+  
   console.log("gameInformation", gameInformation);
 
   useEffect(() => {
