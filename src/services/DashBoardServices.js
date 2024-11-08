@@ -20,3 +20,4 @@ export async function getDashboard() {
         throw error;
     }
 }
+

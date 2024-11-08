@@ -68,6 +68,8 @@ const Logs = () => {
     };
   });
 
+  console.log("rows:::::::",rows);
+  
   return (
     <>
       <div className="bg-[#1a2c38] py-2 h-full ">
