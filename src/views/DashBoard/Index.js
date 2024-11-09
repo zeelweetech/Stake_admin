@@ -1,25 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import BetStatus from "./BetStatus";
 import { getDashboard } from "../../services/DashBoardServices";
-import UserStatus from "./UserStatus";
-import { Inbox } from "@mui/icons-material";
-// import LandingDetails from "./LandingDetails";
-// import LandingBanner from "./LandingBanner";
+import { Dashboard, Inbox } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { setDashBoardData } from "../../features/DashBoard/DashBoardSlice";
+import GameStatus from "./GameStatus";
+import PullPlayerStatus from "./PlayerStatus";
+import WalletStats from "./WalletStats";
 
 function Index() {
-  const [dashboardData, setDashboardData] = useState();
+  const dispatch = useDispatch();
+  const { dashboardData } = useSelector((state) => state?.dashBoard);
+
 
   useEffect(() => {
     GetDashboard();
   }, []);
 
-  console.log("dashboardData", dashboardData);
-
   const GetDashboard = async () => {
     try {
       const response = await getDashboard();
-      console.log("((((((((", response);
-      setDashboardData(response)
+      dispatch(setDashBoardData(response));
+
+      console.log("response::::::", response);
+
     } catch (error) {
       console.error("Failed to fetch logs: ", error);
     }
@@ -28,7 +32,6 @@ function Index() {
   return (
     <div>
       <div className="bg-[#1a2c38] flex flex-col">
-        {/* <div className="flex flex-col flex-1 bg-[#1a2c38]"> */}
         <div className="text-white ml-[-0.1rem] bg-[#0f212e] border-y-4 border-r-4 border-[#2f4553] flex items-center justify-center space-x-4 w-80 rounded-e-full mt-5 mx-auto">
           <Inbox size={25} className="text-white text-3xl" />
           <p className="text-2xl pr-10 py-3">Dashboard</p>
@@ -39,38 +42,51 @@ function Index() {
             <div className="h-28 xl:w-80 lg:w-64 bg-[#4d718768] rounded-lg text-[#b1bad3] p-2 shadow-sm shadow-[#4d718768]">
               <p className="text-xl font-semibold text-center">Total Users</p>
               <p className="text-2xl font-bold text-center mt-2">
-                {dashboardData?.userStats?.[0]?.totalUsers}
+                {dashboardData?.userStats?.[0]?.totalUsers || 0}
               </p>
             </div>
             <div className="h-28 xl:w-80 lg:w-64 bg-[#4d718768] rounded-lg text-[#b1bad3] p-2 shadow-sm shadow-[#4d718768]">
               <p className="text-xl font-semibold text-center">Active Users</p>
               <p className="text-2xl font-bold text-center mt-2">
-                {dashboardData?.userStats?.[0]?.activeUsers}
+                {dashboardData?.userStats?.[0]?.activeUsers || 0}
               </p>
             </div>
             <div className="h-28 xl:w-80 lg:w-64 bg-[#4d718768] rounded-lg text-[#b1bad3] p-2 shadow-sm shadow-[#4d718768]">
               <p className="text-xl font-semibold text-center">Inactive Users</p>
               <p className="text-2xl font-bold text-center mt-2">
-                {dashboardData?.userStats?.[0]?.inactiveUsers}
+                {dashboardData?.userStats?.[0]?.inactiveUsers || 0}
               </p>
             </div>
           </div>
         </div>
-        {/* </div> */}
       </div>
-      
-     <div className="flex xl:space-x-7 lg:space-x-3.5 pt-14 pr-20 item-center w-full">
-        <div className="w-1/2 justify-center xl:w-1/2 lg:w-[28.5rem] bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto ml-[-0.5rem] mt-[-0.5rem]">
-          <BetStatus dashboardData={dashboardData} />
+      <div className="flex xl:gap-6 pt-14 pr-20 items-center w-full">
+        <div className="w-1/2 xl:w-1/2 lg:w-[28.5rem] bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto mt-[-0.5rem] p-[10px] ml-[40px]">
+          <BetStatus />
         </div>
-        {/* <div className="xl:mt-8 lg:mt-3.5 bg-[#0f212e] pt-2 pr-20 xl:w-1/2 shadow-lg shadow-[#0f212e] ml-[-0.5rem] p-2">
-              <BetStatus dashboardData={dashboardData}/>
-            </div> */}
-    </div>
+        <div className="w-1/2 xl:w-1/2 lg:w-[28.5rem] bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto mt-[-0.5rem] p-[10px] mr-[5px]">
+          <GameStatus />
+        </div>
+      </div>
+      <div className="flex xl:gap-6 pb-96 pb-25 pr-20 items-center w-full">
+        <div className="w-1/2 xl:w-1/2 lg:w-[28.5rem] bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto -mt-2 p-[10px] ml-[40px]">
+          <PullPlayerStatus />
+        </div>
+        <div className="h-full xl:w-[37rem] lg:w-96">
+            <div className="bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2">
+              <WalletStats />
+            </div>
+            </div>
+      </div>
+
+
+
+
     </div>
 
-  )
+
+  //  </div>
+  );
 }
 
 export default Index;
-

@@ -1,4 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid";
+import { useSelector } from "react-redux";
 
 const Columns = [
     {
@@ -27,7 +28,8 @@ const Columns = [
     },
 ];
 
-function BetStatus({ dashboardData }) {
+function BetStatus() {
+    const { dashboardData } = useSelector((state) => state?.dashBoard);
     const rows = dashboardData?.betStats?.map((log, index) => ({
         id: index,
         betType: log.betType || "N/A",
