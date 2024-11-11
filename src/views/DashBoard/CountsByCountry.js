@@ -29,7 +29,7 @@ function CountsByCountry() {
         <div className="pb-3">
             <div className="w-1/2">
                 <p className="text-xl font-bold text-center -mt-2 pr-20 py-4 text-[#b1bad3]">
-                    Game Status
+                    Counts By Country
                 </p>
                 <div className="flex items-center -mt-8 py-7 justify-center w-[580px] px-8">
                     <DataGrid

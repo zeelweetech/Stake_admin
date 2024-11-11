@@ -8,22 +8,11 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 function WalletStats() {
     const { dashboardData } = useSelector((state) => state?.dashBoard);
 
-
-    const walletStats = dashboardData?.walletStats || {
-        averageCurrentBalance: 0,
-        maxBalance: 0,
-        minBalance: 0,
-        totalBalance: 0,
-    };
-
-
-    console.log("walletStats:", walletStats);
-
     const data = {
         labels: ["averageCurrentBalance", "maxBalance", "minBalance", "totalBalance"],
         datasets: [
             {
-                label: "# of Votes",
+                label: "Wallet Stats",
                 data: [
                     dashboardData?.walletStats?.averageCurrentBalance,
                     dashboardData?.walletStats?.maxBalance,
@@ -46,7 +35,7 @@ function WalletStats() {
             },
         ],
     };
-    console.log("data::::::::", data);
+    // console.log("data::::::::", data);
 
     return (
         <div>
