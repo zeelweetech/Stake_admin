@@ -55,7 +55,7 @@ function WinLossRatio() {
         plugins: {
             title: {
                 display: true,
-                text: "Player Win/Loss Ratio",
+                // text: "Player Win/Loss Ratio",
                 font: {
                     weight: 'bold',
                 },
@@ -76,12 +76,16 @@ function WinLossRatio() {
     };
 
     return (
-        <div className="flex justify-center py-6">
-            {/* <p className="text-xl font-bold text-center py-4 text-[#b1bad3]">
+        <div>
+            <p className="text-xl font-bold text-center py-4 text-[#b1bad3]">
                 Win Loss Ratio
-            </p> */}
-            <div className="w-full  xl:w-[90%]  xl:w-3/4 bg-[#0f212e] shadow-lg shadow-[#0f212e] p-6">
-                <Bar data={PlayerRatio} options={options} />
+            </p>
+            <div className="flex justify-center p-2 py-2 pt-2">
+                <div className="flex justify-center">
+                    <div className="w-full xl:w-[480px] bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2">
+                        <Bar data={PlayerRatio} options={options} />
+                    </div>
+                </div>
             </div>
         </div>
     );

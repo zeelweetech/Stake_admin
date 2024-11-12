@@ -75,7 +75,8 @@ function TopGames() {
         "& .MuiTablePagination-selectIcon": {
             color: "white",
         },
-        overflowY: 'hidden',
+        height:220,
+        overflowY: 'auto',
     }}
       />
     </div>

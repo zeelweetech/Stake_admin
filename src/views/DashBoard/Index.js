@@ -77,16 +77,16 @@ function Index() {
           <div className="w-1/2 xl:w-1/2 lg:w-[28.5rem] bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto mt-[-0.5rem] p-[10px] ml-[40px]">
             <BetCount />
           </div>
-          <div className="bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 h-full xl:w-[37rem] -mt-2">
+          <div className="bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 h-full xl:w-[480px] -mt-2">
             <WalletStats />
           </div>
         </div>
 
-        <div className="flex xl:gap-6 pt-14 pr-20 items-center w-full -mt-2">
-          <div className="w-1/2 xl:w-[35rem] me-px max-w-screen-md lg:w-[28.5rem] bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto mt-[-1rem] mb-84 ml-auto">
+        <div className="flex xl:gap-1 pt-14 pr-20 items-center w-full -mt-1">
+          <div className="w-1/2 xl:w-[610px]  xl:h-[340px] lg:w-[28.5rem] bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto mt-[-1rem] mb-84">
             <WinLossRatio />
           </div>
-          <div className="w-1/2 xl:w-[35rem] max-w-screen-md me-px bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto -mt-2 p-[10px] ml-auto">
+          <div className="w-1/2 xl:w-[30rem] max-w-screen-md xl:h-[340px] me-px bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto -mt-2 p-[10px] ml-auto">
             <TopGames />
           </div>
         </div>

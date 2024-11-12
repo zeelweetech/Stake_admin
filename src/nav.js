@@ -4,6 +4,7 @@ import { GiTriangleTarget } from "react-icons/gi";
 import GroupIcon from "@mui/icons-material/Group";
 import cards from "./assets/img/card.png"
 import { TbLogs } from "react-icons/tb";
+import EmojiEvents from '@mui/icons-material/EmojiEvents';
 
 const nav = [
   {
@@ -46,6 +47,14 @@ const nav = [
       color: "info",
     },
   },
+  {
+    name: "Medals",
+    to: "/medals",
+    icon:<EmojiEvents size={25}/>,
+    badge: {
+      color: "info",
+    }
+  }
 ];
 
 export default nav;

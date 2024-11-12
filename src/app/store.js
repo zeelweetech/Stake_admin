@@ -5,6 +5,8 @@ import gameDataFilterReducer from "../features/games/gameDataFilterSlice"
 import gameDetailReducer from "../features/games/gameDetails"
 import userInformationReducer from "../features/users/userInformationSlice"
 import DashBoardReducer from "../features/DashBoard/DashBoardSlice"
+import MedalReducer from "../features/medals/medalSlice"
+
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -12,7 +14,8 @@ export const store = configureStore({
     gameDataFilter: gameDataFilterReducer,
     gameDetail: gameDetailReducer,
     userInformation: userInformationReducer,
-    dashBoard: DashBoardReducer
+    dashBoard: DashBoardReducer,
+    medal:MedalReducer
   },
 });
 export default store;

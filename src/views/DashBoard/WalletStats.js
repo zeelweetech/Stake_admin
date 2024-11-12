@@ -39,7 +39,7 @@ function WalletStats() {
 
     return (
         <div>
-            <div className="flex justify-center xl:w-[570px] lg:w-[370px] xl:h-[400px] lg:h-[320px]">
+            <div className="flex justify-center xl:w-[480px] xl:h-[320px]">
                 <Doughnut data={data} />
             </div>
             <p className="text-m font-semibold text-[#b1bad3] flex justify-center py-5">

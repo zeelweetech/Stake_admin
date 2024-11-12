@@ -80,7 +80,7 @@ function BetCount() {
           </p>
         </div>
         <select
-          className="bg-[#4d718768] text-white p-2 rounded-md sm:ml-4"
+          className="bg-[#4d718768] xl-text-white p-2 rounded-md sm:ml-4"
           name="week"
           value={selectedWeek}
           onChange={(e) => setSelectedWeek(e.target.value)}
