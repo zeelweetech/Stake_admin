@@ -45,7 +45,7 @@ export default function AddDistributions({
   usersData,
   allGameData
 }) {
-  const { gameId } = useParams();
+  // const { gameId } = useParams();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState(false);

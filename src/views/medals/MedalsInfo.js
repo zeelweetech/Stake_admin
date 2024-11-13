@@ -1,206 +1,239 @@
-// import { useSelector } from "react-redux";
-// import { DataGrid } from "@mui/x-data-grid";
-// import React from "react";
+import React, { useEffect, useState } from "react";
+import {
+    Button, Dialog, DialogActions, DialogContent, DialogTitle,
+    FormControl, FormControlLabel, IconButton, Switch, TextField
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import toast from "react-hot-toast";
+import Loader from "../component/Loader";
+import { AddMedal, EditMedal } from "../../services/medalsService";
 
-// const columns = [
-//     {
-//         field: "medalLevel",
-//         headerName: "MedalLevel",
-//         width: 200,
-//         headerClassName: "column-header",
-//     },
-//     {
-//         field: "medalType",
-//         headerName: "MedalType",
-//         width: 200,
-//         headerClassName: "column-header",
-//     },
-//     {
-//         field: "winAmount",
-//         headerName: "WinAmount",
-//         width: 200,
-//         headerClassName: "column-header",
-//     },
-//     {
-//         headerName: "Action",
-//         width: 200,
-//         headerClassName: "column-header",
-//     },
-// ];
-
-// function MedalsInfo() {
-//     const { medalData } = useSelector((state) => state?.medal || {});
-
-//     const rows = medalData?.map((log) => ({
-//         id: log.id,
-//         medalLevel: log.medalLevel || "",
-//         medalType: log.medalType || "",
-//         winAmount: log.winAmount || "0.00",
-//     }))
-
-//     console.log("medal data :::::::::::", medalData);
-//     return (
-//         <div className="justify-center pt-4">
-//         <div style={{ height: 400, width: '100%' }}>
-//             <p className="text-xl font-bold text-center py-4 text-[#b1bad3]">
-//                 Medal Info
-//             </p>
-//             <DataGrid
-//                 rows={rows}
-//                 columns={columns}
-//                 hideFooter
-//                 getRowClassName={(params) =>
-//                     params.indexRelativeToCurrentPage % 2 === 0
-//                         ? "row-dark"
-//                         : "row-light"
-//                 }
-//                 sx={{
-//                     border: "none",
-//                     color: "#b1bad3",
-//                     "& .MuiDataGrid-cell": {
-//                         border: "none",
-//                     },
-//                     "& .MuiDataGrid-columnHeader": {
-//                         borderBottom: "none",
-//                         borderTop: "none",
-//                     },
-//                     "& .MuiDataGrid-footerContainer": {
-//                         borderTop: "none",
-//                         borderBottom: "none",
-//                         color: "white",
-//                     },
-//                     "& .MuiTablePagination-root": {
-//                         color: "white",
-//                     },
-//                     "& .MuiTablePagination-selectIcon": {
-//                         color: "white",
-//                     },
-//                     height: 220,
-//                     overflowY: 'auto',
-//                 }}
-//             />
-//         </div>
-//         </div>
-//     );
-// }
-
-// export default MedalsInfo;
-
-
-import { useDispatch } from "react-redux";
-import { DataGrid } from "@mui/x-data-grid";
-import React from "react";
-import { useState } from "react";  // For managing modal state or form
-import { useSelector } from "react-redux";
-import { EditModel } from "../../services/medalsService";
-
-const columns = [
-    {
-        field: "medalLevel",
-        headerName: "MedalLevel",
-        width: 200,
-        headerClassName: "column-header",
+const textFieldStyles = {
+    color: "#b1bad3",
+    ".MuiOutlinedInput-notchedOutline": {
+        borderColor: "#2f4553",
     },
-    {
-        field: "medalType",
-        headerName: "MedalType",
-        width: 200,
-        headerClassName: "column-header",
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#2f4553",
     },
-    {
-        field: "winAmount",
-        headerName: "WinAmount",
-        width: 200,
-        headerClassName: "column-header",
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#2f4553",
     },
-    {
-        headerName: "Action",
-        width: 200,
-        headerClassName: "column-header",
-        renderCell: (params) => {
-            const handleEdit = () => {
-                
-                const medalId = params.row.id;
-                const body = {
-                    medalLevel: "Updated Level", 
-                    medalType: "Updated Type",
-                    winAmount: "Updated Amount",
-                };
-
-                EditModel({ body, id: medalId })
-                    .then((data) => {
-                        console.log("Edit success", data);
-                    })
-                    .catch((error) => {
-                        console.error("Edit failed", error);
-                    });
-            };
-
-            return (
-                <button
-                    onClick={handleEdit}
-                    className="text-blue-500 hover:text-blue-700"
-                >
-                    Edit
-                </button>
-            );
+    input: {
+        color: "#b1bad3",
+    },
+    "& .MuiOutlinedInput-root": {
+        "& fieldset": {
+            borderColor: "#2f4553",
+        },
+        "&:hover fieldset": {
+            borderColor: "#2f4553",
         },
     },
-];
+};
 
-function MedalsInfo() {
-    const { medalData } = useSelector((state) => state?.medal || {});
+export default function MedalsInfo({
+    medalValue,
+    setMedalValue,
+    open,
+    setOpen,
+    isEditing,
+    setIsEditing,
+    setUserMedalData,
+    selectedMedalId,
+    // medalsData = [],
+    // allMedalData = []
+}) {
+    const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [status, setStatus] = useState(false);
 
-    const rows = medalData?.map((log) => ({
-        id: log.id,
-        medalLevel: log.medalLevel || "",
-        medalType: log.medalType || "",
-        winAmount: log.winAmount || "0.00",
-    }));
+    useEffect(() => {
+        if (isEditing) {
+            setStatus(medalValue?.status === "active");
+        }
+    }, [medalValue, isEditing]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setMedalValue((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+        setErrors((prev) => ({ ...prev, [name]: "" }));
+    };
+
+    const handleStatusChange = (event) => {
+        setStatus(event.target.checked);
+    };
+
+    const handleAddMedal = async () => {
+        const { medalLevel, medalType, winAmount } = medalValue;
+        let Errors = {};
+
+        if (!medalLevel) Errors.medalLevel = "Medal level is required";
+        if (!medalType) Errors.medalType = "Medal type is required";
+        if (!winAmount) {
+            Errors.winAmount = "Amount is required";
+        } else if (winAmount <= 0) {
+            Errors.winAmount = "Amount must be greater than zero";
+        }
+
+        if (Object.keys(Errors).length > 0) {
+            setErrors(Errors);
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const body = {
+                medalLevel: medalValue?.medalLevel,
+                medalType: medalValue?.medalType,
+                winAmount: medalValue?.winAmount,
+                status: status ? "active" : "inactive",
+            };
+            const response = await AddMedal({ body });
+            toast.success(response.message);
+
+            setUserMedalData((prev) => [
+                ...prev,
+                {
+                    id: prev.length + 1,
+                    ...medalValue,
+                    status: status ? "active" : "inactive",
+                },
+            ]);
+
+            setOpen(false);
+            setErrors({});
+            setMedalValue({});
+        } catch (error) {
+            console.error("Add Medal error: ", error);
+            toast.error(error?.response?.data?.message || "Failed to add medal");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleEditMedals = async () => {
+        try {
+            const body = {
+                medalLevel: medalValue?.medalLevel,
+                medalType: medalValue?.medalType,
+                winAmount: medalValue?.winAmount,
+                status: status ? "active" : "inactive",
+            };
+            const response = await EditMedal({ body, id: selectedMedalId });
+            console.log("Edit medal response: ", response);
+
+            setUserMedalData((prev) =>
+                prev.map((medal) =>
+                    medal?.id === selectedMedalId
+                        ? { ...medal, ...medalValue, status: status ? "active" : "inactive" }
+                        : medal
+                )
+            );
+
+            setOpen(false);
+            setErrors({});
+            setMedalValue({});
+            setIsEditing(false);
+            setStatus(false);
+        } catch (error) {
+            console.error("Edit Medal error: ", error);
+            toast.error("Failed to edit medal");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
-        <div className="justify-center pt-4">
-            <div style={{ height: 400, width: '100%' }}>
-                <p className="text-xl font-bold text-center py-4 text-[#b1bad3]">
-                    Medal Info
-                </p>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    hideFooter
-                    getRowClassName={(params) =>
-                        params.indexRelativeToCurrentPage % 2 === 0
-                            ? "row-dark"
-                            : "row-light"
-                    }
-                    sx={{
-                        border: "none",
-                        color: "#b1bad3",
-                        "& .MuiDataGrid-cell": {
-                            border: "none",
-                        },
-                        "& .MuiDataGrid-columnHeader": {
-                            borderBottom: "none",
-                            borderTop: "none",
-                        },
-                        "& .MuiDataGrid-footerContainer": {
-                            borderTop: "none",
-                            borderBottom: "none",
-                            color: "white",
-                        },
-                        "& .MuiTablePagination-root": {
-                            color: "white",
-                        },
-                        "& .MuiTablePagination-selectIcon": {
-                            color: "white",
-                        },
-                        height: 220,
-                        overflowY: 'auto',
+        <Dialog
+            open={open}
+            onClose={() => setOpen(false)}
+            maxWidth="sm"
+            fullWidth
+            sx={{
+                "& .MuiPaper-root": {
+                    borderRadius: "6px",
+                    backgroundColor: "#1a2c38",
+                    color: "#b1bad3",
+                },
+            }}
+        >
+            <DialogTitle>
+                <div className="flex justify-between items-center">
+                    <p>{isEditing ? "Edit Medal" : "Add Medal"}</p>
+                    <IconButton onClick={() => setOpen(false)}>
+                        <CloseIcon className="text-[#b1bad3]" />
+                    </IconButton>
+                </div>
+            </DialogTitle>
+            <DialogContent>
+                <FormControl fullWidth sx={{ mt: 1 }} error={!!errors.medalLevel}>
+                    <TextField
+                        label="Medal Level"
+                        name="medalLevel"
+                        value={medalValue?.medalLevel || ""}
+                        onChange={handleChange}
+                        placeholder="Enter Medal Level"
+                        sx={textFieldStyles}
+                        InputLabelProps={{
+                            style: { color: "#b1bad3" },
+                        }}
+                    />
+                    {errors.medalLevel && <p className="text-red-500">{errors.medalLevel}</p>}
+                </FormControl>
+
+                <FormControl fullWidth sx={{ my: 1.5 }} error={!!errors.medalType}>
+                    <TextField
+                        label="Medal Type"
+                        name="medalType"
+                        value={medalValue?.medalType || ""}
+                        onChange={handleChange}
+                        placeholder="Enter Medal Type"
+                        sx={textFieldStyles}
+                        InputLabelProps={{
+                            style: { color: "#b1bad3" },
+                        }}
+                    />
+                    {errors.medalType && <p className="text-red-500">{errors.medalType}</p>}
+                </FormControl>
+                <TextField
+                    label="Amount"
+                    placeholder="Enter Amount"
+                    name="winAmount"
+                    type="number"
+                    inputProps={{ min: 0 }}
+                    fullWidth
+                    value={medalValue?.winAmount || ""}
+                    onChange={handleChange}
+                    error={!!errors.winAmount}
+                    helperText={errors.winAmount}
+                    sx={textFieldStyles}
+                    InputLabelProps={{
+                        style: { color: "#b1bad3" },
                     }}
                 />
-            </div>
-        </div>
+                {isEditing && (
+                    <FormControlLabel
+                        control={
+                            <Switch checked={status} onChange={handleStatusChange} color="primary" />
+                        }
+                        label="Status"
+                        sx={{ color: "#b1bad3", mt: 2 }}
+                    />
+                )}
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => setOpen(false)} sx={{ backgroundColor: "#ff638433", px: "1rem", py: "0.5rem", color: "#b1bad3", border: "1px solid #ff6384" }}>
+                    Close
+                </Button>
+                <Button onClick={isEditing ? handleEditMedals : handleAddMedal} sx={{ backgroundColor: "#4bc0c033", px: "1rem", py: "0.5rem", color: "#b1bad3", border: "1px solid #4bc0c0" }}>
+                    {loading ? <Loader /> : isEditing ? "Save" : "Add"}
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 }
 
-export default MedalsInfo;

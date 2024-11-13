@@ -1,7 +1,7 @@
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import {
-  DeleteDistribution,
+  // DeleteDistribution,
   getAllUser,
   getUserDistribution,
 } from "../../../services/userServices";
@@ -89,7 +89,7 @@ function UserDistribution() {
 
   const handleDeletedistribution = async (row) => {
     try {
-      await DeleteDistribution({ id: row?.id });
+      await selectedDistributionId({ id: row?.id });
 
       setUserDistributionData((prev) =>
         prev.filter((distribution) => distribution.id !== row.id)
