@@ -3,7 +3,6 @@ import { Chart as ChartJS, CategoryScale, LinearScale, ArcElement, Title, Toolti
 import { useSelector } from "react-redux";
 import React, { useState } from "react";
 
-
 ChartJS.register(CategoryScale, LinearScale, ArcElement, Title, Tooltip, Legend);
 
 function FinancialTransaction() {
@@ -16,22 +15,18 @@ function FinancialTransaction() {
             {
                 label: selectedWeek,
                 data: selectedWeek === "Current Week" ? [
-
                     dashboardData?.currentWeekFinancialTranasactionData?.creditedData || "0",
                     dashboardData?.currentWeekFinancialTranasactionData?.debitedData || "0",
                 ] : [
-
                     dashboardData?.lastWeekFinancialTransactionData?.creditedData || "0",
                     dashboardData?.lastWeekFinancialTransactionData?.debitedData || "0",
                 ],
                 backgroundColor: [
                     "rgba(54, 162, 235, 0.6)",
-                    // "rgba(75, 192, 192, 0.6)",
                     "rgba(255, 99, 132, 0.6)"
                 ],
                 borderColor: [
                     "rgba(54, 162, 235, 1)",
-                    // "rgba(75, 192, 192, 1)",
                     "rgba(255, 99, 132, 1)"
                 ],
                 borderWidth: 1,
@@ -41,10 +36,10 @@ function FinancialTransaction() {
 
     return (
         <div>
-            <div className="chart-container">
+            <div className="w-full xl:w-[400px] xl:h-[400px] bg-[#0f212e] shadow-lg shadow-[#0f212e] p-1 m-auto mt-[-1rem] mb-8">
                 <div className="flex justify-end mb-4">
                     <select
-                        className="bg-[#4d718768] text-white p-2 rounded-md sm:ml-4"
+                        className="bg-[#4d718768] text-white p-2 sm:ml-4"
                         value={selectedWeek}
                         onChange={(e) => setSelectedWeek(e.target.value)}
                     >

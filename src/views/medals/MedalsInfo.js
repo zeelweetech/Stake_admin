@@ -69,36 +69,34 @@ export default function MedalsInfo({
 
     const handleAddMedal = async () => {
         const { medalLevel, medalType, winAmount } = medalValue;
-        let Errors = {};
+        let errors = {};
 
-        if (!medalLevel) Errors.medalLevel = "Medal level is required";
-        if (!medalType) Errors.medalType = "Medal type is required";
+        if (!medalLevel) errors.medalLevel = "Medal level is required";
+        if (!medalType) errors.medalType = "Medal type is required";
         if (!winAmount) {
-            Errors.winAmount = "Amount is required";
+            errors.winAmount = "Amount is required";
         } else if (winAmount <= 0) {
-            Errors.winAmount = "Amount must be greater than zero";
+            errors.winAmount = "Amount must be greater than zero";
         }
 
-        if (Object.keys(Errors).length > 0) {
-            setErrors(Errors);
+        if (Object.keys(errors).length > 0) {
+            setErrors(errors);
             setLoading(false);
             return;
         }
 
+
+        setLoading(true);
         try {
-            const body = {
-                medalLevel: medalValue?.medalLevel,
-                medalType: medalValue?.medalType,
-                winAmount: medalValue?.winAmount,
-                status: status ? "active" : "inactive",
-            };
-            const response = await AddMedal({ body });
+            const response = await AddMedal({ body: medalValue }); 
             toast.success(response.message);
+            console.log("handleAddMedal:::::::", response);
+
 
             setUserMedalData((prev) => [
                 ...prev,
                 {
-                    id: prev.length + 1,
+                    id: response.data?.id || prev.length + 1,
                     ...medalValue,
                     status: status ? "active" : "inactive",
                 },
@@ -111,9 +109,10 @@ export default function MedalsInfo({
             console.error("Add Medal error: ", error);
             toast.error(error?.response?.data?.message || "Failed to add medal");
         } finally {
-            setLoading(false);
+            setLoading(false); 
         }
     };
+
 
     const handleEditMedals = async () => {
         try {

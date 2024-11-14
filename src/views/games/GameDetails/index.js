@@ -1,38 +1,29 @@
+
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-} from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box } from "@mui/material";
 import { getGameHistory } from "../../../services/GameServices";
 import Column from "./Column";
-import GameDetailPlayers from "./GameDetailPlayer";
+// import GameDetailPlayers from "./GameDetailPlayers";
 import { useDispatch, useSelector } from "react-redux";
 import GameDetailFilter from "./GameDetailFilter";
 import { setPullsData } from "../../../features/games/gameDetails";
 
 function GameDetails() {
   const { gameId } = useParams();
-  const dispatch = useDispatch()
-  // const [pullsData, setPullsData] = useState([]);
+  const dispatch = useDispatch();
   const [userData, setUserData] = useState([]);
-  const [paginationModel, setPaginationModel] = React.useState({
-    page: 0,
-    pageSize: 10,
-  });
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [expandedRow, setExpandedRow] = useState(null);
   const { searchTerm } = useSelector((state) => state?.gameDataFilter);
-  const {pullsData} = useSelector((state) => state?.gameDetail)
-  // const [searchTerm, setSearchTerm] = useState("");
+  const { pullsData } = useSelector((state) => state?.gameDetail);
 
   useEffect(() => {
     getAllUserdata();
-  }, [paginationModel?.page, paginationModel?.pageSize]);
+  }, [paginationModel.page, paginationModel.pageSize]);
 
   console.log("searchTerm -*-*-*-*-*", searchTerm);
 
@@ -76,6 +67,7 @@ function GameDetails() {
     }
   };
 
+
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
@@ -92,28 +84,46 @@ function GameDetails() {
     return `${formattedDate} ${formattedTime}`;
   };
 
+
   const rows = pullsData?.map((pulls) => {
-    return {
-      pullId: pulls?.pullId ? pulls?.pullId : "-",
-      CrashPoint: pulls?.crashPoint ? pulls?.crashPoint : "-",
-      PlayerCount: pulls?.playerCount ? pulls?.playerCount : "-",
-      TotalPullAmount: pulls?.totalPullAmount ? pulls?.totalPullAmount : "-",
-      PullTime: formatDateTime(pulls?.pullTime)
-        ? formatDateTime(pulls?.pullTime)
-        : "-",
-      expanded: expandedRow === pulls?.pullId,
-    };
+    // const id = pull.pulls?.pullId || `generated-id-${index}`;
+    if (pulls.isPull === "true") {
+      return {
+        id: pulls?.pullId || `temp-id-${Math.random()}`,
+        pullId: pulls?.pullId ? pulls?.pullId : "-",
+        CrashPoint: pulls?.crashPoint ? pulls?.crashPoint : "-",
+        PlayerCount: pulls?.playerCount ? pulls?.playerCount : "-",
+        TotalPullAmount: pulls?.totalPullAmount ? pulls?.totalPullAmount : "-",
+        PullTime: formatDateTime(pulls?.pullTime) ? formatDateTime(pulls?.pullTime) : "-",
+        expanded: expandedRow === pulls?.pullId,
+      };
+    } else {
+      return {
+        id: pulls?.id || `temp-id-${Math.random()}`,
+        BetType: pulls?.betType ? pulls?.betType : "-",
+        GameId: pulls?.gameId ? pulls?.gameId : "-",
+        BetAmount: pulls?.betAmount ? pulls?.betAmount : "-",
+        Multiplier: pulls?.multiplier ? pulls?.multiplier : "-",
+        CashOutAt: pulls?.cashOutAt ? pulls?.cashOutAt : "-",
+        WinAmount: pulls?.winAmount ? pulls?.winAmount : "-",
+        BetTime: formatDateTime(pulls?.betTime) ? formatDateTime(pulls?.betTime) : "-",
+        UserName: pulls?.user?.userName ? pulls?.user?.userName : "-",
+        Email: pulls?.user?.email ? pulls?.user?.email : "-",
+        LossAmount: pulls?.lossAmount !== undefined ? pulls?.lossAmount : "-",
+        expanded: expandedRow === pulls?.id,
+      };
+    }
   });
 
   const rowsWithDetails = rows
     .flatMap((row) => [
-      row, // Parent row
-      expandedRow === row.pullId // Add child row if expanded
+      row,
+      expandedRow === row.pullId
         ? {
-            id: `details-${row.pullId}`,
-            isDetailsRow: true,
-            pullId: row.pullId,
-          }
+          id: `details-${row.pullId}`,
+          isDetailsRow: true,
+          pullId: row.pullId,
+        }
         : null,
     ])
     .filter(Boolean);
@@ -124,12 +134,7 @@ function GameDetails() {
       renderCell: (params) =>
         params.row.expanded && (
           <Box sx={{ padding: 2, width: "100%" }}>
-            <GameDetailPlayers
-              pullId={params.row.pullId}
-              userData={userData.filter(
-                (player) => player.pullId === params.row.pullId
-              )}
-            />
+
           </Box>
         ),
     },
@@ -142,27 +147,25 @@ function GameDetails() {
 
   return (
     <div className="flex-1 mt-10">
-      <div>
-        <GameDetailFilter getAllUserdata={getAllUserdata} />
-      </div>
+      <GameDetailFilter getAllUserdata={getAllUserdata} />
       <DataGrid
         autoHeight
         rows={rows}
-        columns={Column()}
-        // rows={rowsWithDetails}
-        // columns={columnsWithDetails}
-        getRowId={(row) => row.pullId}
+
+        columns={Column(pullsData[0]?.isPull === "false")}
+
+        getRowId={(row) => row.id}
         loading={loading}
         rowCount={totalCount}
         paginationModel={paginationModel}
         paginationMode="server"
         onPaginationModelChange={setPaginationModel}
         pageSizeOptions={[10, 20]}
+        className="select-none mt-6"
         onRowClick={handleRowClick}
         getRowClassName={(params) =>
           params.indexRelativeToCurrentPage % 2 === 0 ? "row-dark" : "row-light"
         }
-        className="select-none mt-6"
         sx={{
           border: "none",
           color: "#b1bad3",
@@ -195,12 +198,12 @@ function GameDetails() {
               </AccordionSummary>
               <AccordionDetails>
                 {/* <GamePlayersColumn pullId={row.pullId} /> */}
-                <GameDetailPlayers
+                {/* <GameDetailPlayers
                   pullId={row?.pullId}
                   userData={userData.filter(
                     (player) => player.pullId === row.pullId
-                  )}
-                />
+                  )} */}
+                {/* /> */}
               </AccordionDetails>
             </Accordion>
           )}

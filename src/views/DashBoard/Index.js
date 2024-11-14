@@ -1,11 +1,8 @@
 import React, { useEffect } from "react";
-// import BetStatus from "./BetStatus";
 import { getDashboard } from "../../services/DashBoardServices";
 import { Inbox } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { setDashBoardData } from "../../features/DashBoard/DashBoardSlice";
-// import GameStatus from "./GameStatus";
-// import PullPlayerStatus from "./PlayerStatus";
 import WalletStats from "./WalletStats";
 import FinancialTransaction from "./FinancialTransaction";
 import BetCount from "./BetCount";
@@ -13,8 +10,6 @@ import CountsByCountry from "./CountsByCountry";
 import WinLossRatio from "./WinLossRatio";
 import TopGames from "./TopGames";
 import TopUsers from "./TopUsers";
-// import CountsByCountry from "./GameStatus";
-
 
 function Index() {
   const dispatch = useDispatch();
@@ -82,26 +77,18 @@ function Index() {
           </div>
         </div>
 
-        <div className="flex xl:gap-1 pt-14 pr-20 items-center w-full -mt-1">
-          <div className="w-1/2 xl:w-[610px]  xl:h-[340px] lg:w-[28.5rem] bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto mt-[-1rem] mb-84">
+        <div className="flex xl:gap-1 pt-14 pt-5.5 pr-20 items-center w-full -mt-1">
+          <div className="w-1/2 xl:w-[616px]  xl:h-[340px]  bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto mt-[-1rem] mb-8">
             <WinLossRatio />
           </div>
-          <div className="w-1/2 xl:w-[30rem] max-w-screen-md xl:h-[340px] me-px bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto -mt-2 p-[10px] ml-auto">
+          <div className="w-1/2 xl:w-[30rem] max-w-screen-md xl:h-[340px] me-px bg-[#0f212e] shadow-lg shadow-[#0f212e] p-1 m-auto mt-[-1rem] p-[10px] ml-auto">
             <TopGames />
           </div>
         </div>
 
-        <div className="flex xl:gap-6 pt-14 pr-20 items-center w-full -mt-2">
-          <div className="w-1/2 xl:w-[35rem] me-px max-w-screen-md lg:w-[28.5rem] bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto mt-[-1rem] mb-84 ml-auto">
-            <FinancialTransaction />
-          </div>
-          <div className="w-1/2 xl:w-[35rem] max-w-screen-md me-px bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 m-auto -mt-2 p-[10px] ml-auto">
-            <CountsByCountry />
-          </div>
-        </div>
-        <div className="flex xl:gap-6 pt-10 pr-20 items-center w-full">
-        <div className="w-1/2 xl:w-1/2 max-w-fit bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 mr-90 my-2.5 ml-auto p-[10px] -mt-8">
-        <TopUsers />
+        <div className="flex xl:gap-6 pt-14 pt-5.5 pr-20 items-center w-full -mt-1">
+          <div className="w-1/2 xl:w-[616px]  xl:h-[340px]  bg-[#0f212e] shadow-lg shadow-[#0f212e] p-3 m-auto mt-[-1rem] mb-8">
+            <TopUsers />
 
             <div className="xl:mt-8 lg:mt-3.5 bg-[#0f212e] shadow-lg shadow-[#0f212e] py-4 px-4">
               <ul className="custom-list">
@@ -119,6 +106,15 @@ function Index() {
                 </li>
               </ul>
             </div>
+          </div>
+
+          <div className="w-1/2 xl:w-[30rem] max-w-screen-md xl:h-[340px] me-px bg-[#0f212e] shadow-lg shadow-[#0f212e] p-3 m-auto mt-[-1rem] p-[10px] ml-auto">
+            <CountsByCountry />
+          </div>
+        </div>
+        <div className="flex flex-col items-center w-full pt-10">
+          <div >
+            <FinancialTransaction />
           </div>
         </div>
       </div>

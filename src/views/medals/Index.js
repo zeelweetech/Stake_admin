@@ -1,3 +1,4 @@
+
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
@@ -15,7 +16,6 @@ function GetUserMedal() {
     const [isEditing, setIsEditing] = useState(false);
     const [medalValue, setMedalValue] = useState();
     const [selectedMedalId, setSelectedMedalId] = useState();
-    const [allMedalData] = useState([]);
     const [paginationModel, setPaginationModel] = useState({
         page: 0,
         pageSize: 10,
@@ -27,50 +27,29 @@ function GetUserMedal() {
         getMedal();
     }, [paginationModel?.page, paginationModel?.pageSize]);
 
-
     const getMedal = async () => {
         try {
             const response = await GetMedals({
-                page: paginationModel?.page + 1, // Server-side pagination
-                pageSize: paginationModel?.pageSize, // Data per page
+                page: paginationModel?.page + 1,
+                pageSize: paginationModel?.pageSize,
             });
-            dispatch(setMedalData(response)); // Assuming response contains medal data
-            
-            // Assuming response contains a total count
-            const totalRecords = response?.totalCount; // Adjust this based on your API response
-            setTotalCount(totalRecords);
-    
+            dispatch(setMedalData(response));
+            setTotalCount(response.totalCount); 
+
             console.log('Medal Data:', response);
         } catch (error) {
             console.error("Failed to fetch medals: ", error);
             setLoading(false);
         }
     };
-    
 
-    // const getUserMedaL = async () => {
-    //     setLoading(true);
-    //     try {
-    //         const response = GetMedals({
-    //             page: paginationModel?.page + 1,
-    //             pageSize: paginationModel?.pageSize,
-    //         });
-    //         setUserMedalData(response)
-    //         setLoading(false);
-    //         setTotalCount(response);
-
-    //     } catch (error) {
-
-    //     }
-    // }
-
-    const openEditDialog = (distribution) => {
+    const openEditDialog = (Medal) => {
         setMedalValue({
-            medalLevel: distribution?.medalLevel,
-            medalType: distribution?.medalType,
-            winAmount: distribution?.winAmount,
+            medalLevel: Medal?.medalLevel,
+            medalType: Medal?.medalType,
+            winAmount: Medal?.winAmount,
         });
-        setSelectedMedalId(distribution?.id);
+        setSelectedMedalId(Medal?.id);
         setIsEditing(true);
         setOpen(true);
     };
@@ -79,27 +58,27 @@ function GetUserMedal() {
         {
             field: "medalLevel",
             headerName: "Medal Level",
-            width: 220,
+            width: 200,
             headerClassName: "column-header",
             cellClassName: "column-cell",
         },
         {
             field: "medalType",
             headerName: "Medal Type",
-            width: 170,
+            width: 200,
             headerClassName: "column-header",
             cellClassName: "column-cell",
         },
         {
             field: "winAmount",
             headerName: "Win Amount",
-            width: 180,
+            width: 200,
             headerClassName: "column-header",
             cellClassName: "column-cell",
         },
         {
             headerName: "Edit",
-            width: 100,
+            width: 200,
             headerClassName: "column-header",
             cellClassName: "column-cell",
             renderCell: (params) => (
@@ -121,9 +100,6 @@ function GetUserMedal() {
         medalType: log.medalType || "",
         winAmount: log.winAmount || "0.00",
     }));
-
-    console.log("rows::::::", rows);
-
 
     return (
         <div>
@@ -149,21 +125,21 @@ function GetUserMedal() {
                         </button>
                     </div>
                     <div className="justify-center pt-4 xl:h-[500px]">
-                        <div style={{ height: 500, width: '100%' }}>
+                        <div style={{ height: 600, width: '100%' }}>
                             <p className="text-xl font-bold text-center py-4 text-[#b1bad3]">
                                 Medal Detail
                             </p>
                             <DataGrid
-    rows={rows}
-    getRowId={(row) => row.id}
-    columns={columns}
-    loading={loading}
-    rowCount={totalCount} // Total count of items, for correct pagination
-    paginationModel={paginationModel} // Current page and page size
-    paginationMode="server" // Ensure pagination is handled by the server
-    onPaginationModelChange={setPaginationModel} // Update pagination model on change
-    pageSizeOptions={[10, 20]} // Allow for page size selection
-    hideFooter // Optional: If you want to hide footer
+                                rows={rows}
+                                getRowId={(row) => row.id}
+                                columns={columns}
+                                loading={loading}
+                                rowCount={totalCount}
+                                paginationModel={paginationModel}
+                                paginationMode="server"
+                                onPaginationModelChange={setPaginationModel}
+                                pageSizeOptions={[10, 20]}
+                                hideFooter={false} 
                                 getRowClassName={(params) =>
                                     params.indexRelativeToCurrentPage % 2 === 0
                                         ? "row-dark"
@@ -190,7 +166,7 @@ function GetUserMedal() {
                                     "& .MuiTablePagination-selectIcon": {
                                         color: "white",
                                     },
-                                    height: 500,
+                                    height: 600,
                                     overflowY: 'auto',
                                 }}
                             />
@@ -208,7 +184,6 @@ function GetUserMedal() {
                     setIsEditing={setIsEditing}
                     selectedMedalId={selectedMedalId}
                     userMedalData={userMedalData}
-                    allMedalData={allMedalData}
                 />
             </div>
         </div>

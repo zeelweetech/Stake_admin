@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { DataGrid } from "@mui/x-data-grid"; // make sure to install this package if not already installed
+import { DataGrid } from "@mui/x-data-grid"; 
 
 const columns = [
   {

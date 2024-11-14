@@ -48,19 +48,21 @@ export async function EditMedal({ body: body, id: id }) {
  * add Medal 
  */
 
-export async function AddMedal({body: body}) {
+
+export async function AddMedal({ body }) {
   try {
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: token } : {};
+
     const response = await axios.post(
-      `${process.env.REACT_APP_LOCAL_URL}/medals/edit`,
+      `${process.env.REACT_APP_LOCAL_URL}/medals/add`,
       body,
-      {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      }
+      { headers }
     );
+
     return response.data;
   } catch (error) {
-    throw error;
+    console.error("Error adding medal:", error);
+    throw new Error("Failed to add medal. Please try again later.");
   }
 }

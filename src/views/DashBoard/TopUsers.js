@@ -82,6 +82,7 @@ function TopUsers() {
         "& .MuiTablePagination-selectIcon": {
             color: "white",
         },
+        height:220,
         overflowY: 'hidden',
     }}
       />
