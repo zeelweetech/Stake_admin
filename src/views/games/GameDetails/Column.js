@@ -1,50 +1,48 @@
-// Column.js
-import React from "react";
-
 function Column(isPull) {
-  if (isPull === "true") {
+  // Ensure comparison is type-safe
+  if (isPull === "true" || isPull === true) {
     return [
       {
         field: "pullId",
-        headerName: "Pool Id",
+        headerName: "Pull Id",
         width: 200,
         headerClassName: "column-header",
         cellClassName: "column-cell",
       },
       {
-        field: "CrashPoint",
+        field: "crashPoint",
         headerName: "Crash Point",
         width: 250,
         headerClassName: "column-header",
         cellClassName: "column-cell",
       },
       {
-        field: "PlayerCount",
+        field: "playerCount",
         headerName: "Player Count",
         width: 220,
         headerClassName: "column-header",
         cellClassName: "column-cell",
       },
       {
-        field: "TotalPullAmount",
+        field: "totalPullAmount",
         headerName: "Total Pull Amount",
         width: 220,
         headerClassName: "column-header",
         cellClassName: "column-cell",
       },
       {
-        field: "PullTime",
+        field: "pullTime",
         headerName: "Pull Time",
         width: 214,
         headerClassName: "column-header",
         cellClassName: "column-cell",
       },
     ];
-  } else {
+  } else if (isPull === "false" || isPull === false) {
     return [
       {
-        field: "id",
-        headerName: "ID",
+        field: "email",
+        headerName: "Email",
         width: 250,
         headerClassName: "column-header",
         cellClassName: "column-cell",
@@ -113,6 +111,8 @@ function Column(isPull) {
         cellClassName: "column-cell",
       },
     ];
+  } else {
+    throw new Error("Invalid value for isPull. Expected 'true' or 'false'.");
   }
 }
 

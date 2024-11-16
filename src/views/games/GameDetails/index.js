@@ -1,148 +1,107 @@
-
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Accordion, AccordionDetails, AccordionSummary, Box } from "@mui/material";
 import { getGameHistory } from "../../../services/GameServices";
 import Column from "./Column";
-// import GameDetailPlayers from "./GameDetailPlayers";
 import { useDispatch, useSelector } from "react-redux";
 import GameDetailFilter from "./GameDetailFilter";
 import { setPullsData } from "../../../features/games/gameDetails";
+import { DialogActions, Button, IconButton } from "@mui/material";
+import Popup from "reactjs-popup";
+import CloseIcon from "@mui/icons-material/Close";
 
 function GameDetails() {
-  const { gameId } = useParams();
+  const { gameId, isPull: isPullParam } = useParams();
   const dispatch = useDispatch();
-  const [userData, setUserData] = useState([]);
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
+
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [expandedRow, setExpandedRow] = useState(null);
+  const [expandedRowData, setExpandedRowData] = useState(null);
   const { searchTerm } = useSelector((state) => state?.gameDataFilter);
   const { pullsData } = useSelector((state) => state?.gameDetail);
+ 
+  const isPull = isPullParam === "t";
 
   useEffect(() => {
     getAllUserdata();
-  }, [paginationModel.page, paginationModel.pageSize]);
-
-  console.log("searchTerm -*-*-*-*-*", searchTerm);
+  }, [paginationModel.page, paginationModel.pageSize, searchTerm]);
 
   const getAllUserdata = async () => {
     setLoading(true);
     try {
       const response = await getGameHistory({
         id: gameId,
+        data: isPull,
         page: paginationModel?.page + 1,
         limit: paginationModel?.pageSize,
-        pullId: searchTerm?.pullId,
-        crashPoint: searchTerm?.crashPoint,
-        playerCount: searchTerm?.playerCount,
-        totalAmount: searchTerm?.totalAmount,
+        ...searchTerm,
         pullIdOperator: searchTerm?.pullId && "=",
         crashPointOperator: searchTerm?.crashPoint && "=",
         playerCountOperator: searchTerm?.playerCount && "=",
         totalAmountOperator: searchTerm?.totalAmount && "=",
-        pullIdMin: searchTerm?.pullIdRangeMin,
-        pullIdMax: searchTerm?.pullIdRangeMax,
-        crashPointMin: searchTerm?.crashPointRangeMin,
-        crashPointMax: searchTerm?.crashPointRangeMax,
-        playerCountMin: searchTerm?.playerCountRangeMin,
-        playerCountMax: searchTerm?.playerCountRangeMax,
-        totalAmountMin: searchTerm?.totalAmountRangeMin,
-        totalAmountMax: searchTerm?.totalAmountRangeMax,
-        startDate: searchTerm?.startDate,
-        endDate: searchTerm?.endDate,
-        sortBy: searchTerm?.sortBy,
-        sortOrder: searchTerm?.sortOrder,
       });
-      // setPullsData(response?.pulls)
-      dispatch(setPullsData(response?.pulls))
-      const allPlayers = response?.pulls?.flatMap((pull) => pull.players || []);
-      setUserData(allPlayers);
-      setTotalCount(response?.totalPulls);
-      setLoading(false);
+
+      dispatch(setPullsData(response?.pulls));
+      setTotalCount(response?.totalPulls || 0);
     } catch (error) {
-      console.error("Failed to fetch users: ", error);
+      console.error("Failed to fetch users:", error);
+    } finally {
       setLoading(false);
     }
   };
 
-
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
+    if (isNaN(date)) return "-";
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     const formattedDate = `${day}/${month}/${year}`;
-
-    const options = {
+    const formattedTime = date.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "numeric",
       hour12: true,
-    };
-    const formattedTime = date.toLocaleTimeString("en-US", options);
+    });
     return `${formattedDate} ${formattedTime}`;
   };
 
-
-  const rows = pullsData?.map((pulls) => {
-    // const id = pull.pulls?.pullId || `generated-id-${index}`;
-    if (pulls.isPull === "true") {
+  const rows = pullsData?.map((data, index) => {
+    if (isPull) {
       return {
-        id: pulls?.pullId || `temp-id-${Math.random()}`,
-        pullId: pulls?.pullId ? pulls?.pullId : "-",
-        CrashPoint: pulls?.crashPoint ? pulls?.crashPoint : "-",
-        PlayerCount: pulls?.playerCount ? pulls?.playerCount : "-",
-        TotalPullAmount: pulls?.totalPullAmount ? pulls?.totalPullAmount : "-",
-        PullTime: formatDateTime(pulls?.pullTime) ? formatDateTime(pulls?.pullTime) : "-",
-        expanded: expandedRow === pulls?.pullId,
+        id: data.pulls?.pullId || index,
+        pullId: data?.pullId || "-",
+        crashPoint: data?.crashPoint || "-",
+        playerCount: data?.playerCount || "-",
+        totalPullAmount: data?.totalPullAmount || "-",
+        pullTime: formatDateTime(data?.pullTime),
       };
     } else {
       return {
-        id: pulls?.id || `temp-id-${Math.random()}`,
-        BetType: pulls?.betType ? pulls?.betType : "-",
-        GameId: pulls?.gameId ? pulls?.gameId : "-",
-        BetAmount: pulls?.betAmount ? pulls?.betAmount : "-",
-        Multiplier: pulls?.multiplier ? pulls?.multiplier : "-",
-        CashOutAt: pulls?.cashOutAt ? pulls?.cashOutAt : "-",
-        WinAmount: pulls?.winAmount ? pulls?.winAmount : "-",
-        BetTime: formatDateTime(pulls?.betTime) ? formatDateTime(pulls?.betTime) : "-",
-        UserName: pulls?.user?.userName ? pulls?.user?.userName : "-",
-        Email: pulls?.user?.email ? pulls?.user?.email : "-",
-        LossAmount: pulls?.lossAmount !== undefined ? pulls?.lossAmount : "-",
-        expanded: expandedRow === pulls?.id,
+        id: data.pulls?.betId || index,
+        userName: data.user?.userName || "-",
+        email: data.user?.email || "-",
+        betType: data?.betType || "-",
+        gameId: data?.gameId || "-",
+        betAmount: data?.betAmount || "-",
+        multiplier: data?.multiplier || "-",
+        cashOutAt: data?.cashOutAt || "-",
+        winAmount: data?.winAmount || "-",
+        betTime: formatDateTime(data?.betTime),
+        lossAmount: data?.lossAmount ?? "-",
       };
     }
   });
 
-  const rowsWithDetails = rows
-    .flatMap((row) => [
-      row,
-      expandedRow === row.pullId
-        ? {
-          id: `details-${row.pullId}`,
-          isDetailsRow: true,
-          pullId: row.pullId,
-        }
-        : null,
-    ])
-    .filter(Boolean);
-
-  const columnsWithDetails = [
-    ...Column(),
-    {
-      renderCell: (params) =>
-        params.row.expanded && (
-          <Box sx={{ padding: 2, width: "100%" }}>
-
-          </Box>
-        ),
-    },
-  ];
-
   const handleRowClick = (params) => {
-    const clickedRowId = params.row.pullId;
-    setExpandedRow((prev) => (prev === clickedRowId ? null : clickedRowId));
+    setExpandedRowData(params.row);  
+  };
+
+  const handleClosePopup = () => {
+    setExpandedRowData(null);  
   };
 
   return (
@@ -151,9 +110,7 @@ function GameDetails() {
       <DataGrid
         autoHeight
         rows={rows}
-
-        columns={Column(pullsData[0]?.isPull === "false")}
-
+        columns={Column(isPull)}
         getRowId={(row) => row.id}
         loading={loading}
         rowCount={totalCount}
@@ -169,46 +126,56 @@ function GameDetails() {
         sx={{
           border: "none",
           color: "#b1bad3",
-          "& .MuiDataGrid-cell": {
-            border: "none",
-          },
+          "& .MuiDataGrid-cell": { border: "none" },
           "& .MuiDataGrid-columnHeader": {
             borderBottom: "none",
             borderTop: "none",
           },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            borderBottom: "none",
-            color: "white",
-          },
-          "& .MuiTablePagination-root": {
-            color: "white",
-          },
-          "& .MuiTablePagination-selectIcon": {
+          "& .MuiDataGrid-footerContainer": { borderTop: "none", color: "white" },
+          "& .MuiTablePagination-root, .MuiTablePagination-selectIcon": {
             color: "white",
           },
         }}
       />
-      {pullsData.map((row) => (
-        <div key={row?.pullId}>
-          {expandedRow === row?.pullId && (
-            <Accordion expanded={true} sx={{ background: "#1a2c38" }}>
-              <AccordionSummary>
-                Game Details for {row?.pullId}
-              </AccordionSummary>
-              <AccordionDetails>
-                {/* <GamePlayersColumn pullId={row.pullId} /> */}
-                {/* <GameDetailPlayers
-                  pullId={row?.pullId}
-                  userData={userData.filter(
-                    (player) => player.pullId === row.pullId
-                  )} */}
-                {/* /> */}
-              </AccordionDetails>
-            </Accordion>
-          )}
+      <Popup open={expandedRowData !== null} onClose={handleClosePopup} modal>
+        <div className="popup-content bg-[#213743] text-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-2xl font-semibold">Row Details</h3>
+            <div className="flex justify-end">
+              <IconButton onClick={handleClosePopup}>
+                <CloseIcon className="text-[#b1bad3]" />
+              </IconButton>
+            </div>
+          </div>
+          <div className="space-y-2">
+            {expandedRowData && (
+              <>
+                {Object.keys(expandedRowData).map((key) => (
+                  <div key={key} className="flex justify-between">
+                    <span className="font-medium text-gray-300">{key}:</span>
+                    <span>{expandedRowData[key]}</span>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+          <DialogActions className="mt-4">
+            <Button
+              onClick={handleClosePopup}
+              sx={{
+                backgroundColor: "#ff638433",
+                px: "1rem",
+                py: "0.5rem",
+                color: "#b1bad3",
+                border: "1px solid #ff6384",
+              }}
+            >
+              Close
+            </Button>
+          </DialogActions>
         </div>
-      ))}
+      </Popup>
+
     </div>
   );
 }

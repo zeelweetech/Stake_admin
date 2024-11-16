@@ -90,7 +90,7 @@ export default function MedalsInfo({
         try {
             const response = await AddMedal({ body: medalValue }); 
             toast.success(response.message);
-            console.log("handleAddMedal:::::::", response);
+            // console.log("handleAddMedal:::::::", response);
 
 
             setUserMedalData((prev) => [

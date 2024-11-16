@@ -36,10 +36,11 @@ function FinancialTransaction() {
 
     return (
         <div>
-            <div className="w-full xl:w-[400px] xl:h-[400px] bg-[#0f212e] shadow-lg shadow-[#0f212e] p-1 m-auto mt-[-1rem] mb-8">
-                <div className="flex justify-end mb-4">
+            <div className=" bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 h-full xl:w-[490px] xl:h-[490] mr-[-150rem] -mt-2">
+               
+                <div className="flex justify-end mb-0 mt-[-0.5rem]">
                     <select
-                        className="bg-[#4d718768] text-white p-2 sm:ml-4"
+                        className="bg-[#4d718768] text-white p-2 sm:ml-6"
                         value={selectedWeek}
                         onChange={(e) => setSelectedWeek(e.target.value)}
                     >
@@ -47,12 +48,16 @@ function FinancialTransaction() {
                         <option value="Last Week">Last Week</option>
                     </select>
                 </div>
-                <Pie data={data} />
+                <div className="flex justify-center bg-[#0f212e] p-2 mt-[-25px] xl:h-[300px]">
+                    <Pie data={data} width={500} height={500} />
+                </div>
+                <p className="text-m font-semibold text-[#b1bad3] flex justify-center py-4">
+                    FinancialTransaction
+                </p>
+                
             </div>
-            <p className="text-m font-semibold text-[#b1bad3] flex justify-center py-5">
-                FinancialTransaction
-            </p>
         </div>
+
     );
 }
 

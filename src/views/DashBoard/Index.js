@@ -90,7 +90,7 @@ function Index() {
           <div className="w-1/2 xl:w-[616px]  xl:h-[340px]  bg-[#0f212e] shadow-lg shadow-[#0f212e] p-3 m-auto mt-[-1rem] mb-8">
             <TopUsers />
 
-            <div className="xl:mt-8 lg:mt-3.5 bg-[#0f212e] shadow-lg shadow-[#0f212e] py-4 px-4">
+            <div className="xl:mt-[-40px] lg:mt-[-10px] xl:w-[39rem] bg-[#0f212e] shadow-lg shadow-[#0f212e] py-4 px-4">
               <ul className="custom-list">
                 <li className="text-lg font-bold text-[#b1bad3] mt-2 highest-bet relative pl-6">
                   averageCrashPoint:{" "}
@@ -106,13 +106,14 @@ function Index() {
                 </li>
               </ul>
             </div>
+
           </div>
 
           <div className="w-1/2 xl:w-[30rem] max-w-screen-md xl:h-[340px] me-px bg-[#0f212e] shadow-lg shadow-[#0f212e] p-3 m-auto mt-[-1rem] p-[10px] ml-auto">
             <CountsByCountry />
           </div>
         </div>
-        <div className="flex flex-col items-center w-full pt-10">
+        <div className="flex flex-col items-center px-64 w-full pt-10">
           <div >
             <FinancialTransaction />
           </div>

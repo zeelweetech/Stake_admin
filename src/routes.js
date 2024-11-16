@@ -8,15 +8,15 @@ const Logs = React.lazy(() => import("./views/logs"));
 const User = React.lazy(() => import("./views/users/usersHistory"));
 const userDistribution = React.lazy(() => import("./views/users/userDistribution"))
 const UserStatus = React.lazy(() => import("./views/DashBoard/Index"))
-const Medals =React.lazy(() => import("./views/medals/Index"))
+const Medals = React.lazy(() => import("./views/medals/Index"))
 
 
 const routes = [
   { path: "/dashboard", name: "Home", element: UserStatus },
   { path: "/users", name: "Users", element: Users },
-  { path: "/users/:userName/:userId", name: "User", element: User }, 
+  { path: "/users/:userName/:userId", name: "User", element: User },
   { path: "/games", name: "Games", element: Games },
-  { path: "/games/:gameName/:gameId", name: "GameMenu", element: GameMenu },
+  { path: "/games/:gameName/:gameId/:isPull", name: "GameMenu", element: GameMenu },
   { path: "/logs", name: "Logs", element: Logs },
   {
     path: "/userDistribution",

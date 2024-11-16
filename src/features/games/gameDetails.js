@@ -19,7 +19,10 @@ const gameDetailSlice = createSlice({
       state.paginationModel = action.payload
     }
   },
+  
 });
+console.log("set Pulls Data::::::".setPullsData);
+
 
 export const { setPullsData, setPaginationModel } = gameDetailSlice.actions;
 export default gameDetailSlice.reducer;

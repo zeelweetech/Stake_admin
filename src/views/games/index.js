@@ -43,9 +43,10 @@ export default function GamesDashboard() {
       });
   };
 
-  const handleGameData = (name, id) => {
-    console.log("&&&&&", name, id);
-    navigate(`/games/${name}/${id}`);
+  const handleGameData = (name, id, isPull) => {
+    console.log("&&&&&");
+    const data = isPull === true ? "t" : "f"
+    navigate(`/games/${name}/${id}/${data}`);
   };
 
   const handleChange = (e) => {
@@ -116,11 +117,13 @@ export default function GamesDashboard() {
             <div className="grid grid-cols-6 gap-x-4 gap-y-7 py-10">
               {gameData.map((data) => (
                 <div>
+                  {console.log("data", data)
+                  }
                   <img
                     src={data.gameImage}
                     className="xl:w-44 lg:w-36 lg:h-48 xl:h-56 rounded-md hover:cursor-pointer transition-transform duration-300 hover:translate-y-[-10px]"
                     alt="Not Found"
-                    onClick={() => handleGameData(data?.gameName, data?.id)}
+                    onClick={() => handleGameData(data?.gameName, data?.id, data?.isPull )}
                   />
                   <p className="text-white text-center text-xl font-medium mt-2">
                     {data.gameName}
@@ -290,7 +293,8 @@ export default function GamesDashboard() {
             </DialogActions>
           </Dialog>
         </div>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }

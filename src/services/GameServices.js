@@ -54,6 +54,7 @@ export async function getAllGame() {
 export const getGameHistory = async (params) => {
   const {
     id,
+    data,
     page,
     limit,
     pullId,
@@ -77,6 +78,8 @@ export const getGameHistory = async (params) => {
     sortBy,
     sortOrder,
   } = params;
+// console.log("gameHistory..........",id);
+
 
   try {
     const response = await axios.get(
@@ -84,6 +87,7 @@ export const getGameHistory = async (params) => {
       {
         params: {
           page,
+          data,
           limit,
           pullId,
           pullIdMin,
