@@ -49,17 +49,17 @@ export default function GamesDashboard() {
     navigate(`/games/${name}/${id}/${data}`);
   };
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "gameImg") {
-      setAddGameValue({ ...addGameValue, [name]: files[0] });
-      setErrors({ ...errors, [name]: "" });
-    } else {
-      setAddGameValue({ ...addGameValue, [name]: value });
-      setErrors({ ...errors, [name]: "" });
-    }
-    // setErrors((prev) => ({ ...prev, [name]: "" }));
-  };
+  // const handleChange = (e) => {
+  //   const { name, value, files } = e.target;
+  //   if (name === "gameImg") {
+  //     setAddGameValue({ ...addGameValue, [name]: files[0] });
+  //     setErrors({ ...errors, [name]: "" });
+  //   } else {
+  //     setAddGameValue({ ...addGameValue, [name]: value });
+  //     setErrors({ ...errors, [name]: "" });
+  //   }
+  //   // setErrors((prev) => ({ ...prev, [name]: "" }));
+  // };
 
   const handleAddGame = async (e) => {
     const { gameName, gameImg, gameType } = addGameValue;
@@ -188,7 +188,7 @@ export default function GamesDashboard() {
                 type="file"
                 accept="image/*"
                 name="gameImg"
-                onChange={(e) => handleChange(e)}
+                onChange={(e) => handleGameData(e)}
                 className={`p-3 w-full border ${errors.gameImg ? 'border-[#d32f2f]' : 'border-[#2f4553]'} my-0.5`}
               />
               {errors.gameImg && (
@@ -200,7 +200,7 @@ export default function GamesDashboard() {
                 name="gameName"
                 type="text"
                 value={addGameValue?.gameName || ""}
-                onChange={(e) => handleChange(e)}
+                onChange={(e) => handleGameData(e)}
                 fullWidth
                 sx={{
                   my: 0.5,
@@ -233,7 +233,7 @@ export default function GamesDashboard() {
                   label="Game Type"
                   name="gameType"
                   value={addGameValue?.gameType || ""}
-                  onChange={(e) => handleChange(e)}
+                  onChange={(e) => handleGameData(e)}
                   InputLabelProps={{ shrink: true }}
                   sx={{
                     my: 0.5,

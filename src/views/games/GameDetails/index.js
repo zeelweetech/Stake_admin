@@ -1,14 +1,13 @@
-import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getGameHistory } from "../../../services/GameServices";
-import Column from "./Column";
+import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { getGameHistory } from "../../../services/GameServices";
 import GameDetailFilter from "./GameDetailFilter";
 import { setPullsData } from "../../../features/games/gameDetails";
-import { DialogActions, Button, IconButton } from "@mui/material";
-import Popup from "reactjs-popup";
-import CloseIcon from "@mui/icons-material/Close";
+import Column from "./Column";
 
 function GameDetails() {
   const { gameId, isPull: isPullParam } = useParams();
@@ -21,9 +20,11 @@ function GameDetails() {
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [expandedRowData, setExpandedRowData] = useState(null);
+  const [isPanelVisible, setIsPanelVisible] = useState(false);
+
   const { searchTerm } = useSelector((state) => state?.gameDataFilter);
   const { pullsData } = useSelector((state) => state?.gameDetail);
- 
+
   const isPull = isPullParam === "t";
 
   useEffect(() => {
@@ -35,13 +36,14 @@ function GameDetails() {
     try {
       const response = await getGameHistory({
         id: gameId,
-        data: isPull,
         page: paginationModel?.page + 1,
         limit: paginationModel?.pageSize,
         ...searchTerm,
         pullIdOperator: searchTerm?.pullId && "=",
         crashPointOperator: searchTerm?.crashPoint && "=",
         playerCountOperator: searchTerm?.playerCount && "=",
+        playerCountMin: searchTerm?.playerCountMin || 1,
+        playerCountMax: searchTerm?.playerCountMax || 15,
         totalAmountOperator: searchTerm?.totalAmount && "=",
       });
 
@@ -78,6 +80,7 @@ function GameDetails() {
         playerCount: data?.playerCount || "-",
         totalPullAmount: data?.totalPullAmount || "-",
         pullTime: formatDateTime(data?.pullTime),
+        players: data?.players || [],
       };
     } else {
       return {
@@ -97,11 +100,9 @@ function GameDetails() {
   });
 
   const handleRowClick = (params) => {
-    setExpandedRowData(params.row);  
-  };
-
-  const handleClosePopup = () => {
-    setExpandedRowData(null);  
+    console.log("Row Clicked Data:", params.row);
+    setExpandedRowData(params.row);
+    setIsPanelVisible((prev) => !prev); // Toggle visibility
   };
 
   return (
@@ -109,7 +110,7 @@ function GameDetails() {
       <GameDetailFilter getAllUserdata={getAllUserdata} />
       <DataGrid
         autoHeight
-        rows={rows}
+        rows={rows.length > 0 ? rows : []}
         columns={Column(isPull)}
         getRowId={(row) => row.id}
         loading={loading}
@@ -137,45 +138,51 @@ function GameDetails() {
           },
         }}
       />
-      <Popup open={expandedRowData !== null} onClose={handleClosePopup} modal>
-        <div className="popup-content bg-[#213743] text-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-2xl font-semibold">Row Details</h3>
-            <div className="flex justify-end">
-              <IconButton onClick={handleClosePopup}>
-                <CloseIcon className="text-[#b1bad3]" />
-              </IconButton>
-            </div>
-          </div>
-          <div className="space-y-2">
-            {expandedRowData && (
-              <>
-                {Object.keys(expandedRowData).map((key) => (
-                  <div key={key} className="flex justify-between">
-                    <span className="font-medium text-gray-300">{key}:</span>
-                    <span>{expandedRowData[key]}</span>
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
-          <DialogActions className="mt-4">
-            <Button
-              onClick={handleClosePopup}
-              sx={{
-                backgroundColor: "#ff638433",
-                px: "1rem",
-                py: "0.5rem",
-                color: "#b1bad3",
-                border: "1px solid #ff6384",
-              }}
-            >
-              Close
-            </Button>
-          </DialogActions>
-        </div>
-      </Popup>
 
+      {/* Slide Toggle Panel */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 bg-[#213743] text-white p-6 mt-4 rounded-t-lg shadow-lg transition-transform duration-300 ${
+          isPanelVisible ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-2xl font-semibold">PLAYERS</h3>
+          <Button onClick={() => setIsPanelVisible(false)} color="secondary">
+            <CloseIcon />
+          </Button>
+        </div>
+
+        <div className="space-y-4">
+          {expandedRowData?.players?.length > 0 ? (
+            expandedRowData.players.map((player, index) => (
+              <div key={index} className="p-4 bg-gray-700 rounded-lg shadow-md space-y-2">
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-300">Username:</span>
+                  <span>{player?.users?.userName || "Unknown"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-300">Amount:</span>
+                  <span>{player?.amount || "0"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-300">Cashout Multiplier:</span>
+                  <span>{player?.cashoutMultiplier || "0"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-300">Win Amount:</span>
+                  <span>{player?.winAmount || "0"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium text-gray-300">Pull Time:</span>
+                  <span>{formatDateTime(player?.pullTime) || "-"}</span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-400">No players data available.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

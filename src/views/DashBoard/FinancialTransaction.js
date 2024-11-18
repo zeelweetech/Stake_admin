@@ -49,7 +49,7 @@ function FinancialTransaction() {
                     </select>
                 </div>
                 <div className="flex justify-center bg-[#0f212e] p-2 mt-[-25px] xl:h-[300px]">
-                    <Pie data={data} width={500} height={500} />
+                    <Pie data={data} width={560} height={560} />
                 </div>
                 <p className="text-m font-semibold text-[#b1bad3] flex justify-center py-4">
                     FinancialTransaction
