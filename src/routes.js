@@ -9,6 +9,7 @@ const User = React.lazy(() => import("./views/users/usersHistory"));
 const userDistribution = React.lazy(() => import("./views/users/userDistribution"))
 const UserStatus = React.lazy(() => import("./views/DashBoard/Index"))
 const Medals = React.lazy(() => import("./views/medals/Index"))
+const Admin = React.lazy(() => import("./views/admin/Index"))
 
 
 const routes = [
@@ -24,6 +25,7 @@ const routes = [
     element: userDistribution,
   },
   { path: "/medals", name: "Medals", element: Medals },
+  { path: "/admin", name: "Admin", element: Admin },
 ];
 
 export default routes;

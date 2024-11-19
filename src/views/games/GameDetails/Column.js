@@ -41,16 +41,9 @@ function Column(isPull) {
   } else if (isPull === "false" || isPull === false) {
     return [
       {
-        field: "email",
-        headerName: "Email",
-        width: 250,
-        headerClassName: "column-header",
-        cellClassName: "column-cell",
-      },
-      {
-        field: "betType",
-        headerName: "Bet Type",
-        width: 250,
+        field: "userName",
+        headerName: "User Name",
+        width: 214,
         headerClassName: "column-header",
         cellClassName: "column-cell",
       },
@@ -58,6 +51,13 @@ function Column(isPull) {
         field: "gameId",
         headerName: "Game ID",
         width: 220,
+        headerClassName: "column-header",
+        cellClassName: "column-cell",
+      },
+      {
+        field: "betType",
+        headerName: "Bet Type",
+        width: 250,
         headerClassName: "column-header",
         cellClassName: "column-cell",
       },
@@ -96,17 +96,18 @@ function Column(isPull) {
         headerClassName: "column-header",
         cellClassName: "column-cell",
       },
+      
       {
-        field: "userName",
-        headerName: "User Name",
+        field: "lossAmount",
+        headerName: "Loss Amount",
         width: 214,
         headerClassName: "column-header",
         cellClassName: "column-cell",
       },
       {
-        field: "lossAmount",
-        headerName: "Loss Amount",
-        width: 214,
+        field: "email",
+        headerName: "Email",
+        width: 250,
         headerClassName: "column-header",
         cellClassName: "column-cell",
       },

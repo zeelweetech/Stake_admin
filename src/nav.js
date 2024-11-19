@@ -5,6 +5,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import cards from "./assets/img/card.png"
 import { TbLogs } from "react-icons/tb";
 import EmojiEvents from '@mui/icons-material/EmojiEvents';
+import  AdminPanelSettings  from "@mui/icons-material/AdminPanelSettings";
 
 const nav = [
   {
@@ -54,7 +55,15 @@ const nav = [
     badge: {
       color: "info",
     }
-  }
+  },
+  {
+    name: "Admin",
+    to: "/admin",
+    icon:<AdminPanelSettings size={25}/>,
+    badge: {
+      color: "info",
+    }
+  },
 ];
 
 export default nav;

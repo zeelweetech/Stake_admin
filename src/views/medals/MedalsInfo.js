@@ -88,7 +88,7 @@ export default function MedalsInfo({
 
         setLoading(true);
         try {
-            const response = await AddMedal({ body: medalValue }); 
+            const response = await AddMedal({ body: medalValue });
             toast.success(response.message);
             // console.log("handleAddMedal:::::::", response);
 
@@ -109,7 +109,7 @@ export default function MedalsInfo({
             console.error("Add Medal error: ", error);
             toast.error(error?.response?.data?.message || "Failed to add medal");
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     };
 

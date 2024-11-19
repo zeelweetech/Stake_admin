@@ -7,7 +7,7 @@ import userInformationReducer from "../features/users/userInformationSlice"
 import DashBoardReducer from "../features/DashBoard/DashBoardSlice"
 import MedalReducer from "../features/medals/medalSlice"
 import allGameReducer from "../features/games/allGameSlice"
-
+import adminReducer from "../features/Admin/AdminSlice"
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -18,6 +18,7 @@ export const store = configureStore({
     dashBoard: DashBoardReducer,
     medal:MedalReducer,
     allGame:allGameReducer,
+    admin:adminReducer,
   },
 });
 export default store;

@@ -5,12 +5,10 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import ErrorIcon from "@mui/icons-material/Error";
 import { userLogin } from "../../../services/LoginServices";
-import toast from "react-hot-toast";
-// import { setCookie } from "../../../resources/utility";
-// import { decodedToken } from "../../../utils";
 import { useDispatch } from "react-redux";
-import { loginFailure, loginSuccess } from "../../../features/auth/authSlice";
+// import { loginFailure, loginSuccess } from "../../../features/auth/authSlice";
 import { setCookie } from "../../../resources/utility";
+import toast from "react-hot-toast";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +16,6 @@ function Login() {
   const [error, setError] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const auth = useSelector((state) => state.auth);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -30,16 +27,24 @@ function Login() {
     let errors = {};
     const EmailRegEx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
-    if (!values?.email) {
-      errors.email = "Email require";
-    } else if (!EmailRegEx?.test(values?.email)) {
-      errors.email = "Invalid email format";
-    }
+    if (!values?.email && !values?.password) {
+      toast.error("Both email and password are required");
+      errors.email = "Email required";
+      errors.password = "Password required";
+    } else {
+      if (!values?.email) {
+        errors.email = "Email required";
+        toast.error("Email required");
+      } else if (!EmailRegEx?.test(values?.email)) {
+        errors.email = "Invalid email format";
+        toast.error("Invalid email format");
+      }
 
-    if (!values?.password) {
-      errors.password = "Please enter your password";
+      if (!values?.password) {
+        errors.password = "Please enter your password";
+        toast.error("Please enter your password");
+      }
     }
-
     setError(errors);
     return Object.keys(errors).length === 0;
   };
@@ -53,20 +58,18 @@ function Login() {
       };
       await userLogin({ body: body })
         .then((response) => {
-          console.log("response", response);
+
           setCookie("token", response?.token, 24);
           localStorage.setItem("token", response?.token);
           toast.success(response?.message);
-          if (localStorage.getItem("token")) {
-            navigate("/dashboard");
-          }
+          navigate("/dashboard");
         })
         .catch((error) => {
-          console.log("error", error);
-          toast.error(error?.response?.data?.error);
+          toast.error(error?.response?.data?.error || "Invalid credentials! Please try again.");
         });
     }
   };
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -93,9 +96,8 @@ function Login() {
                   Email<p className="text-red-700 ml-1">*</p>
                 </label>
                 <input
-                  className={`border rounded w-[28rem] py-2 px-3 bg-[#0f212e] text-[#b1bad3] hover:border-[#7f8798] focus:outline-[#b1bad3] ${
-                    error?.email ? "border-[#ed4163]" : "border-gray-600"
-                  }`}
+                  className={`border rounded w-[28rem] py-2 px-3 bg-[#0f212e] text-[#b1bad3] hover:border-[#7f8798] focus:outline-[#b1bad3] ${error?.email ? "border-[#ed4163]" : "border-gray-600"
+                    }`}
                   name="email"
                   value={values?.email}
                   onChange={(e) => handleOnChange(e)}
@@ -116,9 +118,8 @@ function Login() {
                   Password<p className="text-red-700 ml-1">*</p>
                 </label>
                 <input
-                  className={`border rounded w-full py-2 px-3 bg-[#0f212e] text-[#b1bad3] hover:border-[#7f8798] focus:outline-[#b1bad3] ${
-                    error?.password ? "border-[#ed4163]" : "border-gray-600"
-                  }`}
+                  className={`border rounded w-full py-2 px-3 bg-[#0f212e] text-[#b1bad3] hover:border-[#7f8798] focus:outline-[#b1bad3] ${error?.password ? "border-[#ed4163]" : "border-gray-600"
+                    }`}
                   name="password"
                   value={values?.password}
                   onChange={(e) => handleOnChange(e)}
@@ -139,9 +140,8 @@ function Login() {
               )}
               <button
                 type="submit"
-                className={`bg-[#1fff20] hover:bg-[#42ed45] py-3 rounded-md font-semibold w-full ${
-                  error?.password ? "mt-5" : ""
-                }`}
+                className={`bg-[#1fff20] hover:bg-[#42ed45] py-3 rounded-md font-semibold w-full ${error?.password ? "mt-5" : ""
+                  }`}
               >
                 Sign In
               </button>
@@ -170,3 +170,4 @@ function Login() {
 }
 
 export default Login;
+

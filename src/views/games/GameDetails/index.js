@@ -20,7 +20,7 @@ function GameDetails() {
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [expandedRowData, setExpandedRowData] = useState(null);
-  const [isPanelVisible, setIsPanelVisible] = useState(false);
+  const [isPanelVisible, setIsPanelVisible] =useState(false)
 
   const { searchTerm } = useSelector((state) => state?.gameDataFilter);
   const { pullsData } = useSelector((state) => state?.gameDetail);
@@ -84,8 +84,8 @@ function GameDetails() {
       };
     } else {
       return {
-        id: data.pulls?.betId || index,
         userName: data.user?.userName || "-",
+        id: data.pulls?.betId || index,
         email: data.user?.email || "-",
         betType: data?.betType || "-",
         gameId: data?.gameId || "-",
@@ -102,7 +102,7 @@ function GameDetails() {
   const handleRowClick = (params) => {
     console.log("Row Clicked Data:", params.row);
     setExpandedRowData(params.row);
-    setIsPanelVisible((prev) => !prev); // Toggle visibility
+    setIsPanelVisible((prev) => !prev); 
   };
 
   return (
@@ -139,52 +139,63 @@ function GameDetails() {
         }}
       />
 
-      {/* Slide Toggle Panel */}
       <div
-        className={`fixed bottom-0 left-0 right-0 bg-[#213743] text-white p-6 mt-4 rounded-t-lg shadow-lg transition-transform duration-300 ${
+        className={`fixed bottom-0 left-0 right-0 bg-[#213743] text-white p-0 mt-2 rounded-t-lg shadow-lg transition-transform duration-300 ${
           isPanelVisible ? "translate-y-0" : "translate-y-full"
         }`}
       >
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-2xl font-semibold">PLAYERS</h3>
+          {/* <h3 className="text-2xl font-semibold">PLAYERS</h3> */}
           <Button onClick={() => setIsPanelVisible(false)} color="secondary">
             <CloseIcon />
           </Button>
-        </div>
+        </div> 
+        <div className="overflow-x-auto bg-[#0f212e] rounded-lg shadow-md p-4">
+  {expandedRowData?.players?.length > 0 ? (
+    <table className="min-w-full border-collapse border border-gray-700 text-gray-300">
+      <thead>
+        <tr className="bg-gray-800">
+          <th className="p-3 border border-gray-700 text-left">Id</th>
+          <th className="p-3 border border-gray-700 text-left">Username</th>
+          <th className="p-3 border border-gray-700 text-left">Player Name</th>
+          <th className="p-3 border border-gray-700 text-left">Amount</th>
+          <th className="p-3 border border-gray-700 text-left">Cashout Multiplier</th>
+          <th className="p-3 border border-gray-700 text-left">Win Amount</th>
+          <th className="p-3 border border-gray-700 text-left">Loss Amount</th>
+          <th className="p-3 border border-gray-700 text-left">Pull Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {expandedRowData.players.map((player, index) => (
+          <tr
+            key={index}
+            className={`${index % 2 === 0 ? "bg-gray-900" : "bg-gray-800"} hover:bg-gray-700`}
+          >
+            <td className="p-3 border border-gray-700">{player?.id || "Unknown"}</td>
+            <td className="p-3 border border-gray-700">{player?.users?.userName || "Unknown"}</td>
+            <td className="p-3 border border-gray-700">{player?.playerName || "Unknown"}</td>
+            <td className="p-3 border border-gray-700">{player?.amount || "0"}</td>
+            <td className="p-3 border border-gray-700">
+              {player?.cashoutMultiplier || "0"}
+            </td>
+            <td className="p-3 border border-gray-700">{player?.winAmount || "0"}</td>
+            <td className="p-3 border border-gray-700">{player?.lossAmount || "0"}</td>
+            <td className="p-3 border border-gray-700">
+              {formatDateTime(player?.pullTime) || "-"}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  ) : (
+    <p className="text-gray-400">No players data available.</p>
+  )}
+</div>
 
-        <div className="space-y-4">
-          {expandedRowData?.players?.length > 0 ? (
-            expandedRowData.players.map((player, index) => (
-              <div key={index} className="p-4 bg-gray-700 rounded-lg shadow-md space-y-2">
-                <div className="flex justify-between">
-                  <span className="font-medium text-gray-300">Username:</span>
-                  <span>{player?.users?.userName || "Unknown"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium text-gray-300">Amount:</span>
-                  <span>{player?.amount || "0"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium text-gray-300">Cashout Multiplier:</span>
-                  <span>{player?.cashoutMultiplier || "0"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium text-gray-300">Win Amount:</span>
-                  <span>{player?.winAmount || "0"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium text-gray-300">Pull Time:</span>
-                  <span>{formatDateTime(player?.pullTime) || "-"}</span>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-400">No players data available.</p>
-          )}
-        </div>
       </div>
-    </div>
+    </div> 
   );
 }
 
 export default GameDetails;
+

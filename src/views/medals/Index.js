@@ -130,6 +130,7 @@ function GetUserMedal() {
                                 Medal Detail
                             </p>
                             <DataGrid
+                                autoHeight
                                 rows={rows}
                                 getRowId={(row) => row.id}
                                 columns={columns}

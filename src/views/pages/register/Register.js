@@ -48,8 +48,10 @@ function Register({
 
     if (!values?.email) {
       errors.email = "Email require";
+      toast.error("Email require")
     } else if (!EmailRegEx?.test(values?.email)) {
       errors.email = "Invalid email format";
+      toast.error("Invalid email format")
     }
 
     if (!values?.Username) {
