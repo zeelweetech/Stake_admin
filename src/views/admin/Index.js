@@ -88,36 +88,58 @@ function GetAdmins() {
                         </button>
                     </div>
 
-                </div>
-                <div className="justify-center pt-4 p-10px xl:h-[300px] xl:w-[1000px]">
-                    <div style={{ height: 600, width: '100%' }}>
-                        <p className="text-xl font-bold text-center py-4 text-[#b1bad3]">Admin Detail</p>
-                        <DataGrid
-                            autoHeight
-                            rows={rows || []}
-                            columns={columns}
-                            loading={loading}
-                            rowCount={totalCount}
-                            paginationModel={pagination}
-                            paginationMode="server"
-                            onPaginationModelChange={(newPagination) =>
-                                setPagination((prev) => ({
-                                    ...prev,
-                                    page: newPagination.page,
-                                    pageSize: newPagination.pageSize,
-                                }))
-                            }
-                            pageSizeOptions={[10, 20]}
-                            sx={{
-                                border: 'none',
-                                color: '#b1bad3',
-                                '& .MuiDataGrid-cell': { border: 'none' },
-                                '& .MuiDataGrid-columnHeader': { borderBottom: 'none' },
-                                '& .MuiDataGrid-footerContainer': { borderTop: 'none' },
-                                height: 600,
-                                overflowY: 'auto',
-                            }}
-                        />
+
+                    <div className="justify-center pt-4 xl:h-[500px] ">
+                        <div style={{ height: 600, width: '100%' }}>
+                            <p className="text-xl font-bold text-center py-4 text-[#b1bad3]">Admin Detail</p>
+                            <DataGrid
+                                autoHeight
+                                rows={rows || []}
+                                columns={columns}
+                                loading={loading}
+                                rowCount={totalCount}
+                                paginationModel={pagination}
+                                paginationMode="server"
+                                onPaginationModelChange={(newPagination) =>
+                                    setPagination((prev) => ({
+                                        ...prev,
+                                        page: newPagination.page,
+                                        pageSize: newPagination.pageSize,
+                                    }))
+                                }
+                                pageSizeOptions={[10, 20]}
+                                getRowClassName={(params) =>
+                                    params.indexRelativeToCurrentPage % 2 === 0
+                                        ? "row-dark"
+                                        : "row-light"
+                                }
+                                sx={{
+                                    border: "none",
+                                    color: "#b1bad3",
+                                    "& .MuiDataGrid-cell": {
+                                        border: "none",
+                                    },
+                                    "& .MuiDataGrid-columnHeader": {
+                                        borderBottom: "none",
+                                        borderTop: "none",
+                                    },
+                                    "& .MuiDataGrid-footerContainer": {
+                                        borderTop: "none",
+                                        borderBottom: "none",
+                                        color: "white",
+                                    },
+                                    "& .MuiTablePagination-root": {
+                                        color: "white",
+                                    },
+                                    "& .MuiTablePagination-selectIcon": {
+                                        color: "white",
+                                    },
+                                    height: 600,
+                                    overflowY: 'auto',
+                                }}
+                            />
+                        </div>
+
                     </div>
 
                 </div>

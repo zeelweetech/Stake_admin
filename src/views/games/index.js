@@ -1,9 +1,10 @@
+
 import React, { useEffect, useState } from "react";
 import "../../App.css";
 import Loader from "../component/Loader";
-import { AddGame, getAllGame } from "../../services/GameServices";
-// import CrashGame from "./CrashGame";
+import { AddGame, getAllGame, OtpGenerate, UpdateGame } from "../../services/GameServices";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import {
@@ -20,14 +21,18 @@ import {
   TextField,
 } from "@mui/material";
 
+
+
 export default function GamesDashboard() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [gameData, setGameData] = useState([]);
   const [addGameValue, setAddGameValue] = useState({});
+  const [editGameValue, setEditGameValue] = useState({});
   const [errors, setErrors] = useState({});
+  const [isEdit, setIsEdit] = useState(false);
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     GameAllData();
   }, []);
@@ -44,32 +49,41 @@ export default function GamesDashboard() {
   };
 
   const handleGameData = (name, id, isPull) => {
-    console.log("&&&&&");
-    const data = isPull === true ? "t" : "f"
+    const data = isPull === true ? "t" : "f";
     navigate(`/games/${name}/${id}/${data}`);
   };
 
-  // const handleChange = (e) => {
-  //   const { name, value, files } = e.target;
-  //   if (name === "gameImg") {
-  //     setAddGameValue({ ...addGameValue, [name]: files[0] });
-  //     setErrors({ ...errors, [name]: "" });
-  //   } else {
-  //     setAddGameValue({ ...addGameValue, [name]: value });
-  //     setErrors({ ...errors, [name]: "" });
-  //   }
-  //   // setErrors((prev) => ({ ...prev, [name]: "" }));
-  // };
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+
+    
+    if (isEdit) {
+      setEditGameValue((prev) => ({
+        ...prev,
+        [name]: name === "gameImg" ? files[0] : value,
+      }));
+    } else {
+      setAddGameValue((prev) => ({
+        ...prev,
+        [name]: name === "gameImg" ? files[0] : value,
+      }));
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
 
   const handleAddGame = async (e) => {
+    e.preventDefault();
+
     const { gameName, gameImg, gameType } = addGameValue;
     let error = {};
 
     if (!gameImg) {
-      error.gameImg = "please enter your Game Image";
+      error.gameImg = "Please enter your Game Image";
+      
     }
     if (!gameName) {
-      error.gameName = "please enter your Game Name";
+      error.gameName = "Please enter your Game Name";
     }
     if (!gameType) {
       error.gameType = "Please select a Game Type";
@@ -80,20 +94,101 @@ export default function GamesDashboard() {
       return;
     }
 
-    e.preventDefault();
     const formData = new FormData();
     formData.append("image", gameImg);
     formData.append("gameName", gameName);
     formData.append("gameType", gameType);
 
-    await AddGame({ body: formData })
-      .then((response) => {
-        console.log("response add game", response);
-        setOpen(false);
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
+    try {
+      const response = await AddGame({ body: formData });
+      console.log("response add game", response);
+      setOpen(false);
+      GameAllData(); 
+    } catch (error) {
+      console.error("Error adding game:", error);
+    }
+  };
+
+  // const handleEditGame = (game) => {
+  //   setIsEdit(true);
+  //   setEditGameValue({
+  //     gameName: game.gameName,
+  //     gameType: game.gameType,
+  //     gameImg: game.gameImage,
+  //     id: game.id, 
+  //   });
+  //   setOpen(true);
+  // };
+ 
+  
+  
+  const handleEditGame = async (game, email) => {
+    let body = {
+      email: email,
+    };
+  
+    try {
+      const response = await OtpGenerate({ body, email });
+  
+      if (response?.email) {
+        
+        setIsEdit(true);
+        setEditGameValue({
+          gameName: game.gameName,
+          gameType: game.gameType,
+          gameImg: game.gameImage,
+          id: game.id,
+        });
+        setOpen(true);
+        
+        alert("OTP sent successfully! You can now edit the game.");
+      } else {
+        
+        console.error("Email not found in API response");
+        
+        alert("Failed to send OTP. Email not found.");
+      }
+    } catch (error) {
+      
+      console.error("Error in handleEditGame:", error.message);
+      
+      alert("Error occurred while sending OTP. Please try again.");
+    }
+  };
+  
+  
+  
+  const handleUpdateGame = async (e) => {
+    e.preventDefault();
+
+    const { gameName, gameImg, gameType, id } = editGameValue;
+    let error = {};
+
+    if (!gameName) {
+      error.gameName = "Please enter your Game Name";
+    }
+    if (!gameType) {
+      error.gameType = "Please select a Game Type";
+    }
+
+    if (Object.keys(error).length > 0) {
+      setErrors(error);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", gameImg);
+    formData.append("gameName", gameName);
+    formData.append("gameType", gameType);
+
+    try {
+      const response = await UpdateGame({ id, body: formData });
+      console.log("Game updated successfully", response);
+      setOpen(false);
+      GameAllData(); // Refresh game data
+    } catch (error) {
+      console.error("Error updating game:", error);
+    }
   };
 
   return (
@@ -107,6 +202,8 @@ export default function GamesDashboard() {
               <button
                 className="text-white bg-[#213743] border border-[#2f4553] font-medium px-4 py-2 rounded-sm flex items-center space-x-1"
                 onClick={() => {
+                  setIsEdit(false); 
+                  setAddGameValue({}); 
                   setOpen(true);
                 }}
               >
@@ -116,14 +213,18 @@ export default function GamesDashboard() {
             </div>
             <div className="grid grid-cols-6 gap-x-4 gap-y-7 py-10">
               {gameData.map((data) => (
-                <div>
-                  {console.log("data", data)
-                  }
+                <div key={data.id} className="relative group">
                   <img
                     src={data.gameImage}
                     className="xl:w-44 lg:w-36 lg:h-48 xl:h-56 rounded-md hover:cursor-pointer transition-transform duration-300 hover:translate-y-[-10px]"
                     alt="Not Found"
-                    onClick={() => handleGameData(data?.gameName, data?.id, data?.isPull )}
+                    onClick={() =>
+                      handleGameData(data?.gameName, data?.id, data?.isPull)
+                    }
+                  />
+                  <EditIcon
+                    onClick={() => handleEditGame(data)}
+                    className="absolute top-2 right-8 text-[#b1bad3] bg-[#213743] rounded-full p-1 hover:cursor-pointer hover:bg-[#2f4553] transition-transform duration-200 transform group-hover:scale-110"
                   />
                   <p className="text-white text-center text-xl font-medium mt-2">
                     {data.gameName}
@@ -148,48 +249,22 @@ export default function GamesDashboard() {
           >
             <DialogTitle>
               <div className="flex justify-between items-center">
-                <p>Add Game</p>
-                <IconButton>
-                  <CloseIcon
-                    onClick={() => setOpen(false)}
-                    className="text-[#b1bad3]"
-                  />
+                <p>{isEdit ? "Edit Game" : "Add Game"}</p>
+                <IconButton onClick={() => setOpen(false)}>
+                  <CloseIcon className="text-[#b1bad3]" />
                 </IconButton>
               </div>
             </DialogTitle>
             <DialogContent>
-              {/* <TextField
-                autoFocus
-                name="gameImg"
-                type="file"
-                value={addGameValue?.gameImg || ""}
-                onChange={(e) => handleChange(e)}
-                InputLabelProps={{ shrink: true }}
-                error={!!errors.gameImg}
-                helperText={errors.gameImg}
-                fullWidth
-                sx={{
-                  my: 1,
-                  input: {
-                    color: "#b1bad3",
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#2f4553",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#2f4553",
-                    },
-                  },
-                }}
-              /> */}
               <input
                 id="image"
                 type="file"
                 accept="image/*"
                 name="gameImg"
-                onChange={(e) => handleGameData(e)}
-                className={`p-3 w-full border ${errors.gameImg ? 'border-[#d32f2f]' : 'border-[#2f4553]'} my-0.5`}
+                onChange={handleChange}
+                className={`p-3 w-full border ${
+                  errors.gameImg ? "border-[#d32f2f]" : "border-[#2f4553]"
+                } my-0.5`}
               />
               {errors.gameImg && (
                 <p className="text-[#d32f2f] w-56 text-sm pb-3">{errors.gameImg}</p>
@@ -199,8 +274,8 @@ export default function GamesDashboard() {
                 placeholder="Enter Game Name"
                 name="gameName"
                 type="text"
-                value={addGameValue?.gameName || ""}
-                onChange={(e) => handleGameData(e)}
+                value={isEdit ? editGameValue.gameName : addGameValue.gameName || ""}
+                onChange={handleChange}
                 fullWidth
                 sx={{
                   my: 0.5,
@@ -209,10 +284,13 @@ export default function GamesDashboard() {
                   },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
-                      borderColor: errors?.gameName ? '#d32f2f' : '#2f4553',
+                      borderColor: errors?.gameName ? "#d32f2f" : "#2f4553",
                     },
                     "&:hover fieldset": {
-                      borderColor: errors?.gameName ? '#d32f2f' : '#2f4553',
+                      borderColor: errors?.gameName ? "#d32f2f" : "#2f4553",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: errors?.gameName ? "#d32f2f" : "#2f4553",
                     },
                   },
                 }}
@@ -220,32 +298,33 @@ export default function GamesDashboard() {
               {errors.gameName && (
                 <p className="text-[#d32f2f] w-56 text-sm pb-3">{errors.gameName}</p>
               )}
-              <FormControl sx={{ width: 140, my: 1 }}>
+              <FormControl
+                sx={{ width: 140, my: 1 }}
+                error={!!errors?.gameType} 
+              >
                 <InputLabel
-                  id="demo-simple-select-label"
-                  sx={{ color: "#b1bad3" }}
+                  id="game-type-label"
+                  sx={{ color: errors?.gameType ? "#d32f2f" : "#b1bad3" }} 
                 >
                   Game Type
                 </InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Game Type"
+                  labelId="game-type-label"
+                  id="game-type-select"
                   name="gameType"
-                  value={addGameValue?.gameType || ""}
-                  onChange={(e) => handleGameData(e)}
-                  InputLabelProps={{ shrink: true }}
+                  value={isEdit ? editGameValue.gameType : addGameValue.gameType || ""}
+                  onChange={handleChange}
                   sx={{
                     my: 0.5,
                     color: "#b1bad3",
                     ".MuiOutlinedInput-notchedOutline": {
-                      borderColor: errors?.gameType ? '#d32f2f' : '#2f4553',
+                      borderColor: errors?.gameType ? "#d32f2f" : "#2f4553",
                     },
                     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: errors?.gameType ? '#d32f2f' : '#2f4553',
+                      borderColor: errors?.gameType ? "#d32f2f" : "#2f4553",
                     },
                     "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: errors?.gameType ? '#d32f2f' : '#2f4553',
+                      borderColor: errors?.gameType ? "#d32f2f" : "#2f4553",
                     },
                   }}
                   MenuProps={{
@@ -260,13 +339,15 @@ export default function GamesDashboard() {
                   <MenuItem value="Casino">Casino</MenuItem>
                   <MenuItem value="Sport">Sport</MenuItem>
                 </Select>
-                {errors.gameType && (
+
+               
+                {errors?.gameType && (
                   <p className="text-[#d32f2f] text-sm w-48">{errors.gameType}</p>
                 )}
               </FormControl>
             </DialogContent>
             <DialogActions>
-              <Button
+            <Button
                 onClick={() => setOpen(false)}
                 sx={{
                   backgroundColor: "#ff638433",
@@ -279,22 +360,22 @@ export default function GamesDashboard() {
                 Close
               </Button>
               <Button
-                sx={{
-                  backgroundColor: "#4bc0c033",
-                  px: "1rem",
-                  py: "0.5rem",
-                  color: "#b1bad3",
-                  border: "1px solid #4bc0c0",
-                }}
-                onClick={handleAddGame}
+              sx={{
+                backgroundColor: "#4bc0c033",
+                px: "1rem",
+                py: "0.5rem",
+                color: "#b1bad3",
+                border: "1px solid #4bc0c0",
+              }}
+                onClick={isEdit ? handleUpdateGame : handleAddGame}
+                className="bg-[#3c4b61] hover:bg-[#475c73] text-white"
               >
-                Add Game
+                {isEdit ? "Update" : "Add "}
               </Button>
             </DialogActions>
           </Dialog>
         </div>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 }
