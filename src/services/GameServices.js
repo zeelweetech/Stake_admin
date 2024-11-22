@@ -78,7 +78,7 @@ export const getGameHistory = async (params) => {
     sortBy,
     sortOrder,
   } = params;
-// console.log("gameHistory..........",id);
+  // console.log("gameHistory..........",id);
 
 
   try {
@@ -183,15 +183,24 @@ export async function AddGame({ body: body }) {
 
 // *  Edit Game
 
-export async function UpdateGame({body:body, id: id}) {
+export async function UpdateGame({ body: body, id: id }) {
   try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      throw new Error("Authorization token not found. Please login again.");
+    }
+    console.log("token>>>>>>>>>>>", token);
+
     const response = await axios.put(`
       ${process.env.REACT_APP_LOCAL_URL}/game/edit/${id}`,
-    body,{
+      body, {
       headers: {
         Authorization: localStorage.getItem("token"),
       },
     });
+    console.log("Edit ?????????????", response.data);
+
     return response.data;
   } catch (error) {
     throw error
@@ -205,45 +214,18 @@ export async function OtpGenerate(body) {
     const response = await axios.post(
       `${process.env.REACT_APP_LOCAL_URL}/game/generateOtp`,
       body, {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      }
+      headers: {
+        Authorization: localStorage.getItem('token'),
+      },
+    }
     );
     console.log("OTP Response:", response.data);
     return response.data;
+
   } catch (error) {
     console.error("Error in OTP Generation:", error);
-    throw error;  
+    throw error;
   }
 }
 
 
-// export async function OtpGenerate({ body: body}) {
-//   try {
-    
-//     const requestBody = {
-//       ...body,
-//       // email,
-//       email:"admin@gmail.com", 
-//     };
-
-//     console.log("Request payload:", requestBody);
-
-//     const response = await axios.post(
-//       `${process.env.REACT_APP_LOCAL_URL}/game/generateOtp`,
-//       requestBody,
-//       {
-//         headers: {
-//           Authorization: localStorage.getItem('token'),
-//         },
-//       }
-//     );
-
-//     return response.data;
-//   } catch (error) {
-    
-//     console.error("Error generating OTP:", error.response?.data || error.message);
-//     throw error;
-//   }
-// }

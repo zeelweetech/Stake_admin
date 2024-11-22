@@ -19,7 +19,11 @@ import {
   MenuItem,
   Select,
   TextField,
+  HideField
 } from "@mui/material";
+import { decodedToken } from "../../utils";
+// import { useDispatch, useSelector } from "react-redux";
+// import { setEmail } from "../../features/games/otpSlice";
 
 
 
@@ -32,7 +36,11 @@ export default function GamesDashboard() {
   const [errors, setErrors] = useState({});
   const [isEdit, setIsEdit] = useState(false);
   const navigate = useNavigate();
-  
+  // const [otpSent, setOtpSent] = useState(false);  // Added state for OTP
+  const decoded = decodedToken()
+  console.log("decoded", decoded);
+
+  // const dispatch = useDispatch()
   useEffect(() => {
     GameAllData();
   }, []);
@@ -44,7 +52,7 @@ export default function GamesDashboard() {
         setGameData(response.games);
       })
       .catch((err) => {
-        console.log("GameAllData error : ", err);
+        console.error("GameAllData error : ", err);
       });
   };
 
@@ -56,7 +64,7 @@ export default function GamesDashboard() {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
-    
+
     if (isEdit) {
       setEditGameValue((prev) => ({
         ...prev,
@@ -80,7 +88,7 @@ export default function GamesDashboard() {
 
     if (!gameImg) {
       error.gameImg = "Please enter your Game Image";
-      
+
     }
     if (!gameName) {
       error.gameName = "Please enter your Game Name";
@@ -103,66 +111,34 @@ export default function GamesDashboard() {
       const response = await AddGame({ body: formData });
       console.log("response add game", response);
       setOpen(false);
-      GameAllData(); 
+      GameAllData();
     } catch (error) {
       console.error("Error adding game:", error);
     }
   };
 
-  // const handleEditGame = (game) => {
-  //   setIsEdit(true);
-  //   setEditGameValue({
-  //     gameName: game.gameName,
-  //     gameType: game.gameType,
-  //     gameImg: game.gameImage,
-  //     id: game.id, 
-  //   });
-  //   setOpen(true);
-  // };
- 
-  
-  
-  const handleEditGame = async (game, email) => {
-    let body = {
-      email: email,
-    };
-  
-    try {
-      const response = await OtpGenerate({ body, email });
-  
-      if (response?.email) {
-        
-        setIsEdit(true);
-        setEditGameValue({
-          gameName: game.gameName,
-          gameType: game.gameType,
-          gameImg: game.gameImage,
-          id: game.id,
-        });
-        setOpen(true);
-        
-        alert("OTP sent successfully! You can now edit the game.");
-      } else {
-        
-        console.error("Email not found in API response");
-        
-        alert("Failed to send OTP. Email not found.");
-      }
-    } catch (error) {
-      
-      console.error("Error in handleEditGame:", error.message);
-      
-      alert("Error occurred while sending OTP. Please try again.");
-    }
+
+  const handleEditGame = (game) => {
+    setIsEdit(true);
+    setEditGameValue({
+      gameName: game.gameName,
+      gameType: game.gameType,
+      gameImg: game.gameImage,
+      otp: game.otp,
+      isActive: game.isActive,
+      email: decoded?.email,
+      id: game.id,
+    });
+
+    setOpen(true);
   };
-  
-  
-  
+
   const handleUpdateGame = async (e) => {
     e.preventDefault();
 
-    const { gameName, gameImg, gameType, id } = editGameValue;
+    const { gameName, gameImg, gameType, id, email, isActive, otp } = editGameValue;
     let error = {};
+    console.log("game of type image>>>>", email);
 
     if (!gameName) {
       error.gameName = "Please enter your Game Name";
@@ -170,6 +146,13 @@ export default function GamesDashboard() {
     if (!gameType) {
       error.gameType = "Please select a Game Type";
     }
+    if (!otp) {
+      error.otp = "Please Enter the Otp"
+    }
+    if (!email) {
+      error.email = "Please Enter the Email"
+    }
+
 
     if (Object.keys(error).length > 0) {
       setErrors(error);
@@ -180,12 +163,23 @@ export default function GamesDashboard() {
     formData.append("image", gameImg);
     formData.append("gameName", gameName);
     formData.append("gameType", gameType);
+    formData.append("otp", otp);
+    formData.append("email", email);
+    formData.append("isActive", isActive)
 
     try {
       const response = await UpdateGame({ id, body: formData });
       console.log("Game updated successfully", response);
+      localStorage.setItem("token")
+      setGameData((prev) =>
+        prev.map((game) =>
+          game.id === response.game.id ? response.game : game
+        )
+      );
       setOpen(false);
-      GameAllData(); // Refresh game data
+
+      GameAllData();
+   
     } catch (error) {
       console.error("Error updating game:", error);
     }
@@ -202,9 +196,9 @@ export default function GamesDashboard() {
               <button
                 className="text-white bg-[#213743] border border-[#2f4553] font-medium px-4 py-2 rounded-sm flex items-center space-x-1"
                 onClick={() => {
-                  setIsEdit(false); 
-                  setAddGameValue({}); 
-                  setOpen(true);
+                  setIsEdit(false);
+                  setAddGameValue({});
+                  setOpen(false);
                 }}
               >
                 <AddIcon />
@@ -262,9 +256,8 @@ export default function GamesDashboard() {
                 accept="image/*"
                 name="gameImg"
                 onChange={handleChange}
-                className={`p-3 w-full border ${
-                  errors.gameImg ? "border-[#d32f2f]" : "border-[#2f4553]"
-                } my-0.5`}
+                className={`p-3 w-full border ${errors.gameImg ? "border-[#d32f2f]" : "border-[#2f4553]"
+                  } my-0.5`}
               />
               {errors.gameImg && (
                 <p className="text-[#d32f2f] w-56 text-sm pb-3">{errors.gameImg}</p>
@@ -300,11 +293,11 @@ export default function GamesDashboard() {
               )}
               <FormControl
                 sx={{ width: 140, my: 1 }}
-                error={!!errors?.gameType} 
+                error={!!errors?.gameType}
               >
                 <InputLabel
                   id="game-type-label"
-                  sx={{ color: errors?.gameType ? "#d32f2f" : "#b1bad3" }} 
+                  sx={{ color: errors?.gameType ? "#d32f2f" : "#b1bad3" }}
                 >
                   Game Type
                 </InputLabel>
@@ -340,14 +333,123 @@ export default function GamesDashboard() {
                   <MenuItem value="Sport">Sport</MenuItem>
                 </Select>
 
-               
+
                 {errors?.gameType && (
                   <p className="text-[#d32f2f] text-sm w-48">{errors.gameType}</p>
                 )}
+
               </FormControl>
+              {isEdit && (
+                <>
+                  <TextField
+                    placeholder="Enter OTP"
+                    name="otp"
+                    type="text"
+                    value={editGameValue.otp || ""}
+                    onChange={handleChange}
+                    fullWidth
+                    sx={{
+                      my: 0.5,
+                      input: {
+                        color: "#b1bad3",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: errors?.otp ? "#d32f2f" : "#2f4553",
+                        },
+                        "&:hover fieldset": {
+                          borderColor: errors?.otp ? "#d32f2f" : "#2f4553",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: errors?.otp ? "#d32f2f" : "#2f4553",
+                        },
+                      },
+                    }}
+                  />
+                  {console.log("editGameValue", editGameValue)
+                  }
+                  {isEdit && (
+                    <>
+                      <div
+                        placeholder="Enter Email"
+                        // name="email"
+                        // type="email"
+                        value={editGameValue?.otp || decoded?.email}
+                        onChange={handleChange}
+                          // className="hidden"
+                        //  visibility = {hidden}
+                        // fullWidth
+                        // sx={{
+                        //   // my: 0.5,
+                        //   input: {
+                        //     // color: "#b1bad3",
+                        //     visibility: "hidden"
+                        //   },
+                          
+                          // "& .MuiOutlinedInput-root": {
+                          //   "& fieldset": {
+                          //     borderColor: errors?.email ? "#d32f2f" : "#2f4553",
+                          //   },
+                          //   "&:hover fieldset": {
+                          //     borderColor: errors?.email ? "#d32f2f" : "#2f4553",
+                          //   },
+                          //   "&.Mui-focused fieldset": {
+                          //     borderColor: errors?.email ? "#d32f2f" : "#2f4553",
+                          //   },
+                          // },
+                        // }}
+                      />
+                      {errors.email && (
+                        <p className="text-[#d32f2f] w-56 text-sm pb-3 ">{errors.email}</p>
+                      )}
+                    </>
+                  )}
+                  {errors.otp && (
+                    <p className="text-[#d32f2f] w-56 text-sm pb-3">{errors.otp}</p>
+                  )}
+                  <Button
+                    variant="contained"
+                    sx={{
+                      mt: 2,
+                      bgcolor: "#213743",
+                      color: "#b1bad3",
+                      ":hover": { bgcolor: "#2f4553" },
+                    }}
+                    
+                    onClick={async () => {
+                      try {
+                        setLoading(true);
+                        const otpResponse = await OtpGenerate({ email: editGameValue.email });
+                        setEditGameValue((prev) => ({ ...prev, otp: otpResponse.otp }));
+                        setLoading(false);
+                        console.log("OTP generated:", otpResponse.otp);
+                      } catch (err) {
+                        setLoading(false);
+                        console.error("Failed to generate OTP:", err);
+                        alert("Failed to generate OTP. Please try again.");
+                      }
+                    }}
+                    
+                  >
+                    
+                    Resend OTP
+                  </Button>
+                </>
+                
+
+              )}
+
             </DialogContent>
+
             <DialogActions>
-            <Button
+              <div className="flex items-center">
+                <p className="font-thin text-lg pr-2">Status: </p>
+                <span
+                  className={`${editGameValue.isActive ? "text-green-500" : "text-red-500"} font-bold`}>
+                  {editGameValue.isActive ? "Active" : "Inactive"}
+                </span>
+              </div>
+              <Button
                 onClick={() => setOpen(false)}
                 sx={{
                   backgroundColor: "#ff638433",
@@ -360,13 +462,13 @@ export default function GamesDashboard() {
                 Close
               </Button>
               <Button
-              sx={{
-                backgroundColor: "#4bc0c033",
-                px: "1rem",
-                py: "0.5rem",
-                color: "#b1bad3",
-                border: "1px solid #4bc0c0",
-              }}
+                sx={{
+                  backgroundColor: "#4bc0c033",
+                  px: "1rem",
+                  py: "0.5rem",
+                  color: "#b1bad3",
+                  border: "1px solid #4bc0c0",
+                }}
                 onClick={isEdit ? handleUpdateGame : handleAddGame}
                 className="bg-[#3c4b61] hover:bg-[#475c73] text-white"
               >
@@ -379,3 +481,6 @@ export default function GamesDashboard() {
     </div>
   );
 }
+
+
+
