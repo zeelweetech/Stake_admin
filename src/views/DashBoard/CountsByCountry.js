@@ -27,9 +27,9 @@ function CountsByCountry() {
 
     return (
         <div className="pb-3">
-            <div className="w-1/2">
-                <p className="text-xl font-bold text-center -mt-2 pr-20 py-4 text-[#b1bad3]">
-                    Counts By Country
+    <div style={{ height: 400, width: '100%' }}>
+    <p className="text-xl font-bold text-center py-4 text-[#b1bad3]">
+            Counts By Country
                 </p>
                 <div className=" -mt-8 p-9 justify-center w-[465px] px-8">
                     <DataGrid
