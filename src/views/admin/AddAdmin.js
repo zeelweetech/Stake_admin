@@ -41,7 +41,7 @@ const textFieldStyles = {
   },
 };
 
-export default function MedalsInfo({
+export default function AdminInfo({
   adminValue,
   setAdminValue,
   open,

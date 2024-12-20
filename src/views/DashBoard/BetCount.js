@@ -73,14 +73,14 @@ function BetCount() {
 
   return (
     <div>
-      <div className="flex py-5 flex-col sm:flex-row">
-        <div className="flex-1 flex justify-center sm:mb-0">
+      <div className="flex flex-row pt-5">
+        <div className="flex-1 flex justify-center">
           <p className="text-m font-semibold text-[#b1bad3]">
             Bet Count
           </p>
         </div>
         <select
-          className="bg-[#4d718768] xl-text-white p-2 rounded-md sm:ml-4"
+          className="bg-[#4d718768] mr-5 xl-text-white p-2 rounded-md "
           name="week"
           value={selectedWeek}
           onChange={(e) => setSelectedWeek(e.target.value)}
@@ -90,7 +90,7 @@ function BetCount() {
         </select>
       </div>
       <div
-        className="space-y-10 xl:w-[600px] lg:w-[430px]"
+        className="space-y-8 xl:w-[600px] lg:w-[430px] lg:h-[430px] w-[500px] p-3"
         style={{ margin: "0 auto" }}
       >
         <Line data={BetsData} options={options} />

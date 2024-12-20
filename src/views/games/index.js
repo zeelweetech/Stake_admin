@@ -19,13 +19,9 @@ import {
   MenuItem,
   Select,
   TextField,
-  HideField
 } from "@mui/material";
 import { decodedToken } from "../../utils";
-// import { useDispatch, useSelector } from "react-redux";
-// import { setEmail } from "../../features/games/otpSlice";
-
-
+import toast from "react-hot-toast";
 
 export default function GamesDashboard() {
   const [loading, setLoading] = useState(false);
@@ -36,11 +32,9 @@ export default function GamesDashboard() {
   const [errors, setErrors] = useState({});
   const [isEdit, setIsEdit] = useState(false);
   const navigate = useNavigate();
-  // const [otpSent, setOtpSent] = useState(false);  // Added state for OTP
   const decoded = decodedToken()
-  console.log("decoded", decoded);
 
-  // const dispatch = useDispatch()
+  
   useEffect(() => {
     GameAllData();
   }, []);
@@ -109,7 +103,7 @@ export default function GamesDashboard() {
 
     try {
       const response = await AddGame({ body: formData });
-      console.log("response add game", response);
+      // console.log("response add game", response);
       setOpen(false);
       GameAllData();
     } catch (error) {
@@ -138,7 +132,7 @@ export default function GamesDashboard() {
 
     const { gameName, gameImg, gameType, id, email, isActive, otp } = editGameValue;
     let error = {};
-    console.log("game of type image>>>>", email);
+    // console.log("game of type image>>>>", email);
 
     if (!gameName) {
       error.gameName = "Please enter your Game Name";
@@ -169,8 +163,8 @@ export default function GamesDashboard() {
 
     try {
       const response = await UpdateGame({ id, body: formData });
-      console.log("Game updated successfully", response);
-      localStorage.setItem("token")
+      // console.log("Game updated successfully", response);
+      // localStorage.setItem("token")
       setGameData((prev) =>
         prev.map((game) =>
           game.id === response.game.id ? response.game : game
@@ -179,7 +173,7 @@ export default function GamesDashboard() {
       setOpen(false);
 
       GameAllData();
-   
+      toast.success("Game is successfully updated!");
     } catch (error) {
       console.error("Error updating game:", error);
     }
@@ -230,7 +224,7 @@ export default function GamesDashboard() {
 
           <Dialog
             open={open}
-            onClose={() => setOpen(false)}
+            onClose={() => setOpen(true)}
             maxWidth="sm"
             fullWidth
             sx={{
@@ -366,8 +360,8 @@ export default function GamesDashboard() {
                       },
                     }}
                   />
-                  {console.log("editGameValue", editGameValue)
-                  }
+                  {/* {console.log("editGameValue", editGameValue) */}
+                  {/* } */}
                   {isEdit && (
                     <>
                       <div
@@ -376,28 +370,28 @@ export default function GamesDashboard() {
                         // type="email"
                         value={editGameValue?.otp || decoded?.email}
                         onChange={handleChange}
-                          // className="hidden"
-                        //  visibility = {hidden}
-                        // fullWidth
-                        // sx={{
-                        //   // my: 0.5,
-                        //   input: {
-                        //     // color: "#b1bad3",
-                        //     visibility: "hidden"
-                        //   },
-                          
-                          // "& .MuiOutlinedInput-root": {
-                          //   "& fieldset": {
-                          //     borderColor: errors?.email ? "#d32f2f" : "#2f4553",
-                          //   },
-                          //   "&:hover fieldset": {
-                          //     borderColor: errors?.email ? "#d32f2f" : "#2f4553",
-                          //   },
-                          //   "&.Mui-focused fieldset": {
-                          //     borderColor: errors?.email ? "#d32f2f" : "#2f4553",
-                          //   },
-                          // },
-                        // }}
+                      // className="hidden"
+                      //  visibility = {hidden}
+                      // fullWidth
+                      // sx={{
+                      //   // my: 0.5,
+                      //   input: {
+                      //     // color: "#b1bad3",
+                      //     visibility: "hidden"
+                      //   },
+
+                      // "& .MuiOutlinedInput-root": {
+                      //   "& fieldset": {
+                      //     borderColor: errors?.email ? "#d32f2f" : "#2f4553",
+                      //   },
+                      //   "&:hover fieldset": {
+                      //     borderColor: errors?.email ? "#d32f2f" : "#2f4553",
+                      //   },
+                      //   "&.Mui-focused fieldset": {
+                      //     borderColor: errors?.email ? "#d32f2f" : "#2f4553",
+                      //   },
+                      // },
+                      // }}
                       />
                       {errors.email && (
                         <p className="text-[#d32f2f] w-56 text-sm pb-3 ">{errors.email}</p>
@@ -415,27 +409,27 @@ export default function GamesDashboard() {
                       color: "#b1bad3",
                       ":hover": { bgcolor: "#2f4553" },
                     }}
-                    
+
                     onClick={async () => {
                       try {
                         setLoading(true);
                         const otpResponse = await OtpGenerate({ email: editGameValue.email });
                         setEditGameValue((prev) => ({ ...prev, otp: otpResponse.otp }));
                         setLoading(false);
-                        console.log("OTP generated:", otpResponse.otp);
+                        // console.log("OTP generated:", otpResponse.otp);
                       } catch (err) {
                         setLoading(false);
                         console.error("Failed to generate OTP:", err);
-                        alert("Failed to generate OTP. Please try again.");
+                        // alert("Failed to generate OTP. Please try again.");
                       }
                     }}
-                    
+
                   >
-                    
+
                     Resend OTP
                   </Button>
                 </>
-                
+
 
               )}
 

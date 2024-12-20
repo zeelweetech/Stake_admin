@@ -29,7 +29,13 @@ function Header() {
     <div>
       <div className="bg-[#1a2c38] shadow-2xl border-b border-b-black">
         <div className="flex justify-around items-center space-x-[36rem]">
-          <img src={stakeLogo} className="w-16 h-16" alt="Not Found" onClick={() => navigate('/dashboard')}/>
+          {/* <img src={stakeLogo} className="w-16 h-16" alt="Not Found" onClick={() => navigate('/dashboard')}/> */}
+          <span
+            className="text-white text-4xl xl:text-5xl lg:text-4xl font-extrabold italic font-sans cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            Listor
+          </span>
           <div className="flex items-center space-x-3">
             {/* <button
               className="bg-[#1475e1] hover:bg-[#396ca8] text-white rounded-lg px-5 py-2.5"

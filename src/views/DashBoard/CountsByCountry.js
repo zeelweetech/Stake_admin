@@ -21,49 +21,49 @@ function CountsByCountry() {
     const { dashboardData } = useSelector((state) => state?.dashBoard);
     const rows = dashboardData?.playerCountsByCountry?.map((log, index) => ({
         id: index,
-        country: log.country ||"", 
+        country: log.country || "",
         userCount: log.userCount || "0",
     }));
 
     return (
         <div className="pb-3">
-            <div className="w-1/2">
-                <p className="text-xl font-bold text-center -mt-2 pr-20 py-4 text-[#b1bad3]">
+            <div >
+                <p className="text-xl font-bold text-center py-3 text-[#b1bad3]">
                     Counts By Country
                 </p>
-                <div className=" -mt-8 p-9 justify-center w-[465px] px-8">
+                <div className="xl:w-[410px] lg:w-[340px] lg:h-[280px] h-[300px] lg:p-1">
                     <DataGrid
-                        rows ={rows}
+                        rows={rows}
                         columns={Columns}
                         hideFooter
-                        getRowClassName={(params) =>  params.indexRelativeToCurrentPage % 2 === 0
+                        getRowClassName={(params) => params.indexRelativeToCurrentPage % 2 === 0
                             ? "row-dark"
                             : "row-light"
-                    }
-                    sx={{
-                        border: "none",
-                        color: "#b1bad3",
-                        "& .MuiDataGrid-cell": {
+                        }
+                        sx={{
                             border: "none",
-                        },
-                        "& .MuiDataGrid-columnHeader": {
-                            borderBottom: "none",
-                            borderTop: "none",
-                        },
-                        "& .MuiDataGrid-footerContainer": {
-                            borderTop: "none",
-                            borderBottom: "none",
-                            color: "white",
-                        },
-                        "& .MuiTablePagination-root": {
-                            color: "white",
-                        },
-                        "& .MuiTablePagination-selectIcon": {
-                            color: "white",
-                        },
-                        overflowY: 'hidden',
-                    }}
-                />
+                            color: "#b1bad3",
+                            "& .MuiDataGrid-cell": {
+                                border: "none",
+                            },
+                            "& .MuiDataGrid-columnHeader": {
+                                borderBottom: "none",
+                                borderTop: "none",
+                            },
+                            "& .MuiDataGrid-footerContainer": {
+                                borderTop: "none",
+                                borderBottom: "none",
+                                color: "white",
+                            },
+                            "& .MuiTablePagination-root": {
+                                color: "white",
+                            },
+                            "& .MuiTablePagination-selectIcon": {
+                                color: "white",
+                            },
+                            overflowY: 'hidden',
+                        }}
+                    />
                 </div>
             </div>
 
