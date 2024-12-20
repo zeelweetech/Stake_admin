@@ -198,7 +198,7 @@ export default function GamesDashboard() {
                 onClick={() => {
                   setIsEdit(false);
                   setAddGameValue({});
-                  setOpen(false);
+                  setOpen(true);
                 }}
               >
                 <AddIcon />
