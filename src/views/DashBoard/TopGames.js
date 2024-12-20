@@ -41,7 +41,7 @@ function TopGames() {
   })) || [];
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <div style={{ width: '100%' }}>
         <p className="text-xl font-bold text-center py-4 text-[#b1bad3]">
         Top Games
       </p>

@@ -36,27 +36,31 @@ function FinancialTransaction() {
 
     return (
         <div>
-            <div className=" bg-[#0f212e] shadow-lg shadow-[#0f212e] p-2 h-full xl:w-[490px] xl:h-[490] mr-[-150rem] -mt-2">
-               
-                <div className="flex justify-end mb-0 mt-[-0.5rem]">
-                    <select
-                        className="bg-[#4d718768] text-white p-2 sm:ml-6"
-                        value={selectedWeek}
-                        onChange={(e) => setSelectedWeek(e.target.value)}
-                    >
-                        <option value="Current Week">Current Week</option>
-                        <option value="Last Week">Last Week</option>
-                    </select>
+            {/* Dropdown Section */}
+            <div className="flex justify-end py-2">
+                <select
+                    className="bg-[#4d718768] text-white p-2 rounded-md"
+                    value={selectedWeek}
+                    onChange={(e) => setSelectedWeek(e.target.value)}
+                >
+                    <option value="Current Week">Current Week</option>
+                    <option value="Last Week">Last Week</option>
+                </select>
+            </div>
+
+            {/* Chart Section */}
+            <div className="flex flex-col items-center space-y-4 xl:w-[350px] mx-auto">
+                {/* Chart */}
+                <div className="w-full px-6">
+                    <Pie data={data} />
                 </div>
-                <div className="flex justify-center bg-[#0f212e] p-2 mt-[-25px] xl:h-[300px]">
-                    <Pie data={data} width={560} height={560} />
-                </div>
-                <p className="text-m font-semibold text-[#b1bad3] flex justify-center py-4">
-                    FinancialTransaction
+                {/* Chart Label */}
+                <p className="text-base font-semibold text-[#b1bad3] text-center">
+                    Financial Transaction
                 </p>
-                
             </div>
         </div>
+
 
     );
 }

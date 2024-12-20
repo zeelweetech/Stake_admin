@@ -76,7 +76,8 @@ const UserDetails = () => {
           <div>
             {userData && (
               <div className="max-w-4xl bg-[#213743] mx-auto p-6 rounded-lg shadow-lg text-white">
-                <h2 className="text-2xl text-center font-bold mb-4 border-b-2 border-[#0f212e] px-4 py-2 w-1/3">User  Information</h2>
+                <div></div>
+                <h2 className="text-2xl lg:text-xl font-bold mb-4 border-b-2 border-[#0f212e] px-4 py-2 w-1/3">User  Information</h2>
                 <table className="min-w-full divide-y divide-[#0f212e]">
                   <tbody className="bg-[#213743] divide-y divide-[#0f212e]">
                     <tr>
@@ -105,7 +106,10 @@ const UserDetails = () => {
                     </tr>
                   </tbody>
                 </table>
-                <h2 className="text-2xl text-center font-bold mt-6 mb-4 border-b-2 px-4 py-2 border-[#0f212e] w-1/3">Financial Information</h2>
+                <h2 className="text-2xl lg:text-xl text-left font-bold mt-6 mb-4 border-b-2 px-4 py-2 border-[#0f212e] w-full sm:w-2/3 lg:w-1/2 xl:w-1/3">
+                  Financial Information
+                </h2>
+
                 <table className="min-w-full border-b border-[#0f212e] divide-y divide-[#0f212e]">
                   <tbody className="bg-[#213743] divide-y divide-[#0f212e]">
                     <tr>
@@ -118,7 +122,7 @@ const UserDetails = () => {
                     </tr>
                   </tbody>
                 </table>
-                <h2 className="text-2xl text-center font-bold mt-6 mb-4 border-b-2  px-4 py-2 border-[#0f212e] w-1/4">Medals</h2>
+                <h2 className="text-2xl lg:text-xl font-bold mt-6 mb-4 border-b-2  px-4 py-2 border-[#0f212e] w-1/4">Medals</h2>
                 <table className="min-w-full border-b border-[#0f212e] divide-y divide-[#0f212e]">
                   <tbody className="bg-[#213743] divide-y divide-[#0f212e]">
                     <tr>
@@ -131,7 +135,7 @@ const UserDetails = () => {
                     </tr>
                   </tbody>
                 </table>
-                <h2 className="text-2xl text-center font-bold mt-6 mb-4 border-b-2 border-[#0f212e] px-4 py-2 w-1/3">Other Information</h2>
+                <h2 className="text-2xl lg:text-xl font-bold mt-6 mb-4 border-b-2 border-[#0f212e] px-4 py-2 w-1/3">Other Information</h2>
                 <div className="flex items-center border-b border-[#0f212e] justify-start">
                   <p className="font-bold px-4 py-2">Created Date & Time:</p>
                   <p className="px-4 py-2">{new Date(userData.createdAt).toLocaleString()}</p>
@@ -139,7 +143,7 @@ const UserDetails = () => {
                   <p className="px-4 py-2">{new Date(userData.updatedAt).toLocaleString()}</p>
                 </div>
                 <div className="flex items-center border-b border-[#0f212e] justify-start mt-4">
-                  <p className="font-bold px-4 py-2">Status:</p>
+                  <p className="font-bold  px-4 py-2">Status:</p>
                   <p className={`${userData.isActive ? "text-green-500" : "text-red-500"} font-bold ml-2`}>
                     {userData.isActive ? "Active" : "Inactive"}
                   </p>

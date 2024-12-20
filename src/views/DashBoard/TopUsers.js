@@ -48,10 +48,11 @@ function TopUsers() {
   })) ;
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
-        <p className="text-xl font-bold text-center py-4 text-[#b1bad3]">
+    <div>
+        <p className="text-xl font-bold text-center py-6 text-[#b1bad3]">
         Top Users
       </p>
+      <div className="p-2">
       <DataGrid
         rows={rows}
         columns={columns}
@@ -83,9 +84,10 @@ function TopUsers() {
             color: "white",
         },
         height:220,
-        overflowY: 'hidden',
+        // overflowY: 'hidden',
     }}
       />
+    </div>
     </div>
   );
 }
