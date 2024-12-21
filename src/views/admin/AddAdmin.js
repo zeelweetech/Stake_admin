@@ -129,8 +129,8 @@ export default function AdminInfo({
       }}
     >
       <DialogTitle>
-        <div className="flex justify-between items-center">
-          <p>{isEditing ? "Edit Admin" : "Add Admin"}</p>
+      <div className="flex justify-between items-center">
+      <p>{isEditing ? "Edit Admin" : "Add Admin"}</p>
           <IconButton onClick={() => setOpen(false)}>
             <CloseIcon className="text-[#b1bad3]" />
           </IconButton>
@@ -232,7 +232,7 @@ export default function AdminInfo({
             border: "1px solid #4bc0c0",
           }}
         >
-          {/* {loading ? <Loader /> : isEditing ? "Save" : "Add"} */}
+          {loading ? <Loader /> : isEditing ? "Save" : "Add"}
         </Button>
       </DialogActions>
     </Dialog>

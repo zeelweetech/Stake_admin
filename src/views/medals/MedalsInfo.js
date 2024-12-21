@@ -161,8 +161,8 @@ export default function MedalsInfo({
             }}
         >
             <DialogTitle>
-                <div className="flex justify-between items-center">
-                    <p>{isEditing ? "Edit Medal" : "Add Medal"}</p>
+            <div className="flex justify-between items-center">
+            <p>{isEditing ? "Edit Medal" : "Add Medal"}</p>
                     <IconButton onClick={() => setOpen(false)}>
                         <CloseIcon className="text-[#b1bad3]" />
                     </IconButton>

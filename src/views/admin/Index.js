@@ -72,11 +72,11 @@ function GetAdmins() {
                     <p className="text-2xl pr-10 py-3">Admin</p>
                 </div>
             </div>
-            <div className="flex justify-center xl:py-10 lg:py-10 lg:px-20">
+            <div className="flex justify-center py-16">
                 <div>
-                    <div className="flex xl:justify-end lg:justify-end">
-                        <button
-                            className="text-white bg-[#213743] font-medium lg:px-2 xl:px-4 lg:px:4 py-2 lg:py-2 rounded-sm flex items-center space-x-1"
+                <div className="flex justify-end">
+                <button
+                            className="text-white bg-[#213743] font-medium px-4 py-2 rounded-sm flex items-center space-x-1"
                             onClick={() => {
                                 setIsEditing(false);
                                 setOpen(true);
@@ -89,9 +89,9 @@ function GetAdmins() {
                     </div>
 
 
-                    <div className="justify-center pt-4 xl:h-[500px] ">
-                        <div style={{ height: 600, width: '100%' }}>
-                            <p className="text-xl font-bold text-center py-4 text-[#b1bad3]">Admin Detail</p>
+                    <div className="flex justify-center item-center py-8">
+                    <div className="xl:w-[60rem] lg:w-[50rem]">
+                        <p className="text-xl font-bold text-center py-4 text-[#b1bad3]">Admin Detail</p>
                             <DataGrid
                                 autoHeight
                                 rows={rows || []}
@@ -134,8 +134,9 @@ function GetAdmins() {
                                     "& .MuiTablePagination-selectIcon": {
                                         color: "white",
                                     },
-                                    height: 600,
-                                    overflowY: 'auto',
+                                    // height: 600,
+                                    // overflowY: 'auto',
+                                    overflowY: "hidden",
                                 }}
                             />
                         </div>
